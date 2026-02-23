@@ -1,40 +1,39 @@
-# PROMPT MAESTRO - Gym SaaS
+# Gym SaaS - Sistema de Gestión para Gimnasios
 
-## Setup Instructions
+Sistema Multi-tenant para administración de gimnasios, control de acceso y contabilidad (Norma Colombiana).
 
-1.  **Environment Requirements**:
-    *   PHP 8.x
-    *   MySQL (InnoDB)
-    *   Web Server (Apache/Nginx) pointing to public root (or serving `index.php` as entry point).
+## Requisitos del Sistema
+- PHP 8.0 o superior.
+- MySQL 5.7 / MariaDB 10.x.
+- Servidor Web Apache (con `mod_rewrite` habilitado).
+- Extensión `pdo_mysql`.
 
-2.  **Configuration**:
-    *   Edit `config/config.php` to set base URL if needed.
-    *   Set Environment Variables for Database:
-        *   `DB_HOST`
-        *   `DB_NAME`
-        *   `DB_USER`
-        *   `DB_PASS`
+## Instalación
 
-3.  **Database Initialization**:
-    *   Import `schema.sql` into your MySQL database.
-    *   Default Super Admin credentials:
-        *   Email: `admin@promptmaestro.com`
-        *   Password: `admin` (Change this immediately!)
+1.  **Base de Datos:**
+    - Crear una base de datos vacía (ej. `gym_saas`).
+    - Importar el esquema: `database/schema.sql`.
+    - Importar datos semilla: `database/seeds/01_initial_seed.sql`.
 
-## Structure
+2.  **Configuración:**
+    - Editar `config/config.php`:
+      ```php
+      define('DB_HOST', 'localhost');
+      define('DB_NAME', 'gym_saas');
+      define('DB_USER', 'tu_usuario');
+      define('DB_PASS', 'tu_password');
+      ```
 
-*   `index.php`: Entry point (Front Controller).
-*   `config/`: Configuration files.
-*   `controllers/`: Application logic.
-*   `models/`: Database interaction.
-*   `views/`: HTML templates.
-*   `helpers/`: Utility classes (Router, etc.).
+3.  **Despliegue:**
+    - Apuntar el DocumentRoot del servidor web a la carpeta `/public`.
+    - Asegurarse de que `.htaccess` sea procesado.
 
-## Security
+## Credenciales por Defecto
+- **Usuario:** `admin@demo.com`
+- **Contraseña:** `password123` (En producción, usar hash real)
 
-*   Ensure `storage/` is writable but not directly accessible via web if possible.
-*   Direct access to PHP files in subdirectories is prevented via `defined('APP_NAME')` check.
-
-## Testing in Sandbox
-
-A `setup_db.php` script is provided which was used to initialize the DB. It supports MySQL by default.
+## Estructura del Proyecto
+- `/app`: Lógica del negocio (Modelos, Vistas, Controladores).
+- `/public`: Archivos accesibles vía web (index.php, CSS, JS).
+- `/config`: Configuración global.
+- `/database`: Migraciones SQL.
