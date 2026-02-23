@@ -55,6 +55,9 @@ class Router {
 
         // Manejo básico de subdirectorios si el script no está en la raíz
         $scriptName = dirname($_SERVER['SCRIPT_NAME']);
+        // Normalize slashes
+        $scriptName = str_replace('\\', '/', $scriptName);
+
         if ($scriptName !== '/' && strpos($uri, $scriptName) === 0) {
             $uri = substr($uri, strlen($scriptName));
         }

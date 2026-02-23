@@ -1,5 +1,15 @@
 <?php
 
+// Determine Base URL dynamically
+$protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
+$host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+$scriptDir = dirname($_SERVER['SCRIPT_NAME']);
+// Normalize scriptDir to remove trailing slash unless it's just "/"
+$scriptDir = rtrim(str_replace('\\', '/', $scriptDir), '/');
+
+// Base URL handling for subdirectories (e.g., localhost/gym)
+define('BASE_URL', $protocol . '://' . $host . $scriptDir);
+
 // Configuración Global
 
 // Base de Datos
@@ -13,11 +23,6 @@ define('ROOT_PATH', dirname(__DIR__)); // Raíz del proyecto
 define('APP_PATH', ROOT_PATH . '/app');
 define('PUBLIC_PATH', ROOT_PATH . '/public');
 define('VIEW_PATH', APP_PATH . '/Views');
-
-// URL Base (Ajustar según entorno)
-$protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
-$host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-define('BASE_URL', $protocol . '://' . $host);
 
 // Seguridad
 define('CSRF_TOKEN_NAME', 'csrf_token');
