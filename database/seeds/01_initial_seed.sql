@@ -5,9 +5,9 @@
 INSERT INTO tenants (id, name, domain, status) VALUES (1, 'Gimnasio Demo', 'demo.gym.com', 'active');
 
 -- 2. Crear un Usuario Admin para ese Tenant
--- Password: password123 (hash MD5 o BCRYPT según implementación, aquí placeholder)
+-- Password: password123 (hash BCRYPT generado)
 INSERT INTO users (gym_id, name, email, password_hash, role)
-VALUES (1, 'Admin Demo', 'admin@demo.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'gym_admin');
+VALUES (1, 'Admin Demo', 'admin@demo.com', '$2y$10$09aBgcm9AnHcmgQFmXTlSuZYQmrmneNd4.0bnS4FN6/T9vxE1giV6', 'gym_admin');
 
 -- 3. Plan de Cuentas Básico (PUC Colombia resumido)
 -- Activos

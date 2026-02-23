@@ -12,8 +12,8 @@ Sistema Multi-tenant para administración de gimnasios, control de acceso y cont
 
 1.  **Base de Datos:**
     - Crear una base de datos vacía (ej. `gym_saas`).
-    - Importar el esquema: `database/schema.sql`.
-    - Importar datos semilla: `database/seeds/01_initial_seed.sql`.
+    - Ejecutar el script `install.php` desde el navegador o CLI para instalar el esquema y datos base.
+    - O importar manualmente: `database/schema.sql` y `database/seeds/01_initial_seed.sql`.
 
 2.  **Configuración:**
     - Editar `config/config.php`:
@@ -25,15 +25,15 @@ Sistema Multi-tenant para administración de gimnasios, control de acceso y cont
       ```
 
 3.  **Despliegue:**
-    - Apuntar el DocumentRoot del servidor web a la carpeta `/public`.
-    - Asegurarse de que `.htaccess` sea procesado.
+    - Apuntar el DocumentRoot del servidor web a la carpeta `/public` (Recomendado).
+    - El sistema soporta subdirectorios (ej. `localhost/gym/`) gracias a la detección dinámica en `Router.php` y `config.php`.
 
 ## Credenciales por Defecto
 - **Usuario:** `admin@demo.com`
-- **Contraseña:** `password123` (En producción, usar hash real)
+- **Contraseña:** `password123`
 
 ## Estructura del Proyecto
-- `/app`: Lógica del negocio (Modelos, Vistas, Controladores).
+- `/app`: Lógica del negocio (Modelos, Vistas, Controladores, Servicios, Middleware).
 - `/public`: Archivos accesibles vía web (index.php, CSS, JS).
 - `/config`: Configuración global.
-- `/database`: Migraciones SQL.
+- `/database`: Migraciones y Seeds.
