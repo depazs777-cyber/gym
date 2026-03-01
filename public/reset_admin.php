@@ -1,8 +1,8 @@
 <?php
 // reset_admin.php
-// Ejecuta este archivo en tu navegador (ej: http://localhost/gym/reset_admin.php)
+// Ejecuta este archivo en tu navegador (ej: http://localhost/gym/public/reset_admin.php o http://localhost/gym/reset_admin.php gracias al rewrite)
 
-define('ROOT_PATH', __DIR__);
+define('ROOT_PATH', dirname(__DIR__));
 require_once ROOT_PATH . '/config/config.php';
 
 echo "<h2>Restableciendo Usuario Administrador</h2>";
@@ -41,7 +41,7 @@ try {
     echo "<a href='" . BASE_URL . "/login' style='display: inline-block; padding: 10px 15px; background: #4caf50; color: white; text-decoration: none; border-radius: 5px;'>Ir al Login</a>";
     echo "</div>";
 
-    echo "<p style='color: red; font-family: sans-serif;'>⚠️ Por seguridad, <b>elimina este archivo (reset_admin.php)</b> después de ingresar al sistema.</p>";
+    echo "<p style='color: red; font-family: sans-serif;'>⚠️ Por seguridad, <b>elimina este archivo (public/reset_admin.php)</b> después de ingresar al sistema.</p>";
 
 } catch (PDOException $e) {
     echo "<div style='color: red; font-family: sans-serif;'>";
