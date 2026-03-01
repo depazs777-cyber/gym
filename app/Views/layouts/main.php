@@ -14,15 +14,34 @@
     <aside class="sidebar">
         <div class="logo mb-4">
             <h2>Gym SaaS</h2>
-            <small class="text-muted"><?= $_SESSION['gym_name'] ?? 'Mi Gimnasio' ?></small>
+            <small class="text-muted">
+                <?php
+                    if ($_SESSION['role'] === 'super_admin') {
+                        echo 'Gestión Global (Maestro)';
+                    } else {
+                        echo $_SESSION['gym_name'] ?? 'Mi Gimnasio';
+                    }
+                ?>
+            </small>
         </div>
         <nav>
             <ul style="list-style: none; padding: 0;">
-                <li class="mb-4"><a href="<?= BASE_URL ?>/dashboard">📊 Dashboard</a></li>
-                <li class="mb-4"><a href="<?= BASE_URL ?>/accounting">💰 Contabilidad</a></li>
-                <li class="mb-4"><a href="<?= BASE_URL ?>/members">👥 Afiliados</a></li>
-                <li class="mb-4"><a href="<?= BASE_URL ?>/access">🔑 Control Acceso</a></li>
-                <li class="mb-4"><a href="<?= BASE_URL ?>/logout" style="color: #ff6b6b;">🚪 Salir</a></li>
+
+                <?php if ($_SESSION['role'] === 'super_admin' || $_SESSION['role'] === 'sales'): ?>
+                    <!-- Menú Matriz / Vendedor SaaS -->
+                    <li class="mb-4"><a href="<?= BASE_URL ?>/admin/dashboard">🌐 Panel Maestro</a></li>
+                    <li class="mb-4"><a href="<?= BASE_URL ?>/admin/gyms">🏢 Gimnasios (Clientes)</a></li>
+                    <li class="mb-4"><a href="<?= BASE_URL ?>/admin/leads">💼 CRM Ventas (Leads)</a></li>
+                    <li class="mb-4"><a href="<?= BASE_URL ?>/admin/billing">💸 Facturación SaaS</a></li>
+                <?php else: ?>
+                    <!-- Menú Cliente Gym -->
+                    <li class="mb-4"><a href="<?= BASE_URL ?>/dashboard">📊 Panel del Gym</a></li>
+                    <li class="mb-4"><a href="<?= BASE_URL ?>/accounting">💰 Contabilidad y Pagos</a></li>
+                    <li class="mb-4"><a href="<?= BASE_URL ?>/members">👥 Afiliados</a></li>
+                    <li class="mb-4"><a href="<?= BASE_URL ?>/access">🔑 Control Acceso</a></li>
+                <?php endif; ?>
+
+                <li class="mb-4" style="margin-top: 50px;"><a href="<?= BASE_URL ?>/logout" style="color: #ff6b6b;">🚪 Cerrar Sesión</a></li>
             </ul>
         </nav>
     </aside>
