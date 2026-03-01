@@ -4,8 +4,11 @@
 $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
 $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
 $scriptDir = dirname($_SERVER['SCRIPT_NAME']);
-// Normalize scriptDir to remove trailing slash unless it's just "/"
-$scriptDir = rtrim(str_replace('\\', '/', $scriptDir), '/');
+
+// Remove "public" from the scriptDir if we are accessing via a parent folder rewrite
+$scriptDir = str_replace('\\', '/', $scriptDir);
+$scriptDir = preg_replace('/\/public$/', '', $scriptDir);
+$scriptDir = rtrim($scriptDir, '/');
 
 // Base URL handling for subdirectories (e.g., localhost/gym)
 define('BASE_URL', $protocol . '://' . $host . $scriptDir);

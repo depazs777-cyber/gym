@@ -53,15 +53,25 @@ class Router {
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $method = $_SERVER['REQUEST_METHOD'];
 
-        // Manejo básico de subdirectorios si el script no está en la raíz
+        // Manejo de subdirectorios (ej: localhost/gym o localhost/gym/public)
         $scriptName = dirname($_SERVER['SCRIPT_NAME']);
-        // Normalize slashes
         $scriptName = str_replace('\\', '/', $scriptName);
+        $scriptName = preg_replace('/\/public$/', '', $scriptName);
+        $scriptName = rtrim($scriptName, '/');
 
-        if ($scriptName !== '/' && strpos($uri, $scriptName) === 0) {
+        if ($scriptName !== '' && strpos($uri, $scriptName) === 0) {
             $uri = substr($uri, strlen($scriptName));
         }
-        $uri = '/' . trim($uri, '/'); // Normalizar
+
+        // Si el usuario accede a /public/, también lo limpiamos de la URI procesada
+        $uri = preg_replace('/^\/public\//', '/', $uri);
+
+        $uri = '/' . trim($uri, '/'); // Normalizar a "/ruta"
+
+        // Si la URI es "/" y el método es "GET", mapea a "/" (para localhost/gym/)
+        if ($uri === '') {
+            $uri = '/';
+        }
 
         foreach ($this->routes as $route) {
             // Soporte básico para parámetros {id}
