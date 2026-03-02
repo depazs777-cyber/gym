@@ -69,6 +69,14 @@ $router->group(['middleware' => [AuthMiddleware::class, SuperAdminMiddleware::cl
         $r2->post('/admin/leads/update-status', 'Admin\LeadsController@updateStatus');
     });
 
+    // Planes SaaS
+    $r->get('/admin/plans', 'Admin\PlansController@index');
+    $r->get('/admin/plans/create', 'Admin\PlansController@create');
+    $r->group(['middleware' => [CsrfMiddleware::class]], function($r2) {
+        $r2->post('/admin/plans/store', 'Admin\PlansController@store');
+        $r2->post('/admin/plans/toggle', 'Admin\PlansController@toggleStatus');
+    });
+
     // Placeholder para Facturación (mencionada en UI pero backend aún no detallado en prompts)
     $r->get('/admin/billing', 'Admin\GymsController@index');
 });

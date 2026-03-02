@@ -32,6 +32,7 @@
                     <li class="mb-4"><a href="<?= BASE_URL ?>/admin/dashboard">🌐 Panel Maestro</a></li>
                     <li class="mb-4"><a href="<?= BASE_URL ?>/admin/gyms">🏢 Gimnasios (Clientes)</a></li>
                     <li class="mb-4"><a href="<?= BASE_URL ?>/admin/leads">💼 CRM Ventas (Leads)</a></li>
+                    <li class="mb-4"><a href="<?= BASE_URL ?>/admin/plans">📋 Planes SaaS</a></li>
                     <li class="mb-4"><a href="<?= BASE_URL ?>/admin/billing">💸 Facturación SaaS</a></li>
                 <?php else: ?>
                     <!-- Menú Cliente Gym -->
