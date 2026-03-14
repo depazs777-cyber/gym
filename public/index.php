@@ -113,5 +113,29 @@ $router->group(['middleware' => [AuthMiddleware::class, TenantMiddleware::class]
     });
 });
 
-// Despachar
-$router->dispatch();
+// Despachar y Manejar Errores de Base de Datos que requieran instalación
+try {
+    $router->dispatch();
+} catch (\PDOException $e) {
+    // 42S02 = Table not found
+    // 42S22 o 1054 = Column not found
+    if ($e->getCode() == '42S02' || $e->getCode() == '42S22' || strpos($e->getMessage(), '1054') !== false) {
+        http_response_code(500);
+        echo "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><title>Actualización Requerida</title><style>
+            body { font-family: sans-serif; background: #121212; color: #e0e0e0; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+            .card { background: rgba(255,255,255,0.05); padding: 40px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.1); max-width: 500px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+            a.btn { display: inline-block; background: #2196f3; color: white; padding: 15px 30px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 20px; transition: background 0.3s;}
+            a.btn:hover { background: #1976d2; }
+            h1 { color: #f44336; }
+        </style></head><body>";
+        echo "<div class='card'>";
+        echo "<h1>⚠️ Base de Datos Desactualizada</h1>";
+        echo "<p>El sistema detectó que faltan tablas o columnas en la base de datos (probablemente se agregaron nuevas características). <b>Para solucionar este error, debes actualizar la base de datos.</b></p>";
+        echo "<p><small style='color:#a0a0a0;'>Error Técnico: " . htmlspecialchars($e->getMessage()) . "</small></p>";
+        echo "<a href='" . BASE_URL . "/install.php' class='btn'>🚀 Ejecutar Actualización (install.php) ahora</a>";
+        echo "</div></body></html>";
+        exit;
+    }
+    // Si es otro error de PDO, lanzarlo
+    throw $e;
+}
