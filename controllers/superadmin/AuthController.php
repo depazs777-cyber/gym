@@ -32,6 +32,9 @@ class AuthController extends Controller {
                 Helpers::flash('login_error', 'Credenciales incorrectas o no tienes permisos.', 'alert alert-danger');
                 Helpers::redirect('');
             }
+        } else {
+            // Display the login page for GET requests
+            $this->index();
         }
     }
 
