@@ -10,36 +10,44 @@ class Router {
     protected $namespace = '';
 
     public function __construct() {
-        // Detect subdomain
+        $url = $this->getUrl();
+
+        // 1. Detect environment (subdomain vs localhost folders)
         $host = $_SERVER['HTTP_HOST'];
         $parts = explode('.', $host);
 
-        // Very basic subdomain detection logic
-        // Assuming fitmanager.com or localhost
-        // For localhost testing, we might pass ?tenant=name
-        if (isset($_GET['tenant'])) {
-            $subdomain = $_GET['tenant'];
-            if ($subdomain === 'superadmin') {
-                $this->namespace = 'superadmin';
-            } else {
-                $this->namespace = 'gym';
-                // Tenant will be resolved in Tenant.php
-            }
-        } elseif (count($parts) >= 3 && $parts[0] !== 'www') {
-            $subdomain = $parts[0];
-            if ($subdomain === 'superadmin') {
-                $this->namespace = 'superadmin';
-            } else {
-                $this->namespace = 'gym';
-            }
+        // If testing locally, we can use the first URL segment as the namespace
+        // e.g., localhost/fitmanager/gym/auth/login -> URL is gym/auth/login
+        if (isset($url[0]) && ($url[0] === 'gym' || $url[0] === 'superadmin' || $url[0] === 'api')) {
+            $this->namespace = $url[0];
+            unset($url[0]);
+            // Re-index array
+            $url = array_values($url);
         } else {
-             // Default to superadmin or main landing page if no subdomain
-             // For this project, let's say root goes to superadmin login
-             $this->namespace = 'superadmin';
-             $this->currentController = 'AuthController';
+            // Very basic subdomain detection logic
+            if (isset($_GET['tenant'])) {
+                $subdomain = $_GET['tenant'];
+                if ($subdomain === 'superadmin') {
+                    $this->namespace = 'superadmin';
+                } else {
+                    $this->namespace = 'gym';
+                    // Tenant will be resolved in Tenant.php
+                }
+            } elseif (count($parts) >= 3 && $parts[0] !== 'www' && $parts[0] !== '127') {
+                $subdomain = $parts[0];
+                if ($subdomain === 'superadmin') {
+                    $this->namespace = 'superadmin';
+                } else {
+                    $this->namespace = 'gym';
+                }
+            } else {
+                 // Default to superadmin or main landing page if no subdomain
+                 $this->namespace = 'superadmin';
+                 if (empty($url)) {
+                     $this->currentController = 'AuthController';
+                 }
+            }
         }
-
-        $url = $this->getUrl();
 
         // Check if controller exists in namespace
         $controllerName = 'DashboardController';
@@ -53,14 +61,26 @@ class Router {
             $this->currentController = $controllerName;
             unset($url[0]);
         } elseif (file_exists(APP_ROOT . '/controllers/api/' . $controllerName . '.php') && $this->namespace === 'api') {
-            // Future API routing implementation
             $this->namespace = 'api';
             $this->currentController = $controllerName;
             $controllerPath = APP_ROOT . '/controllers/api/' . $controllerName . '.php';
             unset($url[0]);
         } else {
-            // Controller not found, redirect to 404 or default
-            // In a real app, handle 404 properly
+            // Default to AuthController if the root of a namespace is accessed and dashboard isn't found
+            // or if the URL specifies an unknown controller
+            if (!file_exists($controllerPath) && empty($url)) {
+                $controllerName = 'AuthController';
+                $controllerPath = APP_ROOT . '/controllers/' . $this->namespace . '/AuthController.php';
+                if (file_exists($controllerPath)) {
+                    $this->currentController = $controllerName;
+                }
+            }
+        }
+
+        // If it STILL doesn't exist, we fallback
+        if (!file_exists($controllerPath)) {
+             // Basic 404 handling
+             die("Controller $controllerName no encontrado en el namespace $this->namespace. URL: " . implode('/', $url));
         }
 
         // Require the controller
