@@ -33,7 +33,7 @@ $sql = "CREATE TABLE IF NOT EXISTS saas_plan_price_changes (
 execSql($db, $sql);
 
 // 2. Accounting Documents (Unified)
-// Replaces receipts, purchases tables eventually. 
+// Replaces receipts, purchases tables eventually.
 $sql = "CREATE TABLE IF NOT EXISTS accounting_documents (
     id $pk,
     gym_id INT NOT NULL DEFAULT 0, -- 0 for SaaS

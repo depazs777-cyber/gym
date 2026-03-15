@@ -26,7 +26,7 @@
                             <td><?= htmlspecialchars($order['plan_name'] ?? 'N/A') ?></td>
                             <td>$<?= number_format($order['total'], 2) ?></td>
                             <td>
-                                <?php 
+                                <?php
                                     $badge = match($order['status']) {
                                         'PAID' => 'success',
                                         'PENDING_PAYMENT' => 'warning',

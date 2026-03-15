@@ -24,7 +24,7 @@
                     <td><?= $r['gym_id'] ? 'Gym Specific' : 'Global' ?></td>
                     <td><?= $r['base_field'] ?></td>
                     <td>
-                        <?= $r['rate'] ?> 
+                        <?= $r['rate'] ?>
                         <?= $r['rate_unit'] == 'PERCENT' ? '%' : '‰' ?>
                     </td>
                     <td>$<?= number_format($r['min_base_amount'], 0) ?></td>

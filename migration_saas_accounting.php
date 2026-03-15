@@ -19,18 +19,18 @@ $sqlOrders = "CREATE TABLE sales_orders (
     id $autoIncrement,
     gym_id INT NOT NULL, -- The Customer
     plan_id INT NULL,
-    
+
     amount DECIMAL(15, 2) NOT NULL DEFAULT 0.00,
     discount DECIMAL(15, 2) DEFAULT 0.00,
     total DECIMAL(15, 2) NOT NULL DEFAULT 0.00,
-    
+
     status VARCHAR(20) DEFAULT 'PENDING_PAYMENT', -- PENDING_PAYMENT, PARTIAL, PAID, CANCELLED
-    
+
     notes TEXT NULL,
     created_by INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    
+
     FOREIGN KEY (gym_id) REFERENCES gyms(id) ON DELETE CASCADE
 )";
 
@@ -39,23 +39,23 @@ $sqlRC = "CREATE TABLE cash_receipts (
     id $autoIncrement,
     gym_id INT NOT NULL, -- Payer (Gym or 0 if generic?) usually Gym
     sales_order_id INT NULL, -- Link to order
-    
+
     consecutive_number VARCHAR(20) NOT NULL, -- RC-00001
     issue_date DATE NOT NULL,
-    
+
     amount DECIMAL(15, 2) NOT NULL,
     payment_method VARCHAR(50) DEFAULT 'CASH', -- CASH, TRANSFER, CARD
     reference VARCHAR(100) NULL, -- Trans ID
-    
+
     concept VARCHAR(255) NULL,
     notes TEXT NULL,
-    
+
     status VARCHAR(20) DEFAULT 'ACTIVE', -- ACTIVE, ANNULLED
     annulment_reason TEXT NULL,
-    
+
     created_by INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    
+
     FOREIGN KEY (gym_id) REFERENCES gyms(id) ON DELETE CASCADE,
     FOREIGN KEY (sales_order_id) REFERENCES sales_orders(id) ON DELETE SET NULL
 )";
@@ -68,7 +68,7 @@ $sqlSeq = "CREATE TABLE document_sequences (
     prefix VARCHAR(10) DEFAULT '',
     current_number INT NOT NULL DEFAULT 0,
     padding INT DEFAULT 6, -- 000001
-    
+
     UNIQUE(gym_id, doc_type)
 )";
 
@@ -80,7 +80,7 @@ $sqlNIC = "CREATE TABLE internal_notes (
     issue_date DATE NOT NULL,
     amount DECIMAL(15, 2) NOT NULL,
     description TEXT NOT NULL,
-    
+
     status VARCHAR(20) DEFAULT 'ACTIVE',
     created_by INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

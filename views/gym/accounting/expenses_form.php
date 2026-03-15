@@ -1,7 +1,7 @@
 <h2>Create Expense Voucher (Comprobante Egreso)</h2>
 <div class="card">
     <div class="card-header">
-        Paying Purchase: <?= $purchase['doc_type'] ?> #<?= $purchase['doc_number'] ?> 
+        Paying Purchase: <?= $purchase['doc_type'] ?> #<?= $purchase['doc_number'] ?>
         (<?= htmlspecialchars($purchase['provider_name']) ?>)
     </div>
     <div class="card-body">
@@ -12,7 +12,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="alert alert-warning">
-                        <strong>Net Payable Amount:</strong> 
+                        <strong>Net Payable Amount:</strong>
                         $<?= number_format($purchase['total_payable'], 2) ?>
                     </div>
                 </div>

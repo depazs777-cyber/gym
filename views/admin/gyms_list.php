@@ -22,12 +22,12 @@
                     <small style="color: var(--text-muted);">ID: <?= $gym['id'] ?></small>
                 </td>
                 <td>
-                    <?= htmlspecialchars($gym['license_start']) ?> 
-                    <span style="color: var(--text-muted);">&rarr;</span> 
+                    <?= htmlspecialchars($gym['license_start']) ?>
+                    <span style="color: var(--text-muted);">&rarr;</span>
                     <?= htmlspecialchars($gym['license_end']) ?>
                 </td>
                 <td>
-                    <?php 
+                    <?php
                         $statusClass = match($gym['status']) {
                             'active' => 'badge-success',
                             'expired', 'suspended' => 'badge-danger',
@@ -60,7 +60,7 @@
             <div class="modal-body">
                 <input type="hidden" name="<?= CSRF_TOKEN_NAME ?>" value="<?= $_SESSION[CSRF_TOKEN_NAME] ?>">
                 <input type="hidden" name="gym_id" id="gym_id_input">
-                
+
                 <div class="form-group">
                     <label>Email</label>
                     <input type="email" name="email" class="form-control" required>

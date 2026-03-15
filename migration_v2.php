@@ -9,7 +9,7 @@ $pdo = Database::getInstance()->getConnection();
 try {
     // 1. Update Gyms Table (Config)
     echo "Updating Gyms table...\n";
-    $sql = "ALTER TABLE gyms 
+    $sql = "ALTER TABLE gyms
             ADD COLUMN config_annual_days INT DEFAULT 360,
             ADD COLUMN config_deduct_session TINYINT(1) DEFAULT 1,
             ADD COLUMN config_renewal_mode ENUM('CONTINUE', 'TODAY') DEFAULT 'CONTINUE'";
@@ -17,14 +17,14 @@ try {
 
     // 2. Update Memberships Table
     echo "Updating Memberships table...\n";
-    $sql = "ALTER TABLE memberships 
+    $sql = "ALTER TABLE memberships
             ADD COLUMN purchase_mode ENUM('PERIODIC', 'ANNUAL') DEFAULT 'PERIODIC',
             ADD COLUMN multiplier INT DEFAULT 1";
     try { $pdo->exec($sql); } catch(Exception $e) { echo "Memberships update skipped\n"; }
 
     // 3. Update Payments Table
     echo "Updating Payments table...\n";
-    $sql = "ALTER TABLE payments 
+    $sql = "ALTER TABLE payments
             ADD COLUMN discount DECIMAL(10, 2) DEFAULT 0.00,
             ADD COLUMN notes TEXT DEFAULT NULL";
     try { $pdo->exec($sql); } catch(Exception $e) { echo "Payments update skipped\n"; }

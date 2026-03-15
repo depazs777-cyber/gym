@@ -10,17 +10,17 @@ CREATE TABLE gyms (
     branding_logo VARCHAR(255) DEFAULT NULL,
     branding_color VARCHAR(50) DEFAULT '#000000',
     contact_info TEXT DEFAULT NULL COMMENT 'JSON: nit, address, phone, email, message',
-    
+
     -- Registration & Subscription
     registered_at DATETIME DEFAULT NULL,
     subscription_status VARCHAR(50) DEFAULT 'ACTIVE',
     activated_at DATETIME DEFAULT NULL,
-    
+
     saas_plan_id INT DEFAULT NULL, -- Linked Plan ID
     subscription_period_months_snapshot INT DEFAULT 1,
     subscription_plan_code VARCHAR(20) DEFAULT NULL, -- Legacy/Snapshot
     subscription_price_snapshot DECIMAL(10, 2) DEFAULT 0.00,
-    
+
     -- Config
     config_annual_days INT DEFAULT 360,
     config_deduct_session TINYINT(1) DEFAULT 1,
@@ -40,7 +40,7 @@ CREATE TABLE users (
     email VARCHAR(255) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     role ENUM(
-        'SUPER_ADMIN', 'VENDEDOR', 'MARKETING', 'CALL_CENTER', 'FINANZAS', 
+        'SUPER_ADMIN', 'VENDEDOR', 'MARKETING', 'CALL_CENTER', 'FINANZAS',
         'SOPORTE', 'DEV', 'SEGURIDAD', -- Global
         'ADMIN_GYM', 'RECEPCION', 'ENTRENADOR', 'CONSULTA_REPORTES' -- Gym
     ) NOT NULL,
@@ -174,7 +174,7 @@ CREATE TABLE saas_plans (
     FOREIGN KEY (merged_into_plan_id) REFERENCES saas_plans(id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
-INSERT INTO saas_plans (name, code, period_months, current_price, currency) VALUES 
+INSERT INTO saas_plans (name, code, period_months, current_price, currency) VALUES
 ('Mensual', 'MENSUAL', 1, 50000.00, 'COP'),
 ('Anual', 'ANUAL', 12, 500000.00, 'COP');
 
@@ -205,7 +205,7 @@ CREATE TABLE saas_payments (
     reference VARCHAR(255) NULL,
     notes TEXT NULL,
     created_by_user_id INT NOT NULL,
-    
+
     -- Sales Data
     saas_plan_id INT DEFAULT NULL,
     plan_code VARCHAR(20) DEFAULT NULL,
@@ -246,13 +246,13 @@ CREATE TABLE leads (
     status VARCHAR(50) DEFAULT 'NEW',
     next_followup DATETIME NULL,
     notes TEXT,
-    
+
     city VARCHAR(100),
     gym_name VARCHAR(255),
     owner_name VARCHAR(255),
     last_call_at DATETIME,
     assigned_to_user_id INT,
-    
+
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
@@ -306,7 +306,7 @@ CREATE TABLE saas_settings (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
-INSERT INTO saas_settings (setting_key, setting_value) VALUES 
+INSERT INTO saas_settings (setting_key, setting_value) VALUES
 ('call_center_start_time', '08:00'),
 ('call_center_end_time', '18:00');
 
@@ -337,5 +337,5 @@ CREATE TABLE notification_reads (
 -- Insert Default Super Admin
 -- Password: admin (hash needs to be generated properly in PHP, placeholder here)
 -- Password: admin
-INSERT INTO users (name, email, password_hash, role, status) VALUES 
+INSERT INTO users (name, email, password_hash, role, status) VALUES
 ('Super Admin', 'admin@promptmaestro.com', '$2y$10$F932Ku3FQKMbU4SdbUdAxO6kd1nWcqXxSUjQwG9h2PW3xHLZW2bzq', 'SUPER_ADMIN', 'active');

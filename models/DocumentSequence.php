@@ -24,7 +24,7 @@ class DocumentSequence {
             }
 
             $nextNum = $seq['current_number'] + 1;
-            
+
             // Update
             $update = $this->db->prepare("UPDATE document_sequences SET current_number = ? WHERE gym_id = ? AND doc_type = ?");
             $update->execute([$nextNum, $gymId, $docType]);

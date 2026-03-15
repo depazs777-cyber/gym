@@ -16,7 +16,7 @@
                             <select name="third_party_id" id="thirdPartyId" class="form-control" required onchange="calculateTaxes()">
                                 <option value="">-- Select Provider --</option>
                                 <?php foreach ($providers as $p): ?>
-                                    <option value="<?= $p['id'] ?>" 
+                                    <option value="<?= $p['id'] ?>"
                                         data-person-type="<?= $p['person_type'] ?>"
                                         data-economic="<?= $p['has_economic_activity'] ?>"
                                         data-vat="<?= $p['vat_responsible'] ?>"
@@ -134,7 +134,7 @@ function calculateTaxes() {
     // 1. Calculate Gross
     const ivaValue = subtotal * (ivaRate / 100);
     document.getElementById('ivaValue').value = ivaValue.toFixed(2);
-    
+
     const totalGross = subtotal + ivaValue + otherTaxes;
     document.getElementById('totalGross').value = totalGross.toFixed(2);
 
@@ -163,9 +163,9 @@ function calculateTaxes() {
         // Filter by logic
         // TODO: Detailed logic implementation matching PHP enum checks
         // Simplified for this view:
-        
+
         let applicable = true;
-        
+
         // Check Min Base
         let baseVal = 0;
         if (rule.base_field === 'IVA') baseVal = ivaValue;
@@ -218,7 +218,7 @@ function calculateTaxes() {
 function updateRetentionUI(iva, ica, ivaDesc, icaDesc) {
     document.getElementById('reteivaValue').value = iva.toFixed(2);
     document.getElementById('reteivaInfo').innerText = ivaDesc;
-    
+
     document.getElementById('reteicaValue').value = ica.toFixed(2);
     document.getElementById('reteicaInfo').innerText = icaDesc;
 }
@@ -228,9 +228,9 @@ function calculateTotalPayable() {
     const rIva = parseFloat(document.getElementById('reteivaValue').value) || 0;
     const rIca = parseFloat(document.getElementById('reteicaValue').value) || 0;
     const otherRet = parseFloat(document.getElementById('otherRetentions').value) || 0;
-    
+
     const payable = totalGross - rIva - rIca - otherRet;
-    
+
     document.getElementById('totalPayable').value = payable.toFixed(2);
     document.getElementById('displayTotalPayable').innerText = '$' + payable.toFixed(2);
 }

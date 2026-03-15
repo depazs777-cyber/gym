@@ -1,7 +1,7 @@
 <?php defined('APP_NAME') or exit('No direct script access allowed');
 
 class BillingController extends BaseController {
-    
+
     public function __construct() {
         // SUPER_ADMIN and FINANZAS can access billing
         $this->checkRole(['SUPER_ADMIN', 'FINANZAS']);
@@ -11,7 +11,7 @@ class BillingController extends BaseController {
         $this->autoApplyPricing();
 
         $db = Database::getInstance()->getConnection();
-        
+
         // Fetch All Gyms with License Details
         // Calculate days remaining
         $driver = getenv('DB_DRIVER') ?: 'mysql';
@@ -19,18 +19,18 @@ class BillingController extends BaseController {
             $sql = "
                 SELECT id, name, status, license_start, license_end,
                 CAST(julianday(license_end) - julianday('now') AS INTEGER) as days_remaining
-                FROM gyms 
+                FROM gyms
                 ORDER BY license_end ASC
             ";
         } else {
             $sql = "
                 SELECT id, name, status, license_start, license_end,
                 DATEDIFF(license_end, CURDATE()) as days_remaining
-                FROM gyms 
+                FROM gyms
                 ORDER BY license_end ASC
             ";
         }
-        
+
         $stmt = $db->query($sql);
         $gyms = $stmt->fetchAll();
 
@@ -52,7 +52,7 @@ class BillingController extends BaseController {
         // Fetch Pricing Info
         $stmt = $db->query("SELECT * FROM saas_plans");
         $plans = $stmt->fetchAll();
-        
+
         $annualPlan = null;
         foreach($plans as $p) if($p['name'] === 'Anual') $annualPlan = $p;
 
@@ -105,17 +105,17 @@ class BillingController extends BaseController {
 
         if (count($notifyChanges) > 0) {
             $gyms = $db->query("SELECT id, name FROM gyms WHERE status = 'active'")->fetchAll();
-            
+
             foreach ($notifyChanges as $change) {
                 $title = "Actualización de tarifa — Plan Anual";
                 foreach ($gyms as $gym) {
                     // Check if notification exists
                     $check = $db->prepare("SELECT id FROM notifications WHERE gym_id = ? AND title = ? AND created_at >= ?");
                     $check->execute([$gym['id'], $title, $change['notify_date'] . ' 00:00:00']);
-                    
+
                     if (!$check->fetch()) {
                         $msg = "Queremos contarte con anticipación que a partir de {$change['effective_date']} se aplicará una actualización en la tarifa del Plan Anual. Nueva tarifa: $" . number_format($change['new_price'], 0) . " COP. Tu servicio seguirá funcionando con normalidad.";
-                        
+
                         $ins = $db->prepare("INSERT INTO notifications (gym_id, title, message, target_role, type) VALUES (?, ?, ?, 'ADMIN_GYM', 'PRICE_INCREASE')");
                         $ins->execute([$gym['id'], $title, $msg]);
                     }
@@ -127,26 +127,26 @@ class BillingController extends BaseController {
     public function scheduleIncrease() {
         $this->checkRole(['SUPER_ADMIN']);
         $this->verifyCsrf();
-        
+
         $newPrice = $_POST['new_price'];
         $effectiveDate = $_POST['effective_date'];
-        
+
         $eff = new DateTime($effectiveDate);
         $not = clone $eff;
         $not->modify('-1 month');
         $notifyDate = $not->format('Y-m-d');
-        
+
         $db = Database::getInstance()->getConnection();
-        
+
         // Get Annual Plan
         $stmt = $db->prepare("SELECT id, current_price FROM saas_plans WHERE name = 'Anual'");
         $stmt->execute();
         $plan = $stmt->fetch();
-        
+
         // Insert
         $stmt = $db->prepare("INSERT INTO saas_plan_price_changes (saas_plan_id, old_price, new_price, effective_date, notify_date, created_by_user_id) VALUES (?, ?, ?, ?, ?, ?)");
         $stmt->execute([$plan['id'], $plan['current_price'], $newPrice, $effectiveDate, $notifyDate, $_SESSION['user_id']]);
-        
+
         $_SESSION['success'] = "Price increase scheduled for $effectiveDate. Notification scheduled for $notifyDate.";
         $this->redirect('/admin/billing');
     }
@@ -155,11 +155,11 @@ class BillingController extends BaseController {
         $this->checkRole(['SUPER_ADMIN']);
         $this->verifyCsrf();
         $id = $_POST['change_id'];
-        
+
         $db = Database::getInstance()->getConnection();
         $stmt = $db->prepare("UPDATE saas_plan_price_changes SET status = 'CANCELLED' WHERE id = ?");
         $stmt->execute([$id]);
-        
+
         $_SESSION['success'] = "Price increase cancelled.";
         $this->redirect('/admin/billing');
     }
@@ -168,14 +168,14 @@ class BillingController extends BaseController {
         $this->verifyCsrf();
         $gymId = $_POST['gym_id'];
         $periodType = $_POST['period_type']; // MONTHLY, ANNUAL, CUSTOM
-        $months = (int)$_POST['period_months']; 
+        $months = (int)$_POST['period_months'];
         $amount = $_POST['amount'];
         $method = $_POST['method'];
         $reference = $_POST['reference'];
         $notes = $_POST['notes'];
 
         $db = Database::getInstance()->getConnection();
-        
+
         // Get Gym
         $stmt = $db->prepare("SELECT * FROM gyms WHERE id = ?");
         $stmt->execute([$gymId]);
@@ -185,13 +185,13 @@ class BillingController extends BaseController {
         // Calculate New End Date
         $currentEnd = new DateTime($gym['license_end']);
         $today = new DateTime();
-        
+
         if ($currentEnd < $today) {
             $startBase = $today; // Expired, start from today
         } else {
             $startBase = $currentEnd; // Active, add to end
         }
-        
+
         $newEnd = clone $startBase;
         $newEnd->modify("+$months months");
         $newEndDateStr = $newEnd->format('Y-m-d');
@@ -227,7 +227,7 @@ class BillingController extends BaseController {
     public function history() {
         $gymId = $_GET['gym_id'];
         $db = Database::getInstance()->getConnection();
-        
+
         // Payments
         $stmt = $db->prepare("SELECT * FROM saas_payments WHERE gym_id = ? ORDER BY payment_date DESC");
         $stmt->execute([$gymId]);

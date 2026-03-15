@@ -12,7 +12,7 @@ class GymSettingsController extends BaseController {
     public function settings() {
         $gymId = $_SESSION['gym_id'];
         $db = Database::getInstance()->getConnection();
-        
+
         $stmt = $db->prepare("SELECT * FROM gyms WHERE id = ?");
         $stmt->execute([$gymId]);
         $gym = $stmt->fetch();
@@ -30,7 +30,7 @@ class GymSettingsController extends BaseController {
     public function update() {
         $this->verifyCsrf();
         $gymId = $_SESSION['gym_id'];
-        
+
         $name = $_POST['name'] ?? '';
         $nit = $_POST['nit'] ?? '';
         $address = $_POST['address'] ?? '';
@@ -38,7 +38,7 @@ class GymSettingsController extends BaseController {
         $city = $_POST['city'] ?? '';
         $email = $_POST['email'] ?? '';
         $message = $_POST['message'] ?? '';
-        
+
         $config_annual_days = $_POST['config_annual_days'] ?? 360;
         $config_renewal_mode = $_POST['config_renewal_mode'] ?? 'CONTINUE';
         $config_deduct_session = $_POST['config_deduct_session'] ?? 1;
@@ -69,7 +69,7 @@ class GymSettingsController extends BaseController {
             $ext = pathinfo($_FILES['branding_logo']['name'], PATHINFO_EXTENSION);
             $filename = 'gym_' . $gymId . '_' . time() . '.' . $ext;
             $uploadDir = ROOT_PATH . '/storage/uploads/logos/';
-            
+
             if (move_uploaded_file($_FILES['branding_logo']['tmp_name'], $uploadDir . $filename)) {
                 $logoPath = '/storage/uploads/logos/' . $filename;
             } else {
@@ -89,16 +89,16 @@ class GymSettingsController extends BaseController {
         ]);
 
         $db = Database::getInstance()->getConnection();
-        
+
         try {
-            $sql = "UPDATE gyms SET 
-                    name = ?, 
-                    contact_info = ?, 
-                    config_annual_days = ?, 
-                    config_renewal_mode = ?, 
+            $sql = "UPDATE gyms SET
+                    name = ?,
+                    contact_info = ?,
+                    config_annual_days = ?,
+                    config_renewal_mode = ?,
                     config_deduct_session = ?,
                     config_warning_days = ?";
-            
+
             $params = [$name, $contactInfo, $config_annual_days, $config_renewal_mode, $config_deduct_session, $config_warning_days];
 
             if ($logoPath) {
@@ -111,14 +111,14 @@ class GymSettingsController extends BaseController {
 
             $stmt = $db->prepare($sql);
             $stmt->execute($params);
-            
+
             // Log action?
-            
+
             $_SESSION['success'] = 'Settings updated successfully.';
         } catch (PDOException $e) {
             $_SESSION['error'] = 'Database Error: ' . $e->getMessage();
         }
-        
+
         $this->redirect('/gym/settings');
     }
 }

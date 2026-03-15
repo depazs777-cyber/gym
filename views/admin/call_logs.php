@@ -33,7 +33,7 @@
                     <span class="badge <?= $bg ?>"><?= $log['outcome'] ?></span>
                 </td>
                 <td>
-                    <?php 
+                    <?php
                         $m = floor($log['duration_seconds'] / 60);
                         $s = $log['duration_seconds'] % 60;
                         echo sprintf('%02d:%02d', $m, $s);

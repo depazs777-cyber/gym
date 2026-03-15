@@ -80,7 +80,7 @@ execSql($db, $sql);
 
 // 4. Gyms (Update Columns)
 addColumn($db, 'gyms', "plan_id INT DEFAULT NULL");
-addColumn($db, 'gyms', "saas_plan_id INT DEFAULT NULL"); 
+addColumn($db, 'gyms', "saas_plan_id INT DEFAULT NULL");
 addColumn($db, 'gyms', "registered_at TIMESTAMP DEFAULT NULL");
 addColumn($db, 'gyms', "discount_value DECIMAL(15,2) DEFAULT 0");
 addColumn($db, 'gyms', "license_start DATE DEFAULT NULL");

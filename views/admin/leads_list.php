@@ -17,7 +17,7 @@
 <div class="card" style="margin-bottom: 1rem; padding: 1rem;">
     <form method="GET" action="<?= url('/admin/leads') ?>" style="display: flex; gap: 1rem; flex-wrap: wrap;">
         <input type="text" name="search" placeholder="Name or Phone" value="<?= htmlspecialchars($_GET['search'] ?? '') ?>" style="padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
-        
+
         <select name="status" style="padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
             <option value="">All Statuses</option>
             <option value="NEW" <?= ($_GET['status'] ?? '') === 'NEW' ? 'selected' : '' ?>>New</option>
@@ -87,7 +87,7 @@
                 <td><?= $lead['last_call_at'] ? date('M d, H:i', strtotime($lead['last_call_at'])) : '-' ?></td>
                 <td>
                     <?php if ($lead['next_followup']): ?>
-                        <?php 
+                        <?php
                             $isOverdue = strtotime($lead['next_followup']) < time();
                             $style = $isOverdue ? 'color: var(--danger); font-weight: bold;' : '';
                         ?>
@@ -120,7 +120,7 @@
         <form method="POST" action="<?= url('/admin/leads/update') ?>">
             <input type="hidden" name="<?= CSRF_TOKEN_NAME ?>" value="<?= $_SESSION[CSRF_TOKEN_NAME] ?>">
             <input type="hidden" name="id" id="edit_id">
-            
+
             <div class="form-group">
                 <label>Name</label>
                 <input type="text" name="name" id="edit_name" class="form-control" required>
@@ -157,7 +157,7 @@
         <form method="POST" action="<?= url('/admin/leads/assign') ?>">
             <input type="hidden" name="<?= CSRF_TOKEN_NAME ?>" value="<?= $_SESSION[CSRF_TOKEN_NAME] ?>">
             <input type="hidden" name="lead_id" id="assign_lead_id">
-            
+
             <div class="form-group">
                 <label>Select User (Call Center)</label>
                 <select name="user_id" id="assign_user_id" class="form-control" required>
@@ -187,7 +187,7 @@
             <!-- Left: Call Control -->
             <div>
                 <div id="leadInfo" style="margin-bottom: 1rem;">Loading...</div>
-                
+
                 <!-- Time Traffic Light -->
                 <div id="modalTraffic" style="margin-bottom: 1rem; padding: 10px; border-radius: 4px; text-align: center;">
                      Checking Hours...
@@ -205,7 +205,7 @@
                     <input type="hidden" name="<?= CSRF_TOKEN_NAME ?>" value="<?= $_SESSION[CSRF_TOKEN_NAME] ?>">
                     <input type="hidden" name="lead_id" id="inputLeadId">
                     <input type="hidden" name="duration" id="inputDuration">
-                    
+
                     <div class="form-group">
                         <label>Outcome</label>
                         <select name="outcome" class="form-control" required>
@@ -220,7 +220,7 @@
                             <option value="DNC">Do Not Call (DNC)</option>
                         </select>
                     </div>
-                    
+
                     <div class="form-group">
                         <label>Next Follow-up (Optional)</label>
                         <input type="datetime-local" name="next_followup" class="form-control">
@@ -270,7 +270,7 @@ function openCallModal(leadId) {
         alert("Error: Missing Lead ID");
         return;
     }
-    
+
     document.getElementById('callModal').style.display = 'block';
     document.getElementById('leadInfo').innerHTML = 'Loading...';
     document.getElementById('callForm').style.display = 'none';
@@ -337,13 +337,13 @@ function checkCallTime(settings) {
          document.getElementById('modalTraffic').innerHTML = '⚠️ Settings Unavailable';
          return;
     }
-    
+
     const start = settings.call_center_start_time || '08:00';
     const end = settings.call_center_end_time || '18:00';
-    
+
     const now = new Date();
     const currentHHMM = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-    
+
     const div = document.getElementById('modalTraffic');
     const btn = document.getElementById('btnStartCall');
 
@@ -365,15 +365,15 @@ function checkCallTime(settings) {
 function openAssignModal(lead) {
     document.getElementById('assignModal').style.display = 'block';
     document.getElementById('assign_lead_id').value = lead.id;
-    
-    // Fetch users via AJAX or just populate if we had them. 
-    // Since we don't have a specific endpoint for fetching users in this view, 
+
+    // Fetch users via AJAX or just populate if we had them.
+    // Since we don't have a specific endpoint for fetching users in this view,
     // we can assume a simplified approach: Create a small endpoint or just load all Call Center users if possible.
     // For now, let's fetch from the global data endpoint or similar.
-    
+
     const userSelect = document.getElementById('assign_user_id');
     userSelect.innerHTML = '<option>Loading...</option>';
-    
+
     fetch('<?= url('/admin/leads/users') ?>')
         .then(r => r.json())
         .then(data => {
@@ -397,16 +397,16 @@ function openAssignModal(lead) {
 
 function startCall() {
     if (!callAllowed) return;
-    
+
     callStartTime = new Date();
     document.getElementById('btnStartCall').style.display = 'none';
     document.getElementById('btnEndCall').style.display = 'inline-block';
-    
+
     timerInterval = setInterval(() => {
         const now = new Date();
         const diff = Math.floor((now - callStartTime) / 1000);
         callDuration = diff;
-        
+
         const m = Math.floor(diff / 60).toString().padStart(2, '0');
         const s = (diff % 60).toString().padStart(2, '0');
         document.getElementById('timerDisplay').innerText = `${m}:${s}`;

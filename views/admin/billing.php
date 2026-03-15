@@ -13,7 +13,7 @@
                 Current Price: <strong style="color: var(--success);">$<?= number_format($annualPlan['current_price'] ?? 0, 0) ?> COP</strong>
             </p>
         </div>
-        
+
         <?php if (isset($scheduledChange) && $scheduledChange): ?>
             <div style="text-align: right;">
                 <span class="badge badge-warning" style="margin-bottom: 5px; display: inline-block;">Scheduled Change</span>
@@ -77,7 +77,7 @@
                 <td><?= htmlspecialchars($gym['license_start']) ?></td>
                 <td><?= htmlspecialchars($gym['license_end']) ?></td>
                 <td>
-                    <?php 
+                    <?php
                         $statusClass = 'badge-neutral';
                         if ($gym['status'] === 'active') $statusClass = 'badge-success';
                         elseif ($gym['status'] === 'suspended') $statusClass = 'badge-danger';
@@ -112,12 +112,12 @@
             <h2>Schedule Price Increase</h2>
             <span onclick="document.getElementById('priceModal').style.display='none'" style="cursor: pointer; font-size: 1.5rem;">&times;</span>
         </div>
-        
+
         <form method="POST" action="<?= url('/admin/billing/schedule-increase') ?>">
             <input type="hidden" name="<?= CSRF_TOKEN_NAME ?>" value="<?= $_SESSION[CSRF_TOKEN_NAME] ?>">
-            
+
             <div class="alert alert-info">
-                This will schedule a price increase for the <strong>Annual Plan</strong>. 
+                This will schedule a price increase for the <strong>Annual Plan</strong>.
                 Existing contracts remain unchanged until their next renewal after the Effective Date.
                 Notifications will be sent 1 month prior.
             </div>
@@ -146,11 +146,11 @@
             <h2>Renew License</h2>
             <span onclick="document.getElementById('renewModal').style.display='none'" style="cursor: pointer; font-size: 1.5rem;">&times;</span>
         </div>
-        
+
         <form id="renewForm" method="POST" action="<?= url('/admin/billing/renew') ?>">
             <input type="hidden" name="<?= CSRF_TOKEN_NAME ?>" value="<?= $_SESSION[CSRF_TOKEN_NAME] ?>">
             <input type="hidden" name="gym_id" id="renew_gym_id">
-            
+
             <p><strong>Gym:</strong> <span id="renew_gym_name"></span></p>
             <p><strong>Current Expiry:</strong> <span id="renew_current_end"></span></p>
             <p><strong>New Expiry:</strong> <span id="renew_new_end" style="color: var(--success); font-weight: bold;"></span></p>
@@ -184,7 +184,7 @@
                 <label>Reference / Transaction ID</label>
                 <input type="text" name="reference" class="form-control" placeholder="e.g. TX-123456">
             </div>
-            
+
             <div class="form-group">
                 <label>Notes</label>
                 <textarea name="notes" class="form-control" rows="2"></textarea>
@@ -202,7 +202,7 @@
             <h2>History: <span id="hist_gym_name"></span></h2>
             <span onclick="document.getElementById('historyModal').style.display='none'" style="cursor: pointer; font-size: 1.5rem;">&times;</span>
         </div>
-        
+
         <div id="historyContent" style="max-height: 400px; overflow-y: auto;">
             Loading...
         </div>
@@ -218,7 +218,7 @@ function openRenewModal(id, name, endDate) {
     document.getElementById('renew_gym_id').value = id;
     document.getElementById('renew_gym_name').innerText = name;
     document.getElementById('renew_current_end').innerText = endDate;
-    
+
     currentEndDateObj = new Date(endDate);
     calculateNewDate();
 }
@@ -249,12 +249,12 @@ function calculateNewDate() {
     const today = new Date();
     // If expired, start from today. Else start from current end.
     let baseDate = (currentEndDateObj < today) ? today : currentEndDateObj;
-    
+
     // Copy date
     const newDate = new Date(baseDate);
     // Add months
     newDate.setMonth(newDate.getMonth() + months);
-    
+
     document.getElementById('renew_new_end').innerText = newDate.toISOString().split('T')[0];
 }
 
@@ -262,7 +262,7 @@ function openHistoryModal(id, name) {
     document.getElementById('historyModal').style.display = 'block';
     document.getElementById('hist_gym_name').innerText = name;
     document.getElementById('historyContent').innerText = 'Loading...';
-    
+
     fetch('<?= url('/admin/billing/history') ?>?gym_id=' + id)
         .then(res => res.json())
         .then(data => {
@@ -277,7 +277,7 @@ function openHistoryModal(id, name) {
                 </tr>`;
             });
             html += '</tbody></table>';
-            
+
             html += '<h3 style="margin-top:1rem;">Renewals</h3><table class="table" style="width:100%; font-size:0.9rem;"><thead><tr><th>Renewed At</th><th>Old End</th><th>New End</th><th>Notes</th></tr></thead><tbody>';
             if(data.renewals.length === 0) html += '<tr><td colspan="4">No renewals found</td></tr>';
             data.renewals.forEach(r => {
@@ -289,7 +289,7 @@ function openHistoryModal(id, name) {
                 </tr>`;
             });
             html += '</tbody></table>';
-            
+
             document.getElementById('historyContent').innerHTML = html;
         });
 }

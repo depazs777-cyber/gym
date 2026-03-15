@@ -6,7 +6,7 @@
 
 <div class="card" style="max-width: 900px; margin: 0 auto;">
     <h3 class="card-title">For: <?= htmlspecialchars($client['name']) ?></h3>
-    
+
     <form action="<?= url("/gym/memberships/store") ?>" method="POST" id="saleForm">
         <input type="hidden" name="<?= CSRF_TOKEN_NAME ?>" value="<?= $_SESSION[CSRF_TOKEN_NAME] ?>">
         <input type="hidden" name="client_id" value="<?= $client['id'] ?>">
@@ -14,12 +14,12 @@
         <!-- Config Data for JS -->
         <input type="hidden" id="cfg_annual_days" value="<?= $gymConfig['config_annual_days'] ?? 360 ?>">
         <input type="hidden" id="cfg_renewal_mode" value="<?= $gymConfig['config_renewal_mode'] ?? 'CONTINUE' ?>">
-        
+
         <!-- Last Membership Data -->
         <div class="alert alert-neutral" style="display: flex; justify-content: space-between; align-items: center;">
             <div>
                 <?php if ($lastMembership): ?>
-                    <strong>Last Membership:</strong> Ends: <span id="last_end_date"><?= $lastMembership['end_date'] ?></span> 
+                    <strong>Last Membership:</strong> Ends: <span id="last_end_date"><?= $lastMembership['end_date'] ?></span>
                     (Status: <?= ucfirst($lastMembership['status']) ?>)
                 <?php else: ?>
                     <strong>Status:</strong> New Client (No previous history)
@@ -35,7 +35,7 @@
                     <select id="plan_id" name="plan_id" required onchange="calculate()">
                         <option value="">-- Select a Plan --</option>
                         <?php foreach ($plans as $plan): ?>
-                        <option value="<?= $plan['id'] ?>" 
+                        <option value="<?= $plan['id'] ?>"
                                 data-price="<?= $plan['price'] ?>"
                                 data-type="<?= $plan['type'] ?>"
                                 data-days="<?= $plan['duration_days'] ?>"
@@ -50,11 +50,11 @@
                     <label>Purchase Mode</label>
                     <div style="display: flex; gap: 1.5rem;">
                         <label style="display: flex; align-items: center; font-weight: 400;">
-                            <input type="radio" name="purchase_mode" value="PERIODIC" checked onchange="setMode('PERIODIC')" style="width: auto; margin-right: 0.5rem;"> 
+                            <input type="radio" name="purchase_mode" value="PERIODIC" checked onchange="setMode('PERIODIC')" style="width: auto; margin-right: 0.5rem;">
                             Periodic (Months/Days)
                         </label>
                         <label style="display: flex; align-items: center; font-weight: 400;">
-                            <input type="radio" name="purchase_mode" value="ANNUAL" onchange="setMode('ANNUAL')" style="width: auto; margin-right: 0.5rem;"> 
+                            <input type="radio" name="purchase_mode" value="ANNUAL" onchange="setMode('ANNUAL')" style="width: auto; margin-right: 0.5rem;">
                             Annual
                         </label>
                     </div>
@@ -78,12 +78,12 @@
             <div style="background: var(--bg-body); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
                 <h4 style="margin-top: 0;">Summary</h4>
                 <p><strong>Plan Type:</strong> <span id="disp_type">-</span></p>
-                <p><strong>New Validity:</strong> <br> 
+                <p><strong>New Validity:</strong> <br>
                    <span id="disp_start" style="font-weight: 600; color: var(--text-main);">-</span> to <span id="disp_end" style="font-weight: 600; color: var(--text-main);">-</span>
                 </p>
                 <p><strong>Total Days/Sessions:</strong> <span id="disp_total_units">-</span></p>
                 <hr style="border-top: 1px solid var(--border-color); margin: 1rem 0;">
-                
+
                 <div class="form-group">
                     <label>Discount ($)</label>
                     <input type="number" id="discount" name="discount" value="0" step="0.01" onchange="calculate()">
@@ -133,7 +133,7 @@ function setStartDate(mode) {
         startInput.value = todayStr;
     } else if (mode === 'CONTINUE' && lastEndStr) {
         const last = new Date(lastEndStr);
-        last.setDate(last.getDate() + 1); 
+        last.setDate(last.getDate() + 1);
         startInput.value = last.toISOString().split('T')[0];
     }
     calculate();
@@ -151,7 +151,7 @@ function setMode(mode) {
 function calculate() {
     const planSelect = document.getElementById('plan_id');
     const option = planSelect.options[planSelect.selectedIndex];
-    
+
     if (!option.value) return;
 
     const priceBase = parseFloat(option.getAttribute('data-price')) || 0;
@@ -165,7 +165,7 @@ function calculate() {
     const startVal = document.getElementById('start_date').value;
 
     let totalPrice = 0;
-    let totalUnits = 0; 
+    let totalUnits = 0;
     let endDate = '';
 
     totalPrice = (priceBase * multiplier) - discount;
@@ -174,14 +174,14 @@ function calculate() {
     if (type === 'TIME') {
         let daysToAdd = 0;
         if (mode === 'ANNUAL') {
-            const ratio = multiplier / 12; 
+            const ratio = multiplier / 12;
             daysToAdd = Math.round(ratio * cfgAnnualDays);
         } else {
             daysToAdd = daysBase * multiplier;
         }
-        
+
         totalUnits = daysToAdd + " Days";
-        
+
         if (startVal) {
             const start = new Date(startVal);
             start.setDate(start.getDate() + daysToAdd);

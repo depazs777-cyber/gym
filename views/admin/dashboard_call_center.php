@@ -58,7 +58,7 @@
             </table>
         <?php endif; ?>
     </div>
-    
+
     <!-- Other Info or Leaderboard could go here -->
     <div class="card">
         <h3>Assigned Leads</h3>

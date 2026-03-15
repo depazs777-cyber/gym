@@ -9,17 +9,17 @@ class PlansController extends BaseController {
 
     public function index() {
         $db = Database::getInstance()->getConnection();
-        
+
         // Fetch Plans with Gym count
         $stmt = $db->query("
-            SELECT p.*, 
+            SELECT p.*,
                    (SELECT COUNT(*) FROM gyms g WHERE g.saas_plan_id = p.id) as gym_count,
                    (SELECT name FROM saas_plans WHERE id = p.merged_into_plan_id) as merged_into_name
-            FROM saas_plans p 
+            FROM saas_plans p
             ORDER BY p.is_archived ASC, p.is_active DESC, p.name ASC
         ");
         $plans = $stmt->fetchAll();
-        
+
         // Fetch Active Plans for Dropdown (for Merge modal)
         $stmt = $db->query("SELECT id, name FROM saas_plans WHERE is_active = 1 AND is_archived = 0 ORDER BY name ASC");
         $activePlans = $stmt->fetchAll();
@@ -59,7 +59,7 @@ class PlansController extends BaseController {
         }
 
         $db = Database::getInstance()->getConnection();
-        
+
         // Check duplicate code
         $stmt = $db->prepare("SELECT id FROM saas_plans WHERE code = ?");
         $stmt->execute([$code]);
@@ -82,7 +82,7 @@ class PlansController extends BaseController {
         $id = $_POST['id'] ?? null;
         $name = $_POST['name'] ?? '';
         $isActive = isset($_POST['is_active']) ? 1 : 0;
-        
+
         // Note: Code and Price are NOT editable here directly to preserve integrity/history.
         // Price is changed via schedulePrice. Code is generally immutable or carefully changed manually.
 
@@ -114,7 +114,7 @@ class PlansController extends BaseController {
         }
 
         $db = Database::getInstance()->getConnection();
-        
+
         // Get current price
         $stmt = $db->prepare("SELECT current_price FROM saas_plans WHERE id = ?");
         $stmt->execute([$planId]);
@@ -141,7 +141,7 @@ class PlansController extends BaseController {
         // update_snapshots checkbox is tricky. Requirements say:
         // "Mantener subscription_price_snapshot ... a menos que el sistema opere contrato por plan"
         // "Si se define que al migrar se adopta el nuevo plan ... actualizar snapshot SOLO SI el admin lo decide"
-        $updateSnapshots = isset($_POST['update_snapshots']); 
+        $updateSnapshots = isset($_POST['update_snapshots']);
 
         if (!$sourceId || !$targetId || $sourceId == $targetId) {
             $_SESSION['error'] = 'Invalid Source or Target Plan.';
@@ -157,7 +157,7 @@ class PlansController extends BaseController {
             $stmt = $db->prepare("SELECT * FROM saas_plans WHERE id = ?");
             $stmt->execute([$sourceId]);
             $source = $stmt->fetch();
-            
+
             $stmt->execute([$targetId]);
             $target = $stmt->fetch();
 
@@ -174,7 +174,7 @@ class PlansController extends BaseController {
             // Or just change the plan ID?
             // "NO tocar pagos históricos" - handled by separate saas_payments table.
             // "NO tocar license_start/license_end automatically".
-            
+
             if ($updateSnapshots) {
                 // Update plan ID AND snapshots (price/period) to match new plan
                 $stmt = $db->prepare("UPDATE gyms SET saas_plan_id = ?, subscription_price_snapshot = ?, subscription_period_months_snapshot = ? WHERE saas_plan_id = ?");
@@ -184,7 +184,7 @@ class PlansController extends BaseController {
                 $stmt = $db->prepare("UPDATE gyms SET saas_plan_id = ? WHERE saas_plan_id = ?");
                 $stmt->execute([$targetId, $sourceId]);
             }
-            
+
             // 4. Audit Log (using Notifications table for simplicity or just basic logs)
             $msg = "Plan Merged: '{$source['name']}' -> '{$target['name']}'. Migrated gyms from Source.";
             $stmt = $db->prepare("INSERT INTO notifications (title, message, target_role, type) VALUES ('Plan Merge', ?, 'SUPER_ADMIN', 'INFO')");
@@ -207,7 +207,7 @@ class PlansController extends BaseController {
 
         $id = $_POST['id'] ?? null;
         $db = Database::getInstance()->getConnection();
-        
+
         $stmt = $db->prepare("UPDATE saas_plans SET is_active = NOT is_active WHERE id = ?");
         $stmt->execute([$id]);
 

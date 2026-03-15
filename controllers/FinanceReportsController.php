@@ -1,14 +1,14 @@
 <?php defined('APP_NAME') or exit('No direct script access allowed');
 
 class FinanceReportsController extends BaseController {
-    
+
     public function __construct() {
         $this->checkRole(['SUPER_ADMIN', 'FINANZAS']);
     }
 
     public function index() {
         $db = Database::getInstance()->getConnection();
-        
+
         // Filters
         $startDate = $_GET['start_date'] ?? date('Y-m-01');
         $endDate = $_GET['end_date'] ?? date('Y-m-t');
@@ -20,7 +20,7 @@ class FinanceReportsController extends BaseController {
             $sqlToday = "SELECT SUM(total_amount) FROM sales_orders WHERE status='PAID' AND date(created_at) = date('now')";
             $sqlMonth = "SELECT SUM(total_amount) FROM sales_orders WHERE status='PAID' AND strftime('%Y-%m', created_at) = strftime('%Y-%m', 'now')";
             $sqlYear = "SELECT SUM(total_amount) FROM sales_orders WHERE status='PAID' AND strftime('%Y', created_at) = strftime('%Y', 'now')";
-            
+
             // Renewals Month (Gyms expiring this month)
             $sqlRenewals = "SELECT COUNT(*) FROM gyms WHERE status='active' AND strftime('%Y-%m', license_end) = strftime('%Y-%m', 'now')";
         } else {
@@ -57,20 +57,20 @@ class FinanceReportsController extends BaseController {
 
         // Payments Table (from sales_orders)
         if ($driver === 'sqlite') {
-            $sql = "SELECT s.id, s.created_at as payment_date, s.total_amount as amount, s.period_months, s.doc_number as reference, 
-                           g.name as gym_name, u.name as user_name 
-                    FROM sales_orders s 
-                    LEFT JOIN gyms g ON s.gym_id = g.id 
+            $sql = "SELECT s.id, s.created_at as payment_date, s.total_amount as amount, s.period_months, s.doc_number as reference,
+                           g.name as gym_name, u.name as user_name
+                    FROM sales_orders s
+                    LEFT JOIN gyms g ON s.gym_id = g.id
                     LEFT JOIN users u ON s.seller_user_id = u.id
-                    WHERE s.status='PAID' AND date(s.created_at) BETWEEN ? AND ? 
+                    WHERE s.status='PAID' AND date(s.created_at) BETWEEN ? AND ?
                     ORDER BY s.created_at DESC";
         } else {
-            $sql = "SELECT s.id, s.created_at as payment_date, s.total_amount as amount, s.period_months, s.doc_number as reference, 
-                           g.name as gym_name, u.name as user_name 
-                    FROM sales_orders s 
-                    LEFT JOIN gyms g ON s.gym_id = g.id 
+            $sql = "SELECT s.id, s.created_at as payment_date, s.total_amount as amount, s.period_months, s.doc_number as reference,
+                           g.name as gym_name, u.name as user_name
+                    FROM sales_orders s
+                    LEFT JOIN gyms g ON s.gym_id = g.id
                     LEFT JOIN users u ON s.seller_user_id = u.id
-                    WHERE s.status='PAID' AND DATE(s.created_at) BETWEEN ? AND ? 
+                    WHERE s.status='PAID' AND DATE(s.created_at) BETWEEN ? AND ?
                     ORDER BY s.created_at DESC";
         }
         $payments = [];
@@ -101,24 +101,24 @@ class FinanceReportsController extends BaseController {
         $db = Database::getInstance()->getConnection();
         $startDate = $_GET['start_date'] ?? date('Y-m-01');
         $endDate = $_GET['end_date'] ?? date('Y-m-t');
-        
+
         $driver = getenv('DB_DRIVER') ?: 'mysql';
         if ($driver === 'sqlite') {
-            $sql = "SELECT s.id, s.created_at as payment_date, g.name as gym_name, s.total_amount as amount, s.period_months, 'N/A' as method, s.doc_number as reference, u.name as user_name 
-                    FROM sales_orders s 
-                    LEFT JOIN gyms g ON s.gym_id = g.id 
+            $sql = "SELECT s.id, s.created_at as payment_date, g.name as gym_name, s.total_amount as amount, s.period_months, 'N/A' as method, s.doc_number as reference, u.name as user_name
+                    FROM sales_orders s
+                    LEFT JOIN gyms g ON s.gym_id = g.id
                     LEFT JOIN users u ON s.seller_user_id = u.id
-                    WHERE s.status='PAID' AND date(s.created_at) BETWEEN ? AND ? 
+                    WHERE s.status='PAID' AND date(s.created_at) BETWEEN ? AND ?
                     ORDER BY s.created_at DESC";
         } else {
-            $sql = "SELECT s.id, s.created_at as payment_date, g.name as gym_name, s.total_amount as amount, s.period_months, 'N/A' as method, s.doc_number as reference, u.name as user_name 
-                    FROM sales_orders s 
-                    LEFT JOIN gyms g ON s.gym_id = g.id 
+            $sql = "SELECT s.id, s.created_at as payment_date, g.name as gym_name, s.total_amount as amount, s.period_months, 'N/A' as method, s.doc_number as reference, u.name as user_name
+                    FROM sales_orders s
+                    LEFT JOIN gyms g ON s.gym_id = g.id
                     LEFT JOIN users u ON s.seller_user_id = u.id
-                    WHERE s.status='PAID' AND DATE(s.created_at) BETWEEN ? AND ? 
+                    WHERE s.status='PAID' AND DATE(s.created_at) BETWEEN ? AND ?
                     ORDER BY s.created_at DESC";
         }
-        
+
         try {
             $stmt = $db->prepare($sql);
             $stmt->execute([$startDate, $endDate]);
@@ -129,7 +129,7 @@ class FinanceReportsController extends BaseController {
 
         header('Content-Type: text/csv');
         header('Content-Disposition: attachment; filename="finance_report_' . $startDate . '_to_' . $endDate . '.csv"');
-        
+
         $fp = fopen('php://output', 'w');
         fputcsv($fp, ['ID', 'Date', 'Gym', 'Amount', 'Months', 'Method', 'Reference', 'User']);
         foreach ($rows as $row) {

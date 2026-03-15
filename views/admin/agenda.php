@@ -21,7 +21,7 @@
                 <?php foreach ($agenda as $item): ?>
                 <tr>
                     <td>
-                         <?php 
+                         <?php
                             $isOverdue = strtotime($item['next_followup']) < time();
                             $style = $isOverdue ? 'color: var(--danger); font-weight: bold;' : 'color: var(--primary); font-weight: bold;';
                         ?>

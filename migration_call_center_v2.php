@@ -34,7 +34,7 @@ try {
     )";
     $pdo->exec($sql);
     echo "Table saas_settings created/verified.\n";
-    
+
     // Seed default settings
     $stmt = $pdo->prepare("INSERT OR IGNORE INTO saas_settings (setting_key, setting_value) VALUES (?, ?)");
     $stmt->execute(['call_center_start_time', '08:00']);

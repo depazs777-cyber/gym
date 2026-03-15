@@ -31,7 +31,7 @@ class ThirdPartiesController extends BaseController {
         }
 
         $sql .= " ORDER BY name ASC LIMIT 100";
-        
+
         $stmt = $db->prepare($sql);
         $stmt->execute($params);
         $thirdParties = $stmt->fetchAll();
@@ -55,10 +55,10 @@ class ThirdPartiesController extends BaseController {
     public function store() {
         $this->verifyCsrf();
         $gymId = $_SESSION['gym_id'];
-        
+
         $docNumber = $_POST['doc_number'] ?? '';
         $name = $_POST['name'] ?? ''; // Razon Social or Full Name
-        
+
         if (empty($docNumber) || empty($name)) {
             $_SESSION['error'] = 'Document Number and Name are required.';
             $this->redirect('/gym/third_parties/create');
@@ -75,9 +75,9 @@ class ThirdPartiesController extends BaseController {
         }
 
         $sql = "INSERT INTO third_parties (
-            gym_id, type_persona, doc_type, doc_number, dv, 
-            name, trade_name, email, phone, address, city, 
-            is_client, is_provider, reteiva_percent, reteica_percent, 
+            gym_id, type_persona, doc_type, doc_number, dv,
+            name, trade_name, email, phone, address, city,
+            is_client, is_provider, reteiva_percent, reteica_percent,
             has_economic_activity, rut_required
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -153,10 +153,10 @@ class ThirdPartiesController extends BaseController {
             $this->redirect('/gym/third_parties/edit/' . $id);
         }
 
-        $sql = "UPDATE third_parties SET 
-            type_persona = ?, doc_type = ?, doc_number = ?, dv = ?, 
-            name = ?, trade_name = ?, email = ?, phone = ?, address = ?, city = ?, 
-            is_client = ?, is_provider = ?, reteiva_percent = ?, reteica_percent = ?, 
+        $sql = "UPDATE third_parties SET
+            type_persona = ?, doc_type = ?, doc_number = ?, dv = ?,
+            name = ?, trade_name = ?, email = ?, phone = ?, address = ?, city = ?,
+            is_client = ?, is_provider = ?, reteiva_percent = ?, reteica_percent = ?,
             has_economic_activity = ?, rut_required = ?
             WHERE id = ? AND gym_id = ?";
 

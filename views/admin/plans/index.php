@@ -25,11 +25,11 @@
                 </div>
                 <div class="card-body">
                     <h3 class="card-title text-center">
-                        $<?php echo number_format($plan['current_price'], 0); ?> 
+                        $<?php echo number_format($plan['current_price'], 0); ?>
                         <small class="text-muted">/ <?php echo $plan['period_months']; ?> mo</small>
                     </h3>
                     <p class="text-center text-muted">Code: <?php echo htmlspecialchars($plan['code']); ?></p>
-                    
+
                     <ul class="list-group list-group-flush mb-3">
                         <li class="list-group-item d-flex justify-content-between">
                             <span>Active Gyms:</span>
@@ -44,15 +44,15 @@
 
                     <?php if ($canManage && !$plan['is_archived']): ?>
                         <div class="d-grid gap-2">
-                            <button class="btn btn-outline-primary btn-sm" 
+                            <button class="btn btn-outline-primary btn-sm"
                                     onclick="editPlan(<?php echo htmlspecialchars(json_encode($plan)); ?>)">
                                 Edit Name/Status
                             </button>
-                            <button class="btn btn-outline-info btn-sm" 
+                            <button class="btn btn-outline-info btn-sm"
                                     onclick="schedulePrice(<?php echo $plan['id']; ?>, '<?php echo htmlspecialchars($plan['name']); ?>', <?php echo $plan['current_price']; ?>)">
                                 Schedule Price Change
                             </button>
-                            <button class="btn btn-outline-danger btn-sm" 
+                            <button class="btn btn-outline-danger btn-sm"
                                     onclick="mergePlan(<?php echo $plan['id']; ?>, '<?php echo htmlspecialchars($plan['name']); ?>')">
                                 Merge / Archive
                             </button>

@@ -28,7 +28,7 @@
                 </td>
                 <td>
                     <button class="btn" style="background-color: #6c757d; padding: 0.25rem 0.5rem;" onclick='openEditModal(<?= json_encode($user) ?>)'>Edit</button>
-                    
+
                     <form action="<?= url("/admin/users/toggle") ?>" method="POST" style="display:inline;">
                         <input type="hidden" name="<?= CSRF_TOKEN_NAME ?>" value="<?= $_SESSION[CSRF_TOKEN_NAME] ?>">
                         <input type="hidden" name="id" value="<?= $user['id'] ?>">
@@ -53,7 +53,7 @@
         <h3>Create Internal User</h3>
         <form action="<?= url("/admin/users/create") ?>" method="POST">
             <input type="hidden" name="<?= CSRF_TOKEN_NAME ?>" value="<?= $_SESSION[CSRF_TOKEN_NAME] ?>">
-            
+
             <div class="form-group">
                 <label>Name</label>
                 <input type="text" name="name" required>
@@ -93,7 +93,7 @@
         <form action="<?= url("/admin/users/update") ?>" method="POST">
             <input type="hidden" name="<?= CSRF_TOKEN_NAME ?>" value="<?= $_SESSION[CSRF_TOKEN_NAME] ?>">
             <input type="hidden" name="id" id="edit_id">
-            
+
             <div class="form-group">
                 <label>Name</label>
                 <input type="text" name="name" id="edit_name" required>
@@ -125,7 +125,7 @@
         <form action="<?= url("/admin/users/reset-pass") ?>" method="POST">
             <input type="hidden" name="<?= CSRF_TOKEN_NAME ?>" value="<?= $_SESSION[CSRF_TOKEN_NAME] ?>">
             <input type="hidden" name="id" id="reset_id">
-            
+
             <div class="form-group">
                 <label>New Password</label>
                 <input type="password" name="password" required>

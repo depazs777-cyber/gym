@@ -1,7 +1,7 @@
 <?php defined('APP_NAME') or exit('No direct script access allowed');
 
 class GymController extends BaseController {
-    
+
     public function __construct() {
         // Allow Gym Admin and staff
         $this->checkRole(['ADMIN_GYM', 'RECEPCION', 'ENTRENADOR']);
@@ -36,7 +36,7 @@ class GymController extends BaseController {
     public function listClients() {
         $gymId = $_SESSION['gym_id'];
         $db = Database::getInstance()->getConnection();
-        
+
         // Get Gym Warning Threshold
         $stmt = $db->prepare("SELECT config_warning_days FROM gyms WHERE id = ?");
         $stmt->execute([$gymId]);
@@ -57,21 +57,21 @@ class GymController extends BaseController {
 
         // Fetch Clients with Latest Membership End Date
         $sql = "
-            SELECT c.*, 
+            SELECT c.*,
                    (SELECT MAX(end_date) FROM memberships m WHERE m.client_id = c.id AND m.gym_id = ?) as paid_until
-            FROM clients c 
-            WHERE c.gym_id = ? 
+            FROM clients c
+            WHERE c.gym_id = ?
             $searchSql
             ORDER BY c.name ASC
         ";
-        
+
         $stmt = $db->prepare($sql);
         $stmt->execute($params);
         $clients = $stmt->fetchAll();
 
         // Calculate Status for each client
         $today = new DateTime();
-        
+
         foreach ($clients as &$client) {
             $client['membership_status'] = 'NONE'; // Default
             $client['days_left'] = null;
@@ -82,7 +82,7 @@ class GymController extends BaseController {
                 $endDate = new DateTime($client['paid_until']);
                 $interval = $today->diff($endDate);
                 $daysLeft = (int)$interval->format('%r%a'); // Signed days
-                
+
                 $client['days_left'] = $daysLeft;
 
                 if ($daysLeft < 0) {
@@ -177,7 +177,7 @@ class GymController extends BaseController {
         $stmt = $db->prepare("SELECT MAX(end_date) as paid_until FROM memberships WHERE client_id = ? AND gym_id = ?");
         $stmt->execute([$clientId, $gymId]);
         $membership = $stmt->fetch();
-        
+
         $paidUntil = $membership['paid_until'] ?? null;
         $statusColor = 'red';
         $statusText = 'No Membership';
@@ -202,11 +202,11 @@ class GymController extends BaseController {
 
         // 4. Generate QR Content (Use Client ID or Token)
         // Prompt says "Token must be unique...". We created client_tokens table.
-        // Let's try to fetch token, if not create one? 
-        // For MVP patch, we rely on ID as per previous turn's "ShowQR". 
-        // But prompt says "QR (token del cliente)". 
+        // Let's try to fetch token, if not create one?
+        // For MVP patch, we rely on ID as per previous turn's "ShowQR".
+        // But prompt says "QR (token del cliente)".
         // Ideally we should use the token from client_tokens.
-        
+
         $stmt = $db->prepare("SELECT token FROM client_tokens WHERE client_id = ?");
         $stmt->execute([$clientId]);
         $tokenRow = $stmt->fetch();

@@ -2,7 +2,7 @@
 <div class="card" style="max-width: 800px;">
     <form action="<?= url("/admin/gyms/store") ?>" method="POST" id="createGymForm">
         <input type="hidden" name="<?= CSRF_TOKEN_NAME ?>" value="<?= $_SESSION[CSRF_TOKEN_NAME] ?>">
-        
+
         <div class="row">
             <div class="col-md-6">
                 <h3>Gym Details</h3>
@@ -10,7 +10,7 @@
                     <label for="name">Gym Name</label>
                     <input type="text" id="name" name="name" class="form-control" required>
                 </div>
-                
+
                 <hr>
                 <h3>Gym Admin Account</h3>
                 <div class="form-group mb-3">
@@ -25,15 +25,15 @@
 
             <div class="col-md-6" style="border-left: 1px solid #eee; padding-left: 20px;">
                 <h3>Subscription Plan</h3>
-                
+
                 <div class="form-group mb-3">
                 <div class="form-group mb-3">
                     <label>Plan</label>
                     <select name="plan_id" id="plan_select" class="form-control" onchange="updatePricing()" required>
                         <option value="">Select Plan...</option>
                         <?php foreach ($plans as $p): ?>
-                            <option value="<?= $p['id'] ?>" 
-                                    data-name="<?= $p['name'] ?>" 
+                            <option value="<?= $p['id'] ?>"
+                                    data-name="<?= $p['name'] ?>"
                                     data-price="<?= $p['current_price'] ?>"
                                     data-period="<?= $p['period_months'] ?>">
                                 <?= $p['name'] ?> - $<?= number_format($p['current_price']) ?>
@@ -104,7 +104,7 @@ function updatePricing() {
     const planSelect = document.getElementById('plan_select');
     const periodSelect = document.getElementById('period_select');
     const discountCheck = document.getElementById('apply_discount');
-    
+
     if (planSelect.selectedIndex === 0) return;
 
     const opt = planSelect.options[planSelect.selectedIndex];
@@ -115,7 +115,7 @@ function updatePricing() {
     // Populate Period Dropdown if empty or changed logic
     // Logic: If Annual (period=12), options: 1 Year, 2 Years...
     // If Monthly (period=1), options: 1 Month, 3 Months, 6 Months, 12 Months
-    
+
     // We check if we need to repopulate
     const currentPlanType = planName.includes('Anual') ? 'ANNUAL' : 'MONTHLY';
     if (periodSelect.dataset.lastType !== currentPlanType) {
@@ -155,7 +155,7 @@ function updatePricing() {
     if (discountCheck && discountCheck.checked) {
         const type = document.getElementById('discount_type').value;
         const val = parseFloat(document.getElementById('discount_value').value) || 0;
-        
+
         if (type === 'FIXED') {
             discount = val;
         } else {
@@ -178,7 +178,7 @@ function calculateEndDate() {
     const startInput = document.getElementById('license_start').value;
     const planSelect = document.getElementById('plan_select');
     const periodSelect = document.getElementById('period_select');
-    
+
     if (!startInput || planSelect.selectedIndex === 0) return;
 
     const opt = planSelect.options[planSelect.selectedIndex];
@@ -187,13 +187,13 @@ function calculateEndDate() {
     const multiplier = parseInt(periodSelect.value) || 1;
 
     const date = new Date(startInput);
-    
+
     if (currentPlanType === 'ANNUAL') {
         date.setFullYear(date.getFullYear() + multiplier);
     } else {
         date.setMonth(date.getMonth() + multiplier);
     }
-    
+
     // ISO Date
     const dateStr = date.toISOString().split('T')[0];
     document.getElementById('license_end').value = dateStr;

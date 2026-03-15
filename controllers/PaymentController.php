@@ -1,7 +1,7 @@
 <?php defined('APP_NAME') or exit('No direct script access allowed');
 
 class PaymentController extends BaseController {
-    
+
     public function __construct() {
         $this->checkRole(['ADMIN_GYM', 'RECEPCION']);
         if (!isset($_SESSION['gym_id'])) {
@@ -18,11 +18,11 @@ class PaymentController extends BaseController {
         $to = $_GET['to'] ?? date('Y-m-t');
 
         $sql = "
-            SELECT p.*, c.name as client_name, u.name as cashier_name 
+            SELECT p.*, c.name as client_name, u.name as cashier_name
             FROM payments p
             JOIN clients c ON p.client_id = c.id
             JOIN users u ON p.created_by_user_id = u.id
-            WHERE p.gym_id = ? 
+            WHERE p.gym_id = ?
             AND DATE(p.payment_date) BETWEEN ? AND ?
             ORDER BY p.payment_date DESC
         ";
@@ -72,17 +72,17 @@ class PaymentController extends BaseController {
                 'cashier_name' => $data['cashier'],
                 'notes' => $data['notes'] ?? ''
             ];
-            
+
             // Fetch payment method from real payment table if needed
             $stmt = $db->prepare("SELECT payment_method FROM payments WHERE id = ?");
             $stmt->execute([$paymentId]);
             $pm = $stmt->fetch();
             $receipt['payment_method'] = $pm['payment_method'] ?? '-';
-            
+
         } else {
             // Fallback to Live Data (Old way)
             $sql = "
-                SELECT p.*, 
+                SELECT p.*,
                        c.name as client_name, c.identification as client_id_num,
                        m.start_date, m.end_date,
                        pl.name as plan_name,
@@ -100,7 +100,7 @@ class PaymentController extends BaseController {
             $stmt = $db->prepare($sql);
             $stmt->execute([$paymentId, $gymId]);
             $receipt = $stmt->fetch();
-            
+
             if (!$receipt) die("Receipt not found.");
 
             $receipt['contact_details'] = json_decode($receipt['contact_info'] ?? '', true) ?? [];

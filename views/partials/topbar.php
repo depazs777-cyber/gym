@@ -6,13 +6,13 @@
         </h2>
     </div>
     <div class="topbar-right">
-        
+
         <!-- Notifications -->
         <?php if (isset($_SESSION['gym_id'])): ?>
         <div style="position: relative; cursor: pointer;" onclick="toggleNotifs()">
             <span style="font-size: 1.2rem;">🔔</span>
             <span id="notifBadge" class="notif-badge" style="display:none;">0</span>
-            
+
             <div id="notifDropdown" class="notif-dropdown" style="display:none; position: absolute; background:white;">
                 <div class="notif-header">
                     <span>Notifications</span>

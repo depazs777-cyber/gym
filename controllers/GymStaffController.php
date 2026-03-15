@@ -1,7 +1,7 @@
 <?php defined('APP_NAME') or exit('No direct script access allowed');
 
 class GymStaffController extends BaseController {
-    
+
     public function __construct() {
         $this->checkRole(['ADMIN_GYM']);
         if (!isset($_SESSION['gym_id'])) {
@@ -12,7 +12,7 @@ class GymStaffController extends BaseController {
     public function index() {
         $gymId = $_SESSION['gym_id'];
         $db = Database::getInstance()->getConnection();
-        
+
         $stmt = $db->prepare("SELECT * FROM users WHERE gym_id = ? ORDER BY name ASC");
         $stmt->execute([$gymId]);
         $users = $stmt->fetchAll();
@@ -43,7 +43,7 @@ class GymStaffController extends BaseController {
         }
 
         $db = Database::getInstance()->getConnection();
-        
+
         // Unique Email Check
         $stmt = $db->prepare("SELECT id FROM users WHERE email = ?");
         $stmt->execute([$email]);

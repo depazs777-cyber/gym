@@ -14,7 +14,7 @@ if ($driver !== 'sqlite') {
 function recreateTable($db, $tableName, $createSql) {
     echo "Recreating $tableName...\n";
     $db->exec("PRAGMA foreign_keys = OFF");
-    
+
     // Rename old
     try {
         $db->exec("ALTER TABLE $tableName RENAME TO {$tableName}_old");
@@ -92,13 +92,13 @@ $tokensSql = "CREATE TABLE client_tokens (
 
 $notifSql = "CREATE TABLE notifications (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    gym_id INT DEFAULT NULL, 
-    user_id INT DEFAULT NULL, 
+    gym_id INT DEFAULT NULL,
+    user_id INT DEFAULT NULL,
     title VARCHAR(255) NULL,
     message TEXT NOT NULL,
     target_role VARCHAR(50) DEFAULT NULL,
     type VARCHAR(50) DEFAULT 'INFO',
-    is_read TINYINT(1) DEFAULT 0, 
+    is_read TINYINT(1) DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (gym_id) REFERENCES gyms(id) ON DELETE CASCADE
 )";

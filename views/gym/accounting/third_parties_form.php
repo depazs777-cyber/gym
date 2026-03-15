@@ -32,7 +32,7 @@ $p = $party ?? [];
                 </div>
                 <div class="col-md-4" style="display:flex; align-items:center;">
                     <div class="form-check mt-4">
-                        <input class="form-check-input" type="checkbox" name="no_economic_activity" id="noActivity" value="1" 
+                        <input class="form-check-input" type="checkbox" name="no_economic_activity" id="noActivity" value="1"
                                <?= ($p['has_economic_activity']??1) == 0 ? 'checked' : '' ?> onchange="toggleActivity()">
                         <label class="form-check-label" for="noActivity">
                             Without Economic Activity (No RUT)
@@ -147,7 +147,7 @@ function toggleActivity() {
     const isNoActivity = document.getElementById('noActivity').checked;
     const taxSection = document.getElementById('taxSection');
     const inputs = taxSection.querySelectorAll('input, select');
-    
+
     if (isNoActivity) {
         taxSection.style.opacity = '0.5';
         inputs.forEach(i => i.disabled = true);

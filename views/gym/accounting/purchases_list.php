@@ -21,7 +21,7 @@
             </thead>
             <tbody>
                 <?php foreach ($purchases as $p): ?>
-                <?php 
+                <?php
                     $totalRet = $p['reteiva_value'] + $p['reteica_value'] + $p['other_retentions'];
                 ?>
                 <tr>

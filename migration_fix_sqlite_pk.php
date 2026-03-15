@@ -14,7 +14,7 @@ if ($driver !== 'sqlite') {
 function recreateTable($db, $tableName, $createSql) {
     echo "Recreating $tableName...\n";
     $db->exec("PRAGMA foreign_keys = OFF");
-    
+
     // Rename old
     try {
         $db->exec("ALTER TABLE $tableName RENAME TO {$tableName}_old");
@@ -36,7 +36,7 @@ function recreateTable($db, $tableName, $createSql) {
 
     // Copy data
     try {
-        // We need to know columns. 
+        // We need to know columns.
         // Simplest is INSERT INTO new SELECT * FROM old, but schema might differ slightly if we fixed types?
         // But here we only changed PK definition. Columns should match.
         // However, if we defined columns in slightly different order in $createSql, it might mismatch if using *
@@ -85,10 +85,10 @@ $paymentsSql = "CREATE TABLE payments (
     amount DECIMAL(10, 2) NOT NULL,
     discount DECIMAL(10, 2) DEFAULT 0.00,
     notes TEXT DEFAULT NULL,
-    payment_method VARCHAR(50) NOT NULL, 
+    payment_method VARCHAR(50) NOT NULL,
     payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_by_user_id INT NOT NULL,
-    consecutive_number INT NOT NULL, 
+    consecutive_number INT NOT NULL,
     FOREIGN KEY (gym_id) REFERENCES gyms(id) ON DELETE CASCADE,
     FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE CASCADE,
     FOREIGN KEY (membership_id) REFERENCES memberships(id) ON DELETE SET NULL,
@@ -112,7 +112,7 @@ $attendanceSql = "CREATE TABLE attendance (
     client_id INT NOT NULL,
     access_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     method VARCHAR(20) NOT NULL,
-    access_granted TINYINT(1) NOT NULL, 
+    access_granted TINYINT(1) NOT NULL,
     rejection_reason VARCHAR(255) DEFAULT NULL,
     FOREIGN KEY (gym_id) REFERENCES gyms(id) ON DELETE CASCADE,
     FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE CASCADE

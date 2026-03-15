@@ -74,7 +74,7 @@
                     <img id="cardLogo" src="" alt="Logo" style="max-height: 50px; margin-bottom: 0.5rem; display: none;">
                     <h3 id="cardGymName" style="margin: 0; font-size: 1.2rem; color: white;">Gym Name</h3>
                 </div>
-                
+
                 <!-- Client Info -->
                 <div style="padding: 1.5rem; text-align: center;">
                     <div style="width: 80px; height: 80px; background: var(--neutral-bg); border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: var(--text-muted);">
@@ -82,12 +82,12 @@
                     </div>
                     <h2 id="cardClientName" style="margin: 0 0 0.25rem; font-size: 1.25rem;">Client Name</h2>
                     <p id="cardClientID" style="color: var(--text-muted); margin: 0 0 1rem; font-size: 0.9rem;">ID: 12345</p>
-                    
+
                     <div id="cardStatus" style="margin-bottom: 1rem;"></div>
 
                     <!-- QR Code -->
                     <div id="cardQR" style="display: flex; justify-content: center; margin: 1rem 0;"></div>
-                    
+
                     <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">Valid Until: <span id="cardValidUntil">-</span></p>
                 </div>
 
@@ -125,7 +125,7 @@ function showCard(clientId) {
             // Populate Data
             const client = data.client;
             const gym = data.gym;
-            
+
             document.getElementById('cardClientName').innerText = client.name;
             document.getElementById('cardClientID').innerText = 'ID: ' + client.identification;
             document.getElementById('cardGymName').innerText = gym.name;
@@ -134,7 +134,7 @@ function showCard(clientId) {
             // Logo
             if (gym.branding_logo) {
                 const logo = document.getElementById('cardLogo');
-                logo.src = '<?= url("/") ?>' + gym.branding_logo; 
+                logo.src = '<?= url("/") ?>' + gym.branding_logo;
                 logo.style.display = 'block';
             }
 
@@ -177,10 +177,10 @@ function downloadCard() {
 
 // Simple QR Logic for the other button (kept for compatibility)
 function showQR(id, name) {
-    // Reuse Card logic or keep separate? 
-    // The prompt asked for redesign, assume this is covered by showCard, 
-    // but button exists in list. Let's redirect to showCard for consistency 
-    // or implementing a simpler modal if needed. 
+    // Reuse Card logic or keep separate?
+    // The prompt asked for redesign, assume this is covered by showCard,
+    // but button exists in list. Let's redirect to showCard for consistency
+    // or implementing a simpler modal if needed.
     // For now, let's just trigger showCard as it's better.
     showCard(id);
 }

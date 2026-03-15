@@ -7,7 +7,7 @@ class SalesOrder extends BaseModel {
     public function create($gymId, $planId, $amount, $discount, $total, $notes, $createdBy) {
         try {
             // Map inputs to schema columns
-            $sql = "INSERT INTO sales_orders (gym_id, plan_id, unit_price, discount_value, total_amount, status, notes, seller_user_id) 
+            $sql = "INSERT INTO sales_orders (gym_id, plan_id, unit_price, discount_value, total_amount, status, notes, seller_user_id)
                     VALUES (?, ?, ?, ?, ?, 'PENDING_PAYMENT', ?, ?)";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$gymId, $planId, $amount, $discount, $total, $notes, $createdBy]);
@@ -31,7 +31,7 @@ class SalesOrder extends BaseModel {
     public function getAllPending() {
         try {
             $stmt = $this->pdo->prepare("
-                SELECT o.*, o.total_amount as total, g.name as gym_name, p.name as plan_name 
+                SELECT o.*, o.total_amount as total, g.name as gym_name, p.name as plan_name
                 FROM sales_orders o
                 JOIN gyms g ON o.gym_id = g.id
                 LEFT JOIN saas_plans p ON o.plan_id = p.id

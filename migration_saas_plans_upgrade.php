@@ -75,7 +75,7 @@ try {
                 $s->execute();
                 $planId = $s->fetchColumn();
             }
-            
+
             if ($planId) {
                 $u = $pdo->prepare("UPDATE gyms SET saas_plan_id = ? WHERE id = ?");
                 $u->execute([$planId, $gym['id']]);

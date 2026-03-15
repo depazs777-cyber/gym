@@ -3,13 +3,13 @@
         <span><?= APP_NAME ?></span>
         <small><?= $_SESSION['user_role'] ?? 'User' ?></small>
     </div>
-    
+
     <ul class="sidebar-menu">
-        <?php 
+        <?php
             $role = $_SESSION['user_role'] ?? '';
             $isGymUser = isset($_SESSION['gym_id']) && $_SESSION['gym_id'] > 0;
             $currentUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-            
+
             // Helper to check active state
             $isActive = function($path) use ($currentUri) {
                 return strpos($currentUri, $path) !== false ? 'active' : '';
@@ -18,7 +18,7 @@
 
         <?php if (!$isGymUser): // SaaS Global Users ?>
             <li><a href="<?= url("/admin/dashboard") ?>" class="<?= $isActive('/admin/dashboard') ?>">Dashboard</a></li>
-            
+
             <?php if (in_array($role, ['SUPER_ADMIN', 'VENDEDOR'])): ?>
                 <li><a href="<?= url("/admin/gyms") ?>" class="<?= $isActive('/admin/gyms') ?>">Manage Gyms</a></li>
             <?php endif; ?>
@@ -50,7 +50,7 @@
                 <li class="sidebar-heading">Finance</li>
                 <li><a href="<?= url("/admin/billing") ?>" class="<?= $isActive('/admin/billing') ?>">Billing</a></li>
                 <li><a href="<?= url("/admin/reports-finance") ?>" class="<?= $isActive('/admin/reports-finance') ?>">Finance Reports</a></li>
-                
+
                 <li class="sidebar-heading">Accounting</li>
                 <li><a href="<?= url("/admin/accounting/third-parties") ?>" class="<?= $isActive('/admin/accounting/third-parties') ?>">Third Parties</a></li>
                 <li><a href="<?= url("/admin/accounting/orders") ?>" class="<?= $isActive('/admin/accounting/orders') ?>">Sales Orders</a></li>
@@ -64,7 +64,7 @@
             <li><a href="<?= url("/gym/plans") ?>" class="<?= $isActive('/gym/plans') ?>">Plans</a></li>
             <li><a href="<?= url("/gym/payments") ?>" class="<?= $isActive('/gym/payments') ?>">Payments</a></li>
             <li><a href="<?= url("/gym/attendance") ?>" class="<?= $isActive('/gym/attendance') ?>">Attendance</a></li>
-            
+
             <li class="sidebar-heading">Accounting</li>
             <li><a href="<?= url("/gym/accounting/third-parties") ?>" class="<?= $isActive('/gym/accounting/third-parties') ?>">Third Parties</a></li>
             <li><a href="<?= url("/gym/accounting/purchases") ?>" class="<?= $isActive('/gym/accounting/purchases') ?>">Purchases</a></li>

@@ -1,6 +1,6 @@
 <?php defined('APP_NAME') or exit('No direct script access allowed');
 class AttendanceController extends BaseController {
-    
+
     public function __construct() {
         $this->checkRole(['ADMIN_GYM', 'RECEPCION', 'ENTRENADOR']);
         if (!isset($_SESSION['gym_id'])) {
@@ -11,7 +11,7 @@ class AttendanceController extends BaseController {
     public function index() {
         $gymId = $_SESSION['gym_id'];
         $db = Database::getInstance()->getConnection();
-        
+
         $stmt = $db->prepare("
             SELECT a.*, c.name as client_name, c.identification
             FROM attendance a
@@ -73,9 +73,9 @@ class AttendanceController extends BaseController {
         // 2. Check Active Membership
         // We look for any membership that covers today (Time based) OR has sessions left (Session based)
         $today = date('Y-m-d');
-        
+
         $sql = "
-            SELECT m.*, p.type, p.name as plan_name 
+            SELECT m.*, p.type, p.name as plan_name
             FROM memberships m
             JOIN plans p ON m.plan_id = p.id
             WHERE m.client_id = ? AND m.status = 'active'
@@ -86,14 +86,14 @@ class AttendanceController extends BaseController {
             )
             LIMIT 1
         ";
-        
+
         $stmt = $db->prepare($sql);
         $stmt->execute([$client['id'], $today]);
         $membership = $stmt->fetch();
 
         if ($membership) {
             // Access Granted
-            
+
             // Check Config for Session Deduction
             $stmt = $db->prepare("SELECT config_deduct_session FROM gyms WHERE id = ?");
             $stmt->execute([$gymId]);
@@ -104,7 +104,7 @@ class AttendanceController extends BaseController {
             if ($membership['type'] === 'SESSIONS' && $shouldDeduct) {
                 $upd = $db->prepare("UPDATE memberships SET sessions_used = sessions_used + 1 WHERE id = ?");
                 $upd->execute([$membership['id']]);
-                
+
                 // Check if used up
                 if ($membership['sessions_used'] + 1 >= $membership['sessions_total']) {
                     $upd = $db->prepare("UPDATE memberships SET status = 'expired' WHERE id = ?");
@@ -119,7 +119,7 @@ class AttendanceController extends BaseController {
             $this->logAccess($client['id'], 0, 'No active membership');
             $_SESSION['error'] = "Access Denied: No active membership.";
         }
-        
+
         $this->redirect('/gym/attendance/checkin');
     }
 

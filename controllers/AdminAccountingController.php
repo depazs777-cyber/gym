@@ -32,7 +32,7 @@ class AdminAccountingController extends BaseController {
     public function thirdPartiesStore() {
         $data = $_POST;
         $data['gym_id'] = 0; // Force SaaS Scope
-        
+
         $tpModel = new ThirdParty();
         try {
             $tpModel->create($data);
@@ -62,7 +62,7 @@ class AdminAccountingController extends BaseController {
             $orderModel = new SalesOrder();
             $order = $orderModel->get($orderId);
         }
-        
+
         // Get Gyms list for dropdown if no order selected
         $db = Database::getInstance()->getConnection();
         $gyms = $db->query("SELECT id, name FROM gyms ORDER BY name")->fetchAll();
@@ -82,10 +82,10 @@ class AdminAccountingController extends BaseController {
         $ref = $_POST['reference'];
         $concept = $_POST['concept'];
         $notes = $_POST['notes'];
-        
+
         $rcModel = new CashReceipt();
         $orderModel = new SalesOrder();
-        
+
         try {
             $db = Database::getInstance()->getConnection();
             $db->beginTransaction();
@@ -96,18 +96,18 @@ class AdminAccountingController extends BaseController {
             // 2. Update Order & Activate Gym if applicable
             if ($orderId) {
                 $order = $orderModel->get($orderId);
-                
+
                 // Simple logic: If Payment >= Total, mark PAID. Else PARTIAL.
                 // NOTE: Real accounting handles balances. For now, simplistic.
                 $newStatus = ($amount >= $order['total']) ? 'PAID' : 'PARTIAL';
                 $orderModel->updateStatus($orderId, $newStatus);
-                
+
                 if ($newStatus === 'PAID') {
                     // Activate Gym
                     // Assuming Gym model exists or doing via direct SQL for now to be safe
                     $updGym = $db->prepare("UPDATE gyms SET status = 'active' WHERE id = ?");
                     $updGym->execute([$gymId]);
-                    
+
                     // Update License End Date based on Plan?
                     // Already set during creation? If pending_payment, dates might be stale.
                     // For now, assume dates set at creation are valid start dates.
@@ -135,7 +135,7 @@ class AdminAccountingController extends BaseController {
             'purchases' => $purchases
         ]);
     }
-    
+
     public function purchasesCreate() {
          $tpModel = new ThirdParty();
          $providers = $tpModel->getAll(0);
@@ -149,17 +149,17 @@ class AdminAccountingController extends BaseController {
         // Logic same as Gym but gym_id = 0
         // ... (To be implemented or reused via shared helper?)
         // For expedience, I will implement a simplified version here calling the Model
-        
+
         $data = $_POST;
         $data['gym_id'] = 0;
         $data['created_by'] = $_SESSION['user_id'];
-        
+
         $purchaseModel = new Purchase();
         // Recalculate taxes logic needed? Yes.
         // I should probably move the tax calculation logic to a Service or Helper.
         // For now, assume the form sends basic data or calculate backend.
         // The Gym version calculated on backend.
-        
+
         try {
              $purchaseModel->create($data); // This model method needs to handle tax calc if not provided?
              // Actually in GymController we did logic in Controller.

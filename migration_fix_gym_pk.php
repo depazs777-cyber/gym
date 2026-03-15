@@ -35,7 +35,7 @@ foreach ($tables as $table) {
 // Add missing columns to memberships if needed
 try {
     echo "Adding columns to memberships...\n";
-    $sql = "ALTER TABLE memberships 
+    $sql = "ALTER TABLE memberships
             ADD COLUMN purchase_mode VARCHAR(20) DEFAULT 'PERIODIC',
             ADD COLUMN multiplier INT DEFAULT 1";
     $db->exec($sql);

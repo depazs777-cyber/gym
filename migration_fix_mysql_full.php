@@ -21,17 +21,17 @@ try {
 
 // 2. List of tables to ensure AUTO_INCREMENT
 $tables = [
-    'gyms', 'users', 'plans', 'clients', 'memberships', 'payments', 
-    'receipts', 'attendance', 'client_tokens', 'saas_plans', 
-    'saas_plan_price_changes', 'saas_payments', 'saas_license_renewals', 
-    'leads', 'call_scripts', 'call_logs', 'motivation_posts', 
+    'gyms', 'users', 'plans', 'clients', 'memberships', 'payments',
+    'receipts', 'attendance', 'client_tokens', 'saas_plans',
+    'saas_plan_price_changes', 'saas_payments', 'saas_license_renewals',
+    'leads', 'call_scripts', 'call_logs', 'motivation_posts',
     'saas_settings', 'notifications', 'notification_reads'
 ];
 
 foreach ($tables as $table) {
     try {
         echo "Processing $table...\n";
-        
+
         // Check if table exists
         $check = $db->query("SHOW TABLES LIKE '$table'");
         if ($check->rowCount() == 0) {
@@ -70,14 +70,14 @@ foreach ($tables as $table) {
 // 3. Add columns to memberships
 try {
     echo "Checking memberships columns...\n";
-    
+
     // Add purchase_mode
     $cols = $db->query("SHOW COLUMNS FROM memberships LIKE 'purchase_mode'");
     if ($cols->rowCount() == 0) {
         $db->exec("ALTER TABLE memberships ADD COLUMN purchase_mode VARCHAR(20) DEFAULT 'PERIODIC'");
         echo "Added purchase_mode.\n";
     }
-    
+
     // Add multiplier
     $cols = $db->query("SHOW COLUMNS FROM memberships LIKE 'multiplier'");
     if ($cols->rowCount() == 0) {

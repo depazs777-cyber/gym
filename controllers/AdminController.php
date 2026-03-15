@@ -1,7 +1,7 @@
 <?php defined('APP_NAME') or exit('No direct script access allowed');
 
 class AdminController extends BaseController {
-    
+
     public function __construct() {
         // Allow all SaaS roles to access the controller, but specific methods will be restricted
         $this->checkRole(['SUPER_ADMIN', 'VENDEDOR', 'MARKETING', 'CALL_CENTER', 'FINANZAS', 'SOPORTE', 'DEV', 'SEGURIDAD']);
@@ -14,7 +14,7 @@ class AdminController extends BaseController {
 
         // Everyone sees the dashboard, but stats might be filtered?
         // For MVP, everyone sees the stats.
-        
+
         $db = Database::getInstance()->getConnection();
         $stmt = $db->query("SELECT COUNT(*) as total FROM gyms");
         $totalGyms = $stmt->fetch()['total'];
@@ -36,7 +36,7 @@ class AdminController extends BaseController {
         // 3. Pending Renewals (Next 30 days)
         $today = date('Y-m-d');
         $nextMonth = date('Y-m-d', strtotime('+30 days'));
-        
+
         $stmt = $db->prepare("SELECT COUNT(*) as total FROM gyms WHERE status = 'active' AND license_end BETWEEN ? AND ?");
         $stmt->execute([$today, $nextMonth]);
         $renewals = $stmt->fetch()['total'];
@@ -55,7 +55,7 @@ class AdminController extends BaseController {
     private function callCenterDashboard() {
         $db = Database::getInstance()->getConnection();
         $userId = $_SESSION['user_id'];
-        
+
         // 1. Motivation
         $today = date('Y-m-d');
         $stmt = $db->prepare("SELECT * FROM motivation_posts WHERE show_date = ? AND is_active = 1 LIMIT 1");
@@ -77,7 +77,7 @@ class AdminController extends BaseController {
             $sql = "SELECT COUNT(*) FROM call_logs WHERE user_id = ? AND DATE(call_start) = CURDATE()";
             $sqlSales = "SELECT COUNT(*) FROM leads WHERE assigned_to_user_id = ? AND status = 'WON' AND YEAR(updated_at) = YEAR(CURDATE()) AND MONTH(updated_at) = MONTH(CURDATE())";
         }
-        
+
         $stmt = $db->prepare($sql);
         $stmt->execute([$userId]);
         $callsToday = $stmt->fetchColumn();
@@ -132,7 +132,7 @@ class AdminController extends BaseController {
 
     public function createGymForm() {
         $this->checkRole(['SUPER_ADMIN', 'VENDEDOR']);
-        
+
         $db = Database::getInstance()->getConnection();
         $stmt = $db->query("SELECT * FROM saas_plans WHERE is_active = 1");
         $plans = $stmt->fetchAll();
@@ -146,11 +146,11 @@ class AdminController extends BaseController {
     public function storeGym() {
         $this->checkRole(['SUPER_ADMIN', 'VENDEDOR']);
         $this->verifyCsrf();
-        
+
         $name = $_POST['name'] ?? '';
         $admin_email = $_POST['admin_email'] ?? '';
         $admin_password = $_POST['admin_password'] ?? '';
-        
+
         // Subscription
         $planId = $_POST['plan_id'] ?? null;
         $periodMultiplier = (int)($_POST['period_multiplier'] ?? 1);
@@ -169,7 +169,7 @@ class AdminController extends BaseController {
         }
 
         $db = Database::getInstance()->getConnection();
-        
+
         // Fetch Plan
         $stmt = $db->prepare("SELECT * FROM saas_plans WHERE id = ?");
         $stmt->execute([$planId]);
@@ -184,7 +184,7 @@ class AdminController extends BaseController {
         $baseMonths = $plan['period_months'] ?? 1;
         $periodMonths = $baseMonths * $periodMultiplier;
         $yearsPaid = ($baseMonths >= 12) ? $periodMultiplier : 0; // Rough approximation for years count
-        
+
         // Discount Validation
         $discountApprovedBy = null;
         if ($discountValue > 0) {
@@ -195,14 +195,14 @@ class AdminController extends BaseController {
                 $amountTotal = $plan['current_price'] * $periodMultiplier; // Reset total
             }
         }
-        
+
         try {
             $db->beginTransaction();
 
             // 1. Create Gym (Status PENDING_PAYMENT) - Updated Logic
             $now = date('Y-m-d H:i:s');
             $planCode = $plan['code'] ?? 'CUSTOM';
-            
+
             // Note: We set status to 'pending_payment' and subscription_status to 'PENDING'
             $stmt = $db->prepare("INSERT INTO gyms (name, license_start, license_end, status, registered_at, subscription_status, activated_at, subscription_plan_code, subscription_price_snapshot, saas_plan_id, subscription_period_months_snapshot) VALUES (?, ?, ?, 'pending_payment', ?, 'PENDING', NULL, ?, ?, ?, ?)");
             $stmt->execute([$name, $licenseStart, $licenseEnd, $now, $planCode, $plan['current_price'], $plan['id'], $baseMonths]);
@@ -216,7 +216,7 @@ class AdminController extends BaseController {
             // 3. Create Sales Order (Contract)
             $salesOrderModel = new SalesOrder();
             $notes = "Initial License Sale. Plan: {$plan['name']} ($periodMonths months).";
-            
+
             // Amount = Gross Price, Discount = Value, Total = Net
             $grossAmount = $plan['current_price'] * $periodMultiplier;
             $salesOrderModel->create($gymId, $plan['id'], $grossAmount, $discountValue, $amountTotal, $notes, $_SESSION['user_id']);
@@ -243,7 +243,7 @@ class AdminController extends BaseController {
     public function editGymForm() {
         $this->checkRole(['SUPER_ADMIN', 'VENDEDOR']);
         $id = $_GET['id'] ?? null;
-        
+
         if (!$id) {
             $_SESSION['error'] = 'Gym ID required.';
             $this->redirect('/admin/gyms');
@@ -290,9 +290,9 @@ class AdminController extends BaseController {
 
     public function getGlobalData() {
         $this->checkRole(['SUPER_ADMIN', 'CALL_CENTER', 'MARKETING', 'VENDEDOR']);
-        
+
         $db = Database::getInstance()->getConnection();
-        
+
         // Scripts
         $stmt = $db->query("SELECT id, title, script_body FROM call_scripts WHERE is_active = 1 ORDER BY title ASC");
         $scripts = $stmt->fetchAll();
@@ -312,7 +312,7 @@ class AdminController extends BaseController {
     public function createGymAdmin() {
         $this->checkRole(['SUPER_ADMIN', 'VENDEDOR']);
         $this->verifyCsrf();
-        
+
         $gymId = $_POST['gym_id'] ?? null;
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';

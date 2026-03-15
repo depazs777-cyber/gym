@@ -68,7 +68,7 @@ execM($db, $sql, "Table document_sequences");
 
 // Seed Defaults for Global
 if (!$isSqlite) { // MySQL insert ignore
-    $db->exec("INSERT IGNORE INTO document_sequences (doc_type, prefix, current_number) VALUES 
+    $db->exec("INSERT IGNORE INTO document_sequences (doc_type, prefix, current_number) VALUES
         ('OC', 'OC-', 0), ('RC', 'RC-', 0), ('CE', 'CE-', 0)");
 } else {
     // SQLite logic
@@ -82,7 +82,7 @@ if (!$isSqlite) { // MySQL insert ignore
 $sql = "CREATE TABLE third_parties (
     id $autoInc,
     gym_id INT DEFAULT NULL, -- Nullable for Global SaaS providers? Schema says tenant specific. Let's keep NOT NULL if strict, but maybe SaaS needs them too? Prompt: 'Gestión interna...'. SaaS needs providers too.
-    third_type VARCHAR(20) NOT NULL, 
+    third_type VARCHAR(20) NOT NULL,
     person_type VARCHAR(20) NOT NULL,
     has_economic_activity TINYINT(1) DEFAULT 1,
     document_type VARCHAR(20) DEFAULT 'NIT',
@@ -154,18 +154,18 @@ $sql = "CREATE TABLE purchase_invoices (
     supplier_invoice_number VARCHAR(50) NOT NULL, -- External
     date DATE NOT NULL,
     due_date DATE NULL,
-    
+
     subtotal DECIMAL(15, 2) DEFAULT 0,
     iva DECIMAL(15, 2) DEFAULT 0,
     total DECIMAL(15, 2) DEFAULT 0,
-    
+
     reteiva_base DECIMAL(15, 2) DEFAULT 0,
     reteiva_value DECIMAL(15, 2) DEFAULT 0,
     reteica_base DECIMAL(15, 2) DEFAULT 0,
     reteica_value DECIMAL(15, 2) DEFAULT 0,
-    
+
     total_payable DECIMAL(15, 2) DEFAULT 0,
-    
+
     status VARCHAR(20) DEFAULT 'PENDING',
     attachment_path VARCHAR(255) NULL,
     created_by_user_id INT NOT NULL,
@@ -180,18 +180,18 @@ $sql = "CREATE TABLE support_documents (
     supplier_id INT NOT NULL, -- Can be 'No Economic Activity' person
     date DATE NOT NULL,
     concept TEXT NULL,
-    
+
     subtotal DECIMAL(15, 2) DEFAULT 0,
     iva DECIMAL(15, 2) DEFAULT 0, -- DS usually no IVA, but optional
     total DECIMAL(15, 2) DEFAULT 0,
-    
+
     reteiva_base DECIMAL(15, 2) DEFAULT 0,
     reteiva_value DECIMAL(15, 2) DEFAULT 0,
     reteica_base DECIMAL(15, 2) DEFAULT 0,
     reteica_value DECIMAL(15, 2) DEFAULT 0,
-    
+
     total_payable DECIMAL(15, 2) DEFAULT 0,
-    
+
     status VARCHAR(20) DEFAULT 'PENDING',
     attachment_path VARCHAR(255) NULL,
     created_by_user_id INT NOT NULL,
@@ -223,20 +223,20 @@ $sql = "CREATE TABLE sales_orders (
     id $autoInc,
     gym_id INT NOT NULL, -- The Gym being sold to (Tenant)
     doc_number VARCHAR(50) NOT NULL,
-    
+
     plan_id INT NOT NULL, -- SaaS Plan
     period_months INT DEFAULT 12,
     unit_price DECIMAL(15, 2) NOT NULL,
-    
+
     discount_type VARCHAR(20) DEFAULT NULL,
     discount_value DECIMAL(15, 2) DEFAULT 0,
     discount_reason TEXT NULL,
     discount_approved_by INT DEFAULT NULL,
-    
+
     total_amount DECIMAL(15, 2) NOT NULL,
-    
+
     status VARCHAR(20) DEFAULT 'PENDING_PAYMENT', -- PENDING_PAYMENT, PARTIAL, PAID, VOID
-    
+
     seller_user_id INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )";

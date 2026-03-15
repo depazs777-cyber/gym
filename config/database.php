@@ -8,7 +8,7 @@ class Database {
 
     private function __construct() {
         $driver = getenv('DB_DRIVER') ?: 'mysql';
-        
+
         if ($driver === 'sqlite') {
             try {
                 $this->pdo = new PDO("sqlite:" . ROOT_PATH . "/database.sqlite");

@@ -4,7 +4,7 @@
 <div class="card" style="max-width: 800px;">
     <form action="<?= url("/gym/settings/update") ?>" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="<?= CSRF_TOKEN_NAME ?>" value="<?= $_SESSION[CSRF_TOKEN_NAME] ?>">
-        
+
         <div class="form-group">
             <label for="name">Gym Commercial Name</label>
             <input type="text" id="name" name="name" value="<?= htmlspecialchars($gym['name']) ?>" required>
@@ -50,7 +50,7 @@
 
         <hr>
         <h3>Receipt Information</h3>
-        
+
         <div class="form-group">
             <label for="nit">NIT / Tax ID</label>
             <input type="text" id="nit" name="nit" value="<?= htmlspecialchars($contactInfo['nit'] ?? '') ?>">

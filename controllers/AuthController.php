@@ -1,7 +1,7 @@
 <?php defined('APP_NAME') or exit('No direct script access allowed');
 
 class AuthController extends BaseController {
-    
+
     public function login() {
         if (isset($_SESSION['user_id'])) {
             $this->redirectBasedOnRole($_SESSION['user_role']);
@@ -32,7 +32,7 @@ class AuthController extends BaseController {
             if ($user['gym_id']) {
                 $gymModel = new Gym();
                 $gym = $gymModel->findById($user['gym_id']);
-                
+
                 if (!$gym) {
                      $_SESSION['error'] = 'Gym not found.';
                      $this->redirect('/');
@@ -43,7 +43,7 @@ class AuthController extends BaseController {
                     $_SESSION['error'] = 'Licencia vencida o suspendida. Contacte a soporte para renovar.';
                     $this->redirect('/');
                 }
-                
+
                 $today = date('Y-m-d');
                 if ($gym['license_end'] < $today) {
                     $_SESSION['error'] = 'Licencia vencida o suspendida. Contacte a soporte para renovar.';

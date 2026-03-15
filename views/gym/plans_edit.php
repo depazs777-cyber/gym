@@ -9,7 +9,7 @@
             <label for="name">Plan Name</label>
             <input type="text" id="name" name="name" value="<?= htmlspecialchars($plan['name']) ?>" required>
         </div>
-        
+
         <div class="form-group">
             <label>Type</label>
             <input type="text" value="<?= $plan['type'] === 'TIME' ? 'Time Based' : 'Session Based' ?>" disabled style="background-color: #eee;">

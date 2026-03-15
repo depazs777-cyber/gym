@@ -18,7 +18,7 @@ function addColumn($pdo, $table, $colDef) {
 try {
     // Add config_warning_days to gyms
     addColumn($pdo, 'gyms', 'config_warning_days INTEGER DEFAULT 3');
-    
+
     echo "Migration V3 Complete.\n";
 
 } catch (PDOException $e) {

@@ -34,7 +34,7 @@ execSql($pdo, $sql);
 // Seed Plans if empty
 $stmt = $pdo->query("SELECT COUNT(*) FROM saas_plans");
 if ($stmt->fetchColumn() == 0) {
-    $sql = "INSERT INTO saas_plans (name, period_months, current_price, currency) VALUES 
+    $sql = "INSERT INTO saas_plans (name, period_months, current_price, currency) VALUES
     ('Mensual', 1, 50000.00, 'COP'),
     ('Anual', 12, 500000.00, 'COP')";
     execSql($pdo, $sql);

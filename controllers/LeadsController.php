@@ -1,7 +1,7 @@
 <?php defined('APP_NAME') or exit('No direct script access allowed');
 
 class LeadsController extends BaseController {
-    
+
     public function __construct() {
         // CALL_CENTER, MARKETING, SUPER_ADMIN, VENDEDOR
         $this->checkRole(['SUPER_ADMIN', 'CALL_CENTER', 'MARKETING', 'VENDEDOR']);
@@ -11,18 +11,18 @@ class LeadsController extends BaseController {
         $db = Database::getInstance()->getConnection();
         $userId = $_SESSION['user_id'];
         $userRole = $_SESSION['user_role'];
-        
+
         // Force "Assigned to Me" for CALL_CENTER
         if ($userRole === 'CALL_CENTER') {
             $_GET['assigned_me'] = 1;
         }
-        
+
         // Base Query
-        $sql = "SELECT l.*, u.name as assigned_user_name 
-                FROM leads l 
-                LEFT JOIN users u ON l.assigned_to_user_id = u.id 
+        $sql = "SELECT l.*, u.name as assigned_user_name
+                FROM leads l
+                LEFT JOIN users u ON l.assigned_to_user_id = u.id
                 WHERE 1=1";
-        
+
         $params = [];
 
         // Filters
@@ -49,7 +49,7 @@ class LeadsController extends BaseController {
         }
 
         $sql .= " ORDER BY l.next_followup ASC, l.created_at DESC";
-        
+
         $stmt = $db->prepare($sql);
         $stmt->execute($params);
         $leads = $stmt->fetchAll();
@@ -74,13 +74,13 @@ class LeadsController extends BaseController {
     public function callLogs() {
         $db = Database::getInstance()->getConnection();
         $userId = $_SESSION['user_id'];
-        
-        $sql = "SELECT cl.*, l.name as lead_name, l.phone, s.title as script_title 
+
+        $sql = "SELECT cl.*, l.name as lead_name, l.phone, s.title as script_title
                 FROM call_logs cl
                 JOIN leads l ON cl.lead_id = l.id
                 LEFT JOIN call_scripts s ON cl.script_id = s.id
                 WHERE 1=1";
-        
+
         $params = [];
         // If Call Center, only own logs? Or all? Usually own + team if manager.
         // Rule: "Solo leads, llamadas, agenda..."
@@ -90,7 +90,7 @@ class LeadsController extends BaseController {
         }
 
         $sql .= " ORDER BY cl.call_start DESC LIMIT 100";
-        
+
         $stmt = $db->prepare($sql);
         $stmt->execute($params);
         $logs = $stmt->fetchAll();
@@ -141,7 +141,7 @@ class LeadsController extends BaseController {
         $name = $_POST['name'] ?? '';
         $phone = $_POST['phone'] ?? '';
         $type = $_POST['customer_type'] ?? 'SMALL_GYM';
-        
+
         if (empty($name) || empty($phone)) {
             $_SESSION['error'] = 'Name and Phone required.';
             $this->redirect('/admin/leads/create');
@@ -184,10 +184,10 @@ class LeadsController extends BaseController {
     public function assign() {
         $this->checkRole(['SUPER_ADMIN', 'MARKETING', 'VENDEDOR']);
         $this->verifyCsrf();
-        
+
         $leadId = $_POST['lead_id'] ?? null;
         $userId = $_POST['user_id'] ?? null;
-        
+
         if (!$leadId || !$userId) {
             $_SESSION['error'] = 'Lead and User required.';
             $this->redirect('/admin/leads');
@@ -196,18 +196,18 @@ class LeadsController extends BaseController {
         $db = Database::getInstance()->getConnection();
         $stmt = $db->prepare("UPDATE leads SET assigned_to_user_id = ? WHERE id = ?");
         $stmt->execute([$userId, $leadId]);
-        
+
         $_SESSION['success'] = 'Lead assigned successfully.';
         $this->redirect('/admin/leads');
     }
 
     public function getCallCenterUsers() {
         $this->checkRole(['SUPER_ADMIN', 'MARKETING', 'VENDEDOR']);
-        
+
         $db = Database::getInstance()->getConnection();
         $stmt = $db->query("SELECT id, name FROM users WHERE role = 'CALL_CENTER' AND status = 'active' ORDER BY name ASC");
         $users = $stmt->fetchAll();
-        
+
         header('Content-Type: application/json');
         echo json_encode(['users' => $users]);
         exit;
@@ -219,28 +219,28 @@ class LeadsController extends BaseController {
         if (!$leadId) exit(json_encode(['error' => 'No ID']));
 
         $db = Database::getInstance()->getConnection();
-        
+
         // Lead
         $sql = "SELECT * FROM leads WHERE id = ?";
         $params = [$leadId];
-        
+
         // Security Check for Call Center
         if ($_SESSION['user_role'] === 'CALL_CENTER') {
             $sql .= " AND assigned_to_user_id = ?";
             $params[] = $_SESSION['user_id'];
         }
-        
+
         $stmt = $db->prepare($sql);
         $stmt->execute($params);
         $lead = $stmt->fetch();
-        
+
         if (!$lead) {
              exit(json_encode(['error' => 'Lead not found or unauthorized.']));
         }
 
         // Scripts matching type OR generic ones (if customer_type is missing or no specific scripts)
-        // Improved logic: Fetch specific scripts, if none, fetch all active scripts? 
-        // Or just fetch all active scripts and let JS filter? 
+        // Improved logic: Fetch specific scripts, if none, fetch all active scripts?
+        // Or just fetch all active scripts and let JS filter?
         // For now: Fetch all active scripts to ensure dropdown isn't empty.
         $stmt = $db->query("SELECT * FROM call_scripts WHERE is_active = 1");
         $scripts = $stmt->fetchAll();
@@ -283,13 +283,13 @@ class LeadsController extends BaseController {
             $stmt = $db->prepare("SELECT assigned_to_user_id FROM leads WHERE id = ?");
             $stmt->execute([$leadId]);
             $assignedId = $stmt->fetchColumn();
-            
+
             if ($assignedId != $_SESSION['user_id']) {
                 $_SESSION['error'] = 'Unauthorized. You can only log calls for your assigned leads.';
                 $this->redirect('/admin/leads');
             }
         }
-        
+
         // Log Call
         $stmt = $db->prepare("INSERT INTO call_logs (lead_id, user_id, outcome, notes, script_id, duration_seconds) VALUES (?, ?, ?, ?, ?, ?)");
         $stmt->execute([$leadId, $_SESSION['user_id'], $outcome, $notes, $scriptId, $duration]);
@@ -299,7 +299,7 @@ class LeadsController extends BaseController {
         if ($outcome === 'WON') $status = 'WON';
         if ($outcome === 'LOST') $status = 'LOST';
         if ($outcome === 'DNC') $status = 'DNC';
-        
+
         if ($status) {
             $stmt = $db->prepare("UPDATE leads SET status = ? WHERE id = ?");
             $stmt->execute([$status, $leadId]);
@@ -310,7 +310,7 @@ class LeadsController extends BaseController {
             $stmt = $db->prepare("UPDATE leads SET next_followup = ? WHERE id = ?");
             $stmt->execute([$nextFollowup, $leadId]);
         }
-        
+
         // Update Last Call
         $now = date('Y-m-d H:i:s');
         $stmt = $db->prepare("UPDATE leads SET last_call_at = ? WHERE id = ?");

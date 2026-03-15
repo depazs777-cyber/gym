@@ -11,17 +11,17 @@ class CashReceipt extends BaseModel {
             if ($clientId) {
                 // Check if client has a linked third party
                 // Assuming clients table has 'third_party_id' or we map by document number
-                // For MVP, lets assume we search by client ID in third_parties if we linked them, 
+                // For MVP, lets assume we search by client ID in third_parties if we linked them,
                 // OR we search by client identification
                 $stmt = $this->pdo->prepare("SELECT identification, name, email, phone, address FROM clients WHERE id = ?");
                 $stmt->execute([$clientId]);
                 $client = $stmt->fetch();
-                
+
                 if ($client) {
                     $stmt = $this->pdo->prepare("SELECT id FROM third_parties WHERE gym_id = ? AND doc_number = ?");
                     $stmt->execute([$gymId, $client['identification']]);
                     $tp = $stmt->fetch();
-                    
+
                     if ($tp) {
                         $thirdPartyId = $tp['id'];
                     } else {
@@ -31,11 +31,11 @@ class CashReceipt extends BaseModel {
                         // Handle potential dupes if race condition, catch error
                         try {
                             $stmtTp->execute([
-                                $gymId, 
-                                $client['identification'], 
-                                $client['name'], 
-                                $client['email'], 
-                                $client['phone'], 
+                                $gymId,
+                                $client['identification'],
+                                $client['name'],
+                                $client['email'],
+                                $client['phone'],
                                 $client['address'] ?? ''
                             ]);
                             $thirdPartyId = $this->pdo->lastInsertId();
@@ -51,7 +51,7 @@ class CashReceipt extends BaseModel {
             }
 
             $desc = "Payment Method: $method. Ref: $ref. $concept. $notes";
-            
+
             $sql = "INSERT INTO accounting_documents (gym_id, doc_type, total_net, status, created_by_user_id, description, doc_number_full, issue_date, third_party_id) VALUES (?, 'RC', ?, 'POSTED', ?, ?, ?, CURDATE(), ?)";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$gymId, $amount, $userId, $desc, $ref, $thirdPartyId]);

@@ -7,11 +7,11 @@
     <div class="card-body">
         <form action="<?= url('/admin/accounting/receipts/store') ?>" method="POST">
             <input type="hidden" name="<?= CSRF_TOKEN_NAME ?>" value="<?= $_SESSION[CSRF_TOKEN_NAME] ?>">
-            
+
             <?php if ($order): ?>
                 <input type="hidden" name="sales_order_id" value="<?= $order['id'] ?>">
                 <input type="hidden" name="gym_id" value="<?= $order['gym_id'] ?>">
-                
+
                 <div class="alert alert-info">
                     <strong>Collecting for Order #<?= $order['id'] ?></strong><br>
                     Customer: <?= htmlspecialchars($order['gym_id']) ?> (Need Gym Name logic here if strict, but ID ok for now)<br>

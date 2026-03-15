@@ -14,11 +14,11 @@ class AccountingController extends BaseController {
         $start = $_GET['start_date'] ?? date('Y-m-01');
         $end = $_GET['end_date'] ?? date('Y-m-t');
 
-        $sql = "SELECT d.*, tp.name as third_party_name 
+        $sql = "SELECT d.*, tp.name as third_party_name
                 FROM accounting_documents d
                 LEFT JOIN third_parties tp ON d.third_party_id = tp.id
                 WHERE d.gym_id = ? AND d.issue_date BETWEEN ? AND ?";
-        
+
         $params = [$gymId, $start, $end];
 
         if ($type !== 'ALL') {
@@ -64,10 +64,10 @@ class AccountingController extends BaseController {
         $stmt->execute([$id]);
         $lines = $stmt->fetchAll();
 
-        // Since we are using Modals, we can return JSON if requested via AJAX, 
+        // Since we are using Modals, we can return JSON if requested via AJAX,
         // or render a dedicated view. For now, let's render a printable view or detail view.
         // Assuming a simple detail view.
-        
+
         $this->view('layouts/main', [
             'childView' => 'gym/accounting/document_detail',
             'doc' => $doc,

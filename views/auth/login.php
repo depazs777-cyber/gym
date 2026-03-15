@@ -41,7 +41,7 @@
     <div class="login-card">
         <div class="brand-logo"><?= APP_NAME ?></div>
         <div class="brand-subtitle">Gym Management SaaS</div>
-        
+
         <?php if (isset($_SESSION['error'])): ?>
             <div class="alert alert-error" style="text-align: left; margin-bottom: 1.5rem;">
                 <?= $_SESSION['error']; unset($_SESSION['error']); ?>
@@ -50,20 +50,20 @@
 
         <form action="<?= url("/login") ?>" method="POST">
             <input type="hidden" name="<?= CSRF_TOKEN_NAME ?>" value="<?= $_SESSION[CSRF_TOKEN_NAME] ?>">
-            
+
             <div class="mb-3" style="text-align: left;">
                 <label for="email" class="mb-1" style="display:block; font-weight:500; font-size:0.9rem;">Email Address</label>
                 <input type="email" id="email" name="email" class="form-control" required placeholder="you@example.com">
             </div>
-            
+
             <div class="mb-4" style="text-align: left;">
                 <label for="password" class="mb-1" style="display:block; font-weight:500; font-size:0.9rem;">Password</label>
                 <input type="password" id="password" name="password" class="form-control" required placeholder="••••••••">
             </div>
-            
+
             <button type="submit" class="btn btn-primary btn-block" style="width: 100%; padding: 0.75rem; font-size: 1rem;">Sign In</button>
         </form>
-        
+
         <div class="mt-4 text-muted" style="font-size: 0.85rem;">
             &copy; <?= date('Y') ?> Prompt Maestro
         </div>

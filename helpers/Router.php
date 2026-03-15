@@ -44,7 +44,7 @@ class Router {
         if (array_key_exists($method, $this->routes) && array_key_exists($path, $this->routes[$method])) {
             $controllerAction = $this->routes[$method][$path];
             list($controller, $action) = explode('@', $controllerAction);
-            
+
             // Autoloading handled in index.php, but we need to instantiate
             $controllerInstance = new $controller();
             $controllerInstance->$action();

@@ -8,7 +8,7 @@
         <h3 class="card-title">Manual Entry / Scan</h3>
         <form action="<?= url("/gym/attendance/verify") ?>" method="POST">
             <input type="hidden" name="<?= CSRF_TOKEN_NAME ?>" value="<?= $_SESSION[CSRF_TOKEN_NAME] ?>">
-            
+
             <div class="form-group">
                 <label for="identification">Client Identification / QR Code</label>
                 <input type="text" id="identification" name="identification" autofocus required autocomplete="off" placeholder="Scan QR or type ID..." style="font-size: 1.2rem; padding: 1rem;">

@@ -1,7 +1,7 @@
 <?php defined('APP_NAME') or exit('No direct script access allowed');
 
 class ReportsController extends BaseController {
-    
+
     public function __construct() {
         $this->checkRole(['ADMIN_GYM', 'CONSULTA_REPORTES']);
         if (!isset($_SESSION['gym_id'])) {
@@ -12,14 +12,14 @@ class ReportsController extends BaseController {
     public function index() {
         $gymId = $_SESSION['gym_id'];
         $db = Database::getInstance()->getConnection();
-        
+
         $filter = $_GET['filter'] ?? 'month';
-        
+
         // Income Stats
         $incomeSQL = "SELECT SUM(amount) as total FROM payments WHERE gym_id = ?";
         if ($filter === 'today') $incomeSQL .= " AND DATE(payment_date) = CURDATE()";
         elseif ($filter === 'month') $incomeSQL .= " AND MONTH(payment_date) = MONTH(CURDATE()) AND YEAR(payment_date) = YEAR(CURDATE())";
-        
+
         $stmt = $db->prepare($incomeSQL);
         $stmt->execute([$gymId]);
         $income = $stmt->fetch()['total'] ?? 0;

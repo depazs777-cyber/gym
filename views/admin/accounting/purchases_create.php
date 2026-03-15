@@ -7,7 +7,7 @@
     <div class="card-body">
         <form action="<?= url('/admin/accounting/purchases/store') ?>" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="<?= CSRF_TOKEN_NAME ?>" value="<?= $_SESSION[CSRF_TOKEN_NAME] ?>">
-            
+
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group mb-3">
@@ -54,7 +54,7 @@
 
             <hr>
             <h4>Amounts (Taxes calculated automatically based on Rules)</h4>
-            
+
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group mb-3">
@@ -92,7 +92,7 @@ function calcTotal() {
     const iva = parseFloat(document.getElementById('iva_value').value) || 0;
     const other = parseFloat(document.getElementById('other_taxes').value) || 0;
     const total = sub + iva + other;
-    
+
     document.getElementById('gross_display').innerText = total.toFixed(2);
     document.getElementById('total_gross').value = total.toFixed(2);
 }

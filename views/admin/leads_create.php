@@ -7,7 +7,7 @@
 <div class="card" style="max-width: 500px;">
     <form action="<?= url("/admin/leads/store") ?>" method="POST">
         <input type="hidden" name="<?= CSRF_TOKEN_NAME ?>" value="<?= $_SESSION[CSRF_TOKEN_NAME] ?>">
-        
+
         <div class="form-group">
             <label>Name</label>
             <input type="text" name="name" required>

@@ -1,7 +1,7 @@
 <?php defined('APP_NAME') or exit('No direct script access allowed');
 
 class ScriptsController extends BaseController {
-    
+
     public function __construct() {
         // CALL_CENTER can view, others manage
         $this->checkRole(['SUPER_ADMIN', 'MARKETING', 'CALL_CENTER']);

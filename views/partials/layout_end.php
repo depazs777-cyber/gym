@@ -1,5 +1,5 @@
     </div>
-    
+
     <!-- Scripts (Motivation, Notifs, etc.) -->
     <?php if (in_array($_SESSION['user_role'] ?? '', ['CALL_CENTER', 'SUPER_ADMIN', 'MARKETING', 'VENDEDOR'])): ?>
     <button id="scriptsToggleBtn" onclick="toggleScriptsDrawer()" style="display:none; position:fixed; right:20px; bottom:20px; z-index:9999; border-radius:50%; width:60px; height:60px; font-size:24px; background:var(--primary); color:white; border:none; box-shadow:0 4px 6px rgba(0,0,0,0.1); cursor:pointer;">📜</button>
@@ -30,7 +30,7 @@
                 container.innerHTML = `<div style="display:flex; align-items:center; justify-content:center; gap:15px; animation: fadeIn 0.5s;">${post.image_url ? `<img src="${post.image_url}" style="width:50px; height:50px; border-radius:50%; object-fit:cover;">` : '<span style="font-size:2rem;">💪</span>'}<div><div style="font-size:1.1rem; font-style:italic;">"${post.quote_text}"</div>${post.title ? `<small style="opacity:0.8;">${post.title}</small>` : ''}</div></div>`;
                 idx = (idx + 1) % posts.length;
             }
-            showSlide(); setInterval(showSlide, 10000); 
+            showSlide(); setInterval(showSlide, 10000);
         }
     }
     function initScriptsDrawer(scripts) {

@@ -1,7 +1,7 @@
 <?php defined('APP_NAME') or exit('No direct script access allowed');
 
 class MotivationController extends BaseController {
-    
+
     public function __construct() {
         $this->checkRole(['SUPER_ADMIN', 'MARKETING', 'CALL_CENTER']);
     }
@@ -23,7 +23,7 @@ class MotivationController extends BaseController {
         $title = $_POST['title'];
         $quote = $_POST['quote_text'];
         $date = $_POST['show_date'];
-        
+
         // Image upload logic here (omitted for brevity, assume URL input or file)
         $img = $_POST['image_url'] ?? '';
 

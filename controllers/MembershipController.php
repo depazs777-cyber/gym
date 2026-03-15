@@ -1,7 +1,7 @@
 <?php defined('APP_NAME') or exit('No direct script access allowed');
 
 class MembershipController extends BaseController {
-    
+
     public function __construct() {
         $this->checkRole(['ADMIN_GYM', 'RECEPCION']);
         if (!isset($_SESSION['gym_id'])) {
@@ -13,13 +13,13 @@ class MembershipController extends BaseController {
         // List Memberships with Tabs (Active, Expiring, Expired)
         $gymId = $_SESSION['gym_id'];
         $db = Database::getInstance()->getConnection();
-        
+
         $status = $_GET['status'] ?? 'active'; // active, expiring, expired
-        
-        $sql = "SELECT m.*, c.name as client_name, p.name as plan_name, p.type 
-                FROM memberships m 
-                JOIN clients c ON m.client_id = c.id 
-                JOIN plans p ON m.plan_id = p.id 
+
+        $sql = "SELECT m.*, c.name as client_name, p.name as plan_name, p.type
+                FROM memberships m
+                JOIN clients c ON m.client_id = c.id
+                JOIN plans p ON m.plan_id = p.id
                 WHERE m.gym_id = ?";
 
         if ($status === 'active') {
@@ -48,7 +48,7 @@ class MembershipController extends BaseController {
     public function create() {
         $gymId = $_SESSION['gym_id'];
         $clientId = $_GET['client_id'] ?? null;
-        
+
         if (!$clientId) {
             $_SESSION['error'] = 'Client ID required.';
             $this->redirect('/gym/clients');
@@ -95,7 +95,7 @@ class MembershipController extends BaseController {
         $this->verifyCsrf();
         $gymId = $_SESSION['gym_id'];
         $userId = $_SESSION['user_id'];
-        
+
         $clientId = $_POST['client_id'] ?? null;
         $planId = $_POST['plan_id'] ?? null;
         $purchaseMode = $_POST['purchase_mode'] ?? 'PERIODIC'; // PERIODIC, ANNUAL
@@ -144,14 +144,14 @@ class MembershipController extends BaseController {
             $endDate = null;
             $sessionsTotal = 0;
             $sessionsUsed = 0; // Starts at 0
-            
+
             // 1. Calculate Price
             // For MVP: Simple multiplier. If Plan has 'annual_price' could use that, but schema doesn't have it yet.
             // Assumption: Annual = 12 * Price (or user input logic if we had fixed annual).
             // Let's stick to simple math for now: Base Price * Multiplier.
             $basePrice = $plan['price'];
             $price = $basePrice * $multiplier;
-            
+
             // Apply Discount
             if ($discount > 0) {
                 // If discount is percentage or fixed? Usually fixed value from UI logic or backend.
@@ -172,11 +172,11 @@ class MembershipController extends BaseController {
                     // But prompt says "Multiplier = 12 (if periodic)".
                     // If Purchase Mode is ANNUAL, UI usually sends multiplier=1 (1 year) or logic handled.
                     // Let's assume Multiplier represents "Periods" (Months) OR "Years" depending on UI.
-                    // Prompt B1.4: "Default multiplier = 12...". 
+                    // Prompt B1.4: "Default multiplier = 12...".
                     // Let's standardize: Multiplier is ALWAYS number of periods (Months).
                     // If Annual selected, JS sets multiplier 12.
                     // So we treat it as:
-                    
+
                     if ($purchaseMode === 'ANNUAL') {
                          // Use configured annual days per "year" (12 months)
                          // If multiplier is 12, we add 1 year (config days).
@@ -193,9 +193,9 @@ class MembershipController extends BaseController {
                     // Periodic
                     $daysToAdd = $plan['duration_days'] * $multiplier;
                 }
-                
+
                 $endDate = date('Y-m-d', strtotime($startDate . " + $daysToAdd days"));
-                
+
                 // For TIME plans, sessions usually 0 or unlimited logic?
                 // Schema has sessions_count. If 0 usually means unlimited/ignored.
                 $sessionsTotal = 0;
@@ -205,18 +205,18 @@ class MembershipController extends BaseController {
                 // Start Date matters for validity period? Usually yes or infinite.
                 // Let's assume 1 year validity or config? For MVP: 1 year.
                 $endDate = date('Y-m-d', strtotime($startDate . " + 365 days"));
-                
+
                 // Calculate total sessions
                 $sessionsTotal = $plan['sessions_count'] * $multiplier;
-                
+
                 // Check if adding to existing active session membership?
                 // Prompt B1.5: "Si tiene membresía activa... sessions_new = sessions_remaining + new".
                 // This means we UPDATE the existing membership or create a new one that overlaps?
-                // Creating a NEW membership record is cleaner for history/finance. 
+                // Creating a NEW membership record is cleaner for history/finance.
                 // But Access Control needs to sum them up.
                 // Let's create a NEW record. The Attendance Logic will sum up "Active" memberships.
-                // Or we can "Carry Over" logic. 
-                // Decision: Create NEW membership. 
+                // Or we can "Carry Over" logic.
+                // Decision: Create NEW membership.
                 // But wait, "Continue" logic for TIME extends date.
                 // For SESSIONS, we just add a new pile of sessions valid from Today.
             }
@@ -226,13 +226,13 @@ class MembershipController extends BaseController {
             // 1. Create Membership
             $stmt = $db->prepare("
                 INSERT INTO memberships (
-                    gym_id, client_id, plan_id, start_date, end_date, 
-                    sessions_total, sessions_used, status, price_at_purchase, 
+                    gym_id, client_id, plan_id, start_date, end_date,
+                    sessions_total, sessions_used, status, price_at_purchase,
                     purchase_mode, multiplier
                 ) VALUES (?, ?, ?, ?, ?, ?, 0, 'active', ?, ?, ?)
             ");
             $stmt->execute([
-                $gymId, $clientId, $planId, $startDate, $endDate, 
+                $gymId, $clientId, $planId, $startDate, $endDate,
                 $sessionsTotal, $price, $purchaseMode, $multiplier
             ]);
             $membershipId = $db->lastInsertId();
@@ -243,15 +243,15 @@ class MembershipController extends BaseController {
             $stmt->execute([$gymId]);
             $max = $stmt->fetch()['max_cons'];
             $consecutive = ($max) ? $max + 1 : 1;
-            
+
             $stmt = $db->prepare("
                 INSERT INTO payments (
-                    gym_id, client_id, membership_id, amount, payment_method, 
+                    gym_id, client_id, membership_id, amount, payment_method,
                     created_by_user_id, consecutive_number, discount, notes
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
             $stmt->execute([
-                $gymId, $clientId, $membershipId, $price, $paymentMethod, 
+                $gymId, $clientId, $membershipId, $price, $paymentMethod,
                 $userId, $consecutive, $discount, $notes
             ]);
             $paymentId = $db->lastInsertId();
@@ -272,7 +272,7 @@ class MembershipController extends BaseController {
                 'cashier' => $_SESSION['user_name'],
                 'notes' => $notes
             ];
-            
+
             $stmt = $db->prepare("
                 INSERT INTO receipts (gym_id, payment_id, receipt_number, snapshot_json)
                 VALUES (?, ?, ?, ?)

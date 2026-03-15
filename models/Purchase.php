@@ -20,24 +20,24 @@ class Purchase extends BaseModel {
     public function create($data) {
         try {
             $sql = "INSERT INTO accounting_documents (
-                gym_id, doc_type, third_party_id, doc_number_full, issue_date, 
+                gym_id, doc_type, third_party_id, doc_number_full, issue_date,
                 total_net, description, created_by_user_id, status
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'POSTED')";
-            
+
             $docType = $data['doc_type'] ?? 'FC';
             $total = $data['total_payable'] ?? 0;
             $issueDate = $data['issue_date'] ?? date('Y-m-d');
             $desc = "Purchase from " . ($data['third_party_name'] ?? 'Unknown');
-            
+
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([
-                $data['gym_id'], 
-                $docType, 
-                $data['third_party_id'], 
-                $data['doc_number'], 
-                $issueDate, 
-                $total, 
-                $desc, 
+                $data['gym_id'],
+                $docType,
+                $data['third_party_id'],
+                $data['doc_number'],
+                $issueDate,
+                $total,
+                $desc,
                 $data['created_by']
             ]);
             return $this->pdo->lastInsertId();

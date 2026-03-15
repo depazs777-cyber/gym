@@ -43,7 +43,7 @@ class BaseController {
 
     protected function checkRole($allowedRoles) {
         $this->checkAuth();
-        
+
         // Enforce Gym Status Check for Gym Users (Tenant Isolation & Licensing)
         // If gym_id is set, the user is acting within a gym context.
         if (isset($_SESSION['gym_id']) && $_SESSION['gym_id'] > 0) {

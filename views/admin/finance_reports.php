@@ -47,7 +47,7 @@
             <input type="date" name="end_date" class="form-control" value="<?= $filters['end'] ?>">
         </div>
         <button type="submit" class="btn btn-primary">Filter</button>
-        
+
         <a href="<?= url('/admin/reports-finance/export') ?>?start_date=<?= $filters['start'] ?>&end_date=<?= $filters['end'] ?>" class="btn btn-secondary" target="_blank">Export CSV</a>
     </form>
 </div>

@@ -32,13 +32,13 @@ echo "Clients table restored/created.\n";
 echo "Fixing notifications table...\n";
 $notifSql = "CREATE TABLE notifications (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    gym_id INT DEFAULT NULL, 
-    user_id INT DEFAULT NULL, 
+    gym_id INT DEFAULT NULL,
+    user_id INT DEFAULT NULL,
     title VARCHAR(255) NULL,
     message TEXT NOT NULL,
     target_role VARCHAR(50) DEFAULT NULL,
     type VARCHAR(50) DEFAULT 'INFO',
-    is_read TINYINT(1) DEFAULT 0, 
+    is_read TINYINT(1) DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (gym_id) REFERENCES gyms(id) ON DELETE CASCADE
 )";
@@ -50,10 +50,10 @@ try {
     $res = $db->query("SELECT name FROM sqlite_master WHERE type='table' AND name='notifications'");
     if ($res->fetch()) {
         $db->exec("ALTER TABLE notifications RENAME TO notifications_old");
-        
+
         $db->exec($notifSql);
-        
-        // Copy data: notifications_old likely has fewer columns or mismatch. 
+
+        // Copy data: notifications_old likely has fewer columns or mismatch.
         // If copy fails, we catch it.
         // Try copying only guaranteed columns first? No, try common set.
         // We can't easily detect columns in PHP without PRAGMA table_info loop.
@@ -65,7 +65,7 @@ try {
         } catch (Exception $e) {
              echo "Could not copy data: " . $e->getMessage() . "\n";
         }
-                   
+
         $db->exec("DROP TABLE notifications_old");
         echo "Notifications fixed.\n";
     } else {
