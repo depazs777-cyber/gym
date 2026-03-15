@@ -1,0 +1,4 @@
+./migration_restore_clients.php:    $res = $db->query("SELECT name FROM sqlite_master WHERE type='table' AND name='notifications'");
+./migration_restore_clients.php:$stmt = $db->query("SELECT name FROM sqlite_master WHERE type='table'");
+./migration_restore_clients_v2.php:    $res = $db->query("SELECT name FROM sqlite_master WHERE type='table' AND name='notifications'");
+./migration_restore_clients_v2.php:$stmt = $db->query("SELECT name FROM sqlite_master WHERE type='table'");
