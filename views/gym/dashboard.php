@@ -1,17 +1,15 @@
-<?php defined('APP_NAME') or exit('No direct script access allowed'); ?>
-<div class="page-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-    <h2 style="margin: 0;">Gym Dashboard</h2>
-    <div style="font-size: 0.9rem; color: var(--text-muted);"><?= date('l, F j, Y') ?></div>
-</div>
-
-<div class="grid-4">
-    <div class="card">
-        <div style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">Total Clients</div>
-        <div style="font-size: 2rem; font-weight: 700; color: var(--primary);"><?= $stats['total_clients'] ?? 0 ?></div>
+<?php require_once APP_ROOT . '/views/layouts/gym-header.php'; ?>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Dashboard</h1>
     </div>
-    <div class="card">
-        <div style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">Active Clients</div>
-        <div style="font-size: 2rem; font-weight: 700; color: var(--success);"><?= $stats['active_clients'] ?? 0 ?></div>
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card text-white bg-primary shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Miembros Totales</h5>
+                    <p class="card-text display-4"><?php echo isset($members) ? count($members) : 0; ?></p>
+                </div>
+            </div>
+        </div>
     </div>
-    <!-- Add more KPIs here if available -->
-</div>
+<?php require_once APP_ROOT . '/views/layouts/footer.php'; ?>

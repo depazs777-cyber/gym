@@ -1,5 +1,7 @@
-vendor/
-node_modules/
-*.log
-database.sqlite
-storage/
+/storage/logs/*
+/storage/backups/*
+!/storage/logs/.gitkeep
+!/storage/backups/.gitkeep
+/.env
+/assets/vendor/fontawesome
+/assets/vendor/phpqrcode
