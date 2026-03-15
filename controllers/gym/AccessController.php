@@ -1,6 +1,9 @@
 <?php
 
 class AccessController extends Controller {
+    protected $tenant;
+    protected $tokenModel;
+    protected $logModel;
     public function __construct() {
         Auth::requireLogin();
         $this->tenant = Tenant::current();

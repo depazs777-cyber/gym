@@ -1,6 +1,8 @@
 <?php
 
 class DashboardController extends Controller {
+    protected $tenant;
+    protected $memberModel;
     public function __construct() {
         Auth::requireLogin();
         $this->tenant = Tenant::current();

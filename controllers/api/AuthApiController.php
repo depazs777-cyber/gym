@@ -1,6 +1,7 @@
 <?php
 
 class AuthApiController extends Controller {
+    protected $memberModel;
     public function __construct() {
         header("Access-Control-Allow-Origin: *");
         header("Content-Type: application/json; charset=UTF-8");

@@ -1,6 +1,8 @@
 <?php
 
 class AuthController extends Controller {
+    protected $userModel;
+    protected $tenant;
     public function __construct() {
         $this->userModel = $this->model('UserModel');
         $this->tenant = Tenant::current();

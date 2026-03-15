@@ -1,6 +1,7 @@
 <?php
 
 class LeadController extends Controller {
+    protected $leadModel;
     public function __construct() {
         Auth::requireLogin();
         if (Auth::user()->role_id != 1) {

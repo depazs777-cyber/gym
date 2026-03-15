@@ -1,6 +1,9 @@
 <?php
 
 class AccountingController extends Controller {
+    protected $tenant;
+    protected $entryModel;
+    protected $accountModel;
     public function __construct() {
         Auth::requireLogin();
         $this->tenant = Tenant::current();

@@ -1,6 +1,8 @@
 <?php
 
 class TenantController extends Controller {
+    protected $tenantModel;
+    protected $planModel;
     public function __construct() {
         Auth::requireLogin();
         if (Auth::user()->role_id != 1) {

@@ -1,6 +1,8 @@
 <?php
 
 class DashboardController extends Controller {
+    protected $tenantModel;
+    protected $leadModel;
     public function __construct() {
         Auth::requireLogin();
         if (Auth::user()->role_id != 1) { // Not super admin

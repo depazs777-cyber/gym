@@ -1,6 +1,11 @@
 <?php
 
 class PosController extends Controller {
+    protected $tenant;
+    protected $productModel;
+    protected $saleModel;
+    protected $accountModel;
+    protected $entryModel;
     public function __construct() {
         Auth::requireLogin();
         $this->tenant = Tenant::current();

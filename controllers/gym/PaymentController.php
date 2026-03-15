@@ -1,6 +1,10 @@
 <?php
 
 class PaymentController extends Controller {
+    protected $tenant;
+    protected $memberModel;
+    protected $accountingModel;
+    protected $accountModel;
     public function __construct() {
         Auth::requireLogin();
         $this->tenant = Tenant::current();

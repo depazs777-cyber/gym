@@ -1,6 +1,7 @@
 <?php
 
 class RoutineController extends Controller {
+    protected $tenant;
     public function __construct() {
         Auth::requireLogin();
         $this->tenant = Tenant::current();

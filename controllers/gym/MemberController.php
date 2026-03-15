@@ -1,6 +1,9 @@
 <?php
 
 class MemberController extends Controller {
+    protected $tenant;
+    protected $memberModel;
+    protected $tokenModel;
     public function __construct() {
         Auth::requireLogin();
         $this->tenant = Tenant::current();

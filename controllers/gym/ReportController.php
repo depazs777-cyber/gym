@@ -1,6 +1,9 @@
 <?php
 
 class ReportController extends Controller {
+    protected $tenant;
+    protected $accountModel;
+    protected $entryModel;
     public function __construct() {
         Auth::requireLogin();
         $this->tenant = Tenant::current();
