@@ -48,7 +48,7 @@
                                     <td><?php echo htmlspecialchars($t->plan_nombre); ?></td>
                                     <td>$<?php echo number_format($t->precio, 2); ?></td>
                                     <td>
-                                        <?php if ($t->precio_personalizado): ?>
+                                        <?php if (isset($t->precio_personalizado) && $t->precio_personalizado): ?>
                                             <span class="badge bg-info text-dark">$<?php echo number_format($t->precio_personalizado, 2); ?></span>
                                         <?php else: ?>
                                             <span class="text-muted">Ninguno</span>

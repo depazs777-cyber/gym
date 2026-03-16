@@ -22,7 +22,7 @@
                     <tr>
                         <td><?php echo htmlspecialchars($t->nombre); ?></td>
                         <td><?php echo $t->plan_nombre; ?></td>
-                        <td><?php echo $t->precio_personalizado ? '$'.number_format($t->precio_personalizado, 2) : 'No'; ?></td>
+                        <td><?php echo isset($t->precio_personalizado) && $t->precio_personalizado ? '$'.number_format($t->precio_personalizado, 2) : 'No'; ?></td>
                         <td><?php echo $t->fecha_vencimiento; ?></td>
                         <td><span class="badge bg-<?php echo $t->estado == 'activo' ? 'success' : 'danger'; ?>"><?php echo ucfirst($t->estado); ?></span></td>
                     </tr>
