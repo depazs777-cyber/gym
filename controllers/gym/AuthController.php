@@ -7,7 +7,11 @@ class AuthController extends Controller {
         $this->userModel = $this->model('UserModel');
         $this->tenant = Tenant::current();
         if (!$this->tenant) {
-            die("Subdominio no encontrado o gimnasio inactivo.");
+            // Check if we're dealing with a database connection error directly
+            // or if the tenant really doesn't exist
+            $msg = "Error: Subdominio no encontrado, gimnasio inactivo, o falta configurar el tenant.<br><br>";
+            $msg .= "<b>Sugerencia para entorno local:</b> Si estás probando en localhost, añade <code>?tenant=subdominio_del_gimnasio</code> a la URL (por ejemplo: <code>?tenant=gimnasio1</code>) o asegúrate de que el gimnasio exista en la base de datos.";
+            die($msg);
         }
     }
 

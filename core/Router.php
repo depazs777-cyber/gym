@@ -109,6 +109,23 @@ class Router {
             $url = filter_var($url, FILTER_SANITIZE_URL);
             $url = explode('/', $url);
             return $url;
+        } else {
+            // Fallback for PHP built-in server or missing htaccess
+            $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+            $scriptName = dirname($_SERVER['SCRIPT_NAME']);
+
+            // Remove the script directory from the request URI
+            if ($scriptName !== '/' && $scriptName !== '\\') {
+                if (strpos($requestUri, $scriptName) === 0) {
+                    $requestUri = substr($requestUri, strlen($scriptName));
+                }
+            }
+
+            $url = trim($requestUri, '/');
+            if (!empty($url) && $url !== 'index.php') {
+                $url = filter_var($url, FILTER_SANITIZE_URL);
+                return explode('/', $url);
+            }
         }
         return [];
     }
