@@ -31,15 +31,14 @@ CREATE TABLE `plans` (
 CREATE TABLE `tenants` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(150) NOT NULL,
-  `subdominio` varchar(50) NOT NULL,
   `plan_id` int(11) NOT NULL,
+  `precio_personalizado` decimal(10,2) DEFAULT NULL,
   `fecha_vencimiento` date NOT NULL,
   `estado` enum('activo','suspendido','cancelado') DEFAULT 'activo',
   `logo` varchar(255) DEFAULT NULL,
   `configuracion_json` json DEFAULT NULL,
   `creado_en` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `subdominio` (`subdominio`),
   KEY `plan_id` (`plan_id`),
   CONSTRAINT `fk_tenant_plan` FOREIGN KEY (`plan_id`) REFERENCES `plans` (`id`) ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

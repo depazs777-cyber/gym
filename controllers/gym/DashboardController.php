@@ -8,7 +8,7 @@ class DashboardController extends Controller {
         $this->tenant = Tenant::current();
         if (!$this->tenant || Auth::user()->tenant_id != $this->tenant->id) {
             Auth::logout();
-            Helpers::redirect('gym/auth/login');
+            Helpers::redirect('auth/login');
         }
         $this->memberModel = $this->model('MemberModel');
     }

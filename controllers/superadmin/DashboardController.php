@@ -7,7 +7,7 @@ class DashboardController extends Controller {
         Auth::requireLogin('superadmin');
         if (Auth::user()->role_id != 1) { // Not super admin
             Auth::logout();
-            Helpers::redirect('superadmin/auth/login');
+            Helpers::redirect('auth/login');
         }
         $this->tenantModel = $this->model('TenantModel');
         $this->leadModel = $this->model('LeadModel');

@@ -6,7 +6,7 @@ class TenantController extends Controller {
     public function __construct() {
         Auth::requireLogin('superadmin');
         if (Auth::user()->role_id != 1) {
-            Helpers::redirect('superadmin/auth/login');
+            Helpers::redirect('auth/login');
         }
         $this->tenantModel = $this->model('TenantModel');
         $this->planModel = $this->model('PlanModel');
@@ -19,6 +19,10 @@ class TenantController extends Controller {
 
     public function create() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if (!Session::verifyCsrfToken($_POST['csrf_token'])) {
+                Helpers::flash('tenant_msg', 'Error de validación (CSRF).', 'alert alert-danger');
+                Helpers::redirect('tenant/create');
+            }
             $_POST = Helpers::sanitize($_POST);
             $tenantId = $this->tenantModel->create($_POST);
 

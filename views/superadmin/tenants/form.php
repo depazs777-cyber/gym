@@ -6,16 +6,10 @@
 
     <div class="card shadow p-4 col-md-8 mx-auto">
         <form action="<?php echo URL_ROOT; ?>/tenant/create" method="POST">
+            <input type="hidden" name="csrf_token" value="<?php echo Session::generateCsrfToken(); ?>">
             <div class="mb-3">
                 <label>Nombre del Gimnasio</label>
                 <input type="text" name="nombre" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label>Subdominio</label>
-                <div class="input-group">
-                    <input type="text" name="subdominio" class="form-control" placeholder="gimnasio1" required pattern="[a-z0-9]+">
-                    <span class="input-group-text">.misistema.com</span>
-                </div>
             </div>
             <div class="mb-3">
                 <label>Plan Suscripción</label>

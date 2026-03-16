@@ -45,9 +45,9 @@ class Auth {
     public static function requireLogin($namespace = 'gym') {
         if (!self::check()) {
             if ($namespace === 'superadmin') {
-                Helpers::redirect('superadmin/auth/login');
+                Helpers::redirect('auth/login');
             } else {
-                Helpers::redirect('gym/auth/login');
+                Helpers::redirect('auth/login');
             }
         }
     }

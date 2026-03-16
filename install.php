@@ -33,14 +33,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$seeds) throw new Exception("No se pudo leer sql/seeds.sql");
         $pdo->exec($seeds);
 
+        // Escape variables para escribirlas con seguridad en el archivo PHP
+        $safe_host = var_export($db_host, true);
+        $safe_user = var_export($db_user, true);
+        $safe_pass = var_export($db_pass, true);
+        $safe_name = var_export($db_name, true);
+
         // Crear archivo config/database.php
         $config_content = <<<EOT
 <?php
 class Database {
-    private \$host = '$db_host';
-    private \$user = '$db_user';
-    private \$pass = '$db_pass';
-    private \$dbname = '$db_name';
+    private \$host = $safe_host;
+    private \$user = $safe_user;
+    private \$pass = $safe_pass;
+    private \$dbname = $safe_name;
     private \$dbh;
     private \$stmt;
 

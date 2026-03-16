@@ -11,8 +11,8 @@
             <thead>
                 <tr>
                     <th>Nombre</th>
-                    <th>Subdominio</th>
                     <th>Plan</th>
+                    <th>Precio Personalizado</th>
                     <th>Vencimiento</th>
                     <th>Estado</th>
                 </tr>
@@ -21,8 +21,8 @@
                 <?php foreach ($tenants as $t): ?>
                     <tr>
                         <td><?php echo htmlspecialchars($t->nombre); ?></td>
-                        <td><a href="http://<?php echo $t->subdominio; ?>.localhost:8000" target="_blank"><?php echo $t->subdominio; ?></a></td>
                         <td><?php echo $t->plan_nombre; ?></td>
+                        <td><?php echo $t->precio_personalizado ? '$'.number_format($t->precio_personalizado, 2) : 'No'; ?></td>
                         <td><?php echo $t->fecha_vencimiento; ?></td>
                         <td><span class="badge bg-<?php echo $t->estado == 'activo' ? 'success' : 'danger'; ?>"><?php echo ucfirst($t->estado); ?></span></td>
                     </tr>

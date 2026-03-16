@@ -5,7 +5,7 @@ class LeadController extends Controller {
     public function __construct() {
         Auth::requireLogin('superadmin');
         if (Auth::user()->role_id != 1) {
-            Helpers::redirect('superadmin/auth/login');
+            Helpers::redirect('auth/login');
         }
         $this->leadModel = $this->model('LeadModel');
     }
