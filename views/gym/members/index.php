@@ -1,7 +1,7 @@
 <?php require_once APP_ROOT . '/views/layouts/gym-header.php'; ?>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Miembros del Gimnasio</h1>
-        <a href="<?php echo URL_ROOT; ?>/member/create" class="btn btn-sm btn-primary">Nuevo Miembro</a>
+        <a href="<?php echo URL_ROOT; ?>/gym/member/create" class="btn btn-sm btn-primary">Nuevo Miembro</a>
     </div>
 
     <?php Helpers::flash('member_msg'); ?>

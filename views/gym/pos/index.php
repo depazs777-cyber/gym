@@ -138,7 +138,7 @@
             formData.append('total', total);
             formData.append('metodo', method);
 
-            fetch('<?php echo URL_ROOT; ?>/pos/checkout', {
+            fetch('<?php echo URL_ROOT; ?>/gym/pos/checkout', {
                 method: 'POST',
                 body: formData
             })

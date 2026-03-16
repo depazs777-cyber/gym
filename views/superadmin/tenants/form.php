@@ -1,11 +1,11 @@
 <?php require_once APP_ROOT . '/views/layouts/superadmin-header.php'; ?>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Registrar Gimnasio</h1>
-        <a href="<?php echo URL_ROOT; ?>/tenant" class="btn btn-sm btn-outline-secondary">Regresar</a>
+        <a href="<?php echo URL_ROOT; ?>/superadmin/tenant" class="btn btn-sm btn-outline-secondary">Regresar</a>
     </div>
 
     <div class="card shadow p-4 col-md-8 mx-auto">
-        <form action="<?php echo URL_ROOT; ?>/tenant/create" method="POST">
+        <form action="<?php echo URL_ROOT; ?>/superadmin/tenant/create" method="POST">
             <input type="hidden" name="csrf_token" value="<?php echo Session::generateCsrfToken(); ?>">
             <div class="mb-3">
                 <label>Nombre del Gimnasio</label>

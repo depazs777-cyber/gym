@@ -1,11 +1,11 @@
 <?php require_once APP_ROOT . '/views/layouts/superadmin-header.php';
 $isEditing = isset($plan);
-$action = $isEditing ? URL_ROOT . '/plan/edit/' . $plan->id : URL_ROOT . '/plan/create';
+$action = $isEditing ? URL_ROOT . '/superadmin/plan/edit/' . $plan->id : URL_ROOT . '/superadmin/plan/create';
 ?>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2"><?php echo $isEditing ? 'Editar Plan' : 'Crear Plan'; ?></h1>
         <div class="btn-toolbar mb-2 mb-md-0">
-            <a href="<?php echo URL_ROOT; ?>/plan" class="btn btn-sm btn-outline-secondary">Regresar</a>
+            <a href="<?php echo URL_ROOT; ?>/superadmin/plan" class="btn btn-sm btn-outline-secondary">Regresar</a>
         </div>
     </div>
 

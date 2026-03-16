@@ -22,12 +22,12 @@ class PlanController extends Controller {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (!Session::verifyCsrfToken($_POST['csrf_token'])) {
                 Helpers::flash('plan_msg', 'Error de validación (CSRF).', 'alert alert-danger');
-                Helpers::redirect('plan/create');
+                Helpers::redirect('superadmin/plan/create');
             }
             $_POST = Helpers::sanitize($_POST);
             $this->planModel->create($_POST);
             Helpers::flash('plan_msg', 'Plan creado exitosamente.');
-            Helpers::redirect('plan');
+            Helpers::redirect('superadmin/plan');
         } else {
             $this->view('superadmin/planes/form');
         }
@@ -37,16 +37,16 @@ class PlanController extends Controller {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (!Session::verifyCsrfToken($_POST['csrf_token'])) {
                 Helpers::flash('plan_msg', 'Error de validación (CSRF).', 'alert alert-danger');
-                Helpers::redirect('plan/edit/' . $id);
+                Helpers::redirect('superadmin/plan/edit/' . $id);
             }
             $_POST = Helpers::sanitize($_POST);
             $this->planModel->update($id, $_POST);
             Helpers::flash('plan_msg', 'Plan actualizado exitosamente.');
-            Helpers::redirect('plan');
+            Helpers::redirect('superadmin/plan');
         } else {
             $plan = $this->planModel->findById($id);
             if (!$plan) {
-                Helpers::redirect('plan');
+                Helpers::redirect('superadmin/plan');
             }
             $this->view('superadmin/planes/form', ['plan' => $plan]);
         }
@@ -56,7 +56,7 @@ class PlanController extends Controller {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (!Session::verifyCsrfToken($_POST['csrf_token'])) {
                 Helpers::flash('plan_msg', 'Error de validación (CSRF).', 'alert alert-danger');
-                Helpers::redirect('plan/bulkIncrease');
+                Helpers::redirect('superadmin/plan/bulkIncrease');
             }
             $porcentaje = floatval($_POST['porcentaje']);
             $excepciones = isset($_POST['excepciones']) ? $_POST['excepciones'] : [];
@@ -95,7 +95,7 @@ class PlanController extends Controller {
                 Helpers::flash('plan_msg', 'Porcentaje inválido.', 'alert alert-danger');
             }
 
-            Helpers::redirect('plan');
+            Helpers::redirect('superadmin/plan');
         } else {
             $tenants = $this->tenantModel->getAllWithPlans();
             $this->view('superadmin/planes/increase', ['tenants' => $tenants]);

@@ -20,7 +20,7 @@ class LeadController extends Controller {
             $_POST = Helpers::sanitize($_POST);
             $this->leadModel->create($_POST);
             Helpers::flash('lead_msg', 'Lead creado exitosamente.');
-            Helpers::redirect('lead');
+            Helpers::redirect('superadmin/lead');
         } else {
             $this->view('superadmin/leads/form');
         }

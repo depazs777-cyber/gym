@@ -2,16 +2,16 @@
     <div class="position-sticky pt-3">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link" href="<?php echo URL_ROOT; ?>/dashboard">Dashboard</a>
+                <a class="nav-link" href="<?php echo URL_ROOT; ?>/superadmin/dashboard">Dashboard</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="<?php echo URL_ROOT; ?>/tenant">Gimnasios (Tenants)</a>
+                <a class="nav-link" href="<?php echo URL_ROOT; ?>/superadmin/tenant">Gimnasios (Tenants)</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="<?php echo URL_ROOT; ?>/plan">Planes SaaS</a>
+                <a class="nav-link" href="<?php echo URL_ROOT; ?>/superadmin/plan">Planes SaaS</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="<?php echo URL_ROOT; ?>/lead">CRM (Leads)</a>
+                <a class="nav-link" href="<?php echo URL_ROOT; ?>/superadmin/lead">CRM (Leads)</a>
             </li>
         </ul>
     </div>

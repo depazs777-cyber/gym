@@ -1,11 +1,11 @@
 <?php require_once APP_ROOT . '/views/layouts/gym-header.php'; ?>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Nuevo Asiento Contable (Partida Doble)</h1>
-        <a href="<?php echo URL_ROOT; ?>/accounting" class="btn btn-sm btn-outline-secondary">Regresar</a>
+        <a href="<?php echo URL_ROOT; ?>/gym/accounting" class="btn btn-sm btn-outline-secondary">Regresar</a>
     </div>
 
     <div class="card shadow p-4 mx-auto">
-        <form action="<?php echo URL_ROOT; ?>/accounting/store" method="POST" id="form_accounting">
+        <form action="<?php echo URL_ROOT; ?>/gym/accounting/store" method="POST" id="form_accounting">
             <div class="row mb-3">
                 <div class="col-md-4">
                     <label>Fecha</label>

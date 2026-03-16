@@ -21,7 +21,7 @@ class TenantController extends Controller {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (!Session::verifyCsrfToken($_POST['csrf_token'])) {
                 Helpers::flash('tenant_msg', 'Error de validación (CSRF).', 'alert alert-danger');
-                Helpers::redirect('tenant/create');
+                Helpers::redirect('superadmin/tenant/create');
             }
             $_POST = Helpers::sanitize($_POST);
             $tenantId = $this->tenantModel->create($_POST);
@@ -33,7 +33,7 @@ class TenantController extends Controller {
             } else {
                 Helpers::flash('tenant_msg', 'Error al crear el gimnasio.', 'alert alert-danger');
             }
-            Helpers::redirect('tenant');
+            Helpers::redirect('superadmin/tenant');
         } else {
             $plans = $this->planModel->findAll();
             $this->view('superadmin/tenants/form', ['plans' => $plans]);

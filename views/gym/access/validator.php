@@ -38,7 +38,7 @@
                 let formData = new FormData();
                 formData.append('token', token);
 
-                fetch('<?php echo URL_ROOT; ?>/access/validate', {
+                fetch('<?php echo URL_ROOT; ?>/gym/access/validate', {
                     method: 'POST',
                     body: formData
                 })

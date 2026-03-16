@@ -2,10 +2,10 @@
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Planes de Suscripción</h1>
         <div class="btn-toolbar mb-2 mb-md-0 gap-2">
-            <a href="<?php echo URL_ROOT; ?>/plan/bulkIncrease" class="btn btn-sm btn-warning fw-bold text-dark">
+            <a href="<?php echo URL_ROOT; ?>/superadmin/plan/bulkIncrease" class="btn btn-sm btn-warning fw-bold text-dark">
                 <i class="fa fa-arrow-up"></i> Aumento Masivo
             </a>
-            <a href="<?php echo URL_ROOT; ?>/plan/create" class="btn btn-sm btn-primary">Crear Plan</a>
+            <a href="<?php echo URL_ROOT; ?>/superadmin/plan/create" class="btn btn-sm btn-primary">Crear Plan</a>
         </div>
     </div>
 
@@ -32,7 +32,7 @@
                         <td><?php echo $plan->max_miembros; ?></td>
                         <td><span class="badge bg-<?php echo $plan->estado == 'activo' ? 'success' : 'secondary'; ?>"><?php echo ucfirst($plan->estado); ?></span></td>
                         <td>
-                            <a href="<?php echo URL_ROOT; ?>/plan/edit/<?php echo $plan->id; ?>" class="btn btn-sm btn-outline-primary">Editar</a>
+                            <a href="<?php echo URL_ROOT; ?>/superadmin/plan/edit/<?php echo $plan->id; ?>" class="btn btn-sm btn-outline-primary">Editar</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

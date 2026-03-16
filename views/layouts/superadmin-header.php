@@ -15,7 +15,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container-fluid">
-            <a class="navbar-brand" href="<?php echo URL_ROOT; ?>/dashboard"><?php echo SITE_NAME; ?> Admin</a>
+            <a class="navbar-brand" href="<?php echo URL_ROOT; ?>/superadmin/dashboard"><?php echo SITE_NAME; ?> Admin</a>
             <div class="d-flex">
                 <a href="<?php echo URL_ROOT; ?>/auth/logout" class="btn btn-outline-light btn-sm">Cerrar Sesión</a>
             </div>

@@ -1,7 +1,7 @@
 <?php require_once APP_ROOT . '/views/layouts/superadmin-header.php'; ?>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Gimnasios (Tenants)</h1>
-        <a href="<?php echo URL_ROOT; ?>/tenant/create" class="btn btn-sm btn-primary">Nuevo Gimnasio</a>
+        <a href="<?php echo URL_ROOT; ?>/superadmin/tenant/create" class="btn btn-sm btn-primary">Nuevo Gimnasio</a>
     </div>
 
     <?php Helpers::flash('tenant_msg'); ?>

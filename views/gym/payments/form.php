@@ -1,11 +1,11 @@
 <?php require_once APP_ROOT . '/views/layouts/gym-header.php'; ?>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Renovar Membresía</h1>
-        <a href="<?php echo URL_ROOT; ?>/payment" class="btn btn-sm btn-outline-secondary">Regresar</a>
+        <a href="<?php echo URL_ROOT; ?>/gym/payment" class="btn btn-sm btn-outline-secondary">Regresar</a>
     </div>
 
     <div class="card shadow p-4 col-md-8 mx-auto">
-        <form action="<?php echo URL_ROOT; ?>/payment/create" method="POST">
+        <form action="<?php echo URL_ROOT; ?>/gym/payment/create" method="POST">
             <div class="mb-3">
                 <label>Seleccionar Miembro</label>
                 <select name="member_id" class="form-select" required>

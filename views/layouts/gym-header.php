@@ -14,7 +14,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
         <div class="container-fluid">
-            <a class="navbar-brand" href="<?php echo URL_ROOT; ?>/dashboard">
+            <a class="navbar-brand" href="<?php echo URL_ROOT; ?>/gym/dashboard">
                 <?php if (isset($tenant) && $tenant->logo): ?>
                     <img src="<?php echo URL_ROOT; ?>/assets/uploads/logos-gimnasios/<?php echo $tenant->logo; ?>" height="30" alt="">
                 <?php endif; ?>

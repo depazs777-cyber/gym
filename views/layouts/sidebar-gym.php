@@ -2,28 +2,28 @@
     <div class="position-sticky pt-3">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link" href="<?php echo URL_ROOT; ?>/dashboard">Dashboard</a>
+                <a class="nav-link" href="<?php echo URL_ROOT; ?>/gym/dashboard">Dashboard</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="<?php echo URL_ROOT; ?>/member">Miembros</a>
+                <a class="nav-link" href="<?php echo URL_ROOT; ?>/gym/member">Miembros</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="<?php echo URL_ROOT; ?>/access/validator">Validador QR</a>
+                <a class="nav-link" href="<?php echo URL_ROOT; ?>/gym/access/validator">Validador QR</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="<?php echo URL_ROOT; ?>/payment">Pagos & Membresías</a>
+                <a class="nav-link" href="<?php echo URL_ROOT; ?>/gym/payment">Pagos & Membresías</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="<?php echo URL_ROOT; ?>/pos">Punto de Venta</a>
+                <a class="nav-link" href="<?php echo URL_ROOT; ?>/gym/pos">Punto de Venta</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="<?php echo URL_ROOT; ?>/accounting">Contabilidad (Comprobantes)</a>
+                <a class="nav-link" href="<?php echo URL_ROOT; ?>/gym/accounting">Contabilidad (Comprobantes)</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="<?php echo URL_ROOT; ?>/report/balance">Balance General</a>
+                <a class="nav-link" href="<?php echo URL_ROOT; ?>/gym/report/balance">Balance General</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="<?php echo URL_ROOT; ?>/report/pnl">Estado Resultados (PyG)</a>
+                <a class="nav-link" href="<?php echo URL_ROOT; ?>/gym/report/pnl">Estado Resultados (PyG)</a>
             </li>
         </ul>
     </div>

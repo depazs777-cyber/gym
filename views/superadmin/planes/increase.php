@@ -2,7 +2,7 @@
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Aumento Masivo de Planes</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
-            <a href="<?php echo URL_ROOT; ?>/plan" class="btn btn-sm btn-outline-secondary">Regresar</a>
+            <a href="<?php echo URL_ROOT; ?>/superadmin/plan" class="btn btn-sm btn-outline-secondary">Regresar</a>
         </div>
     </div>
 
@@ -12,7 +12,7 @@
             Puedes seleccionar gimnasios específicos que estarán exentos de este aumento (mantendrán su precio actual como "Precio Personalizado").
         </div>
 
-        <form action="<?php echo URL_ROOT; ?>/plan/bulkIncrease" method="POST">
+        <form action="<?php echo URL_ROOT; ?>/superadmin/plan/bulkIncrease" method="POST">
             <input type="hidden" name="csrf_token" value="<?php echo Session::generateCsrfToken(); ?>">
             <div class="mb-4 row">
                 <label class="col-sm-4 col-form-label fw-bold">Porcentaje de Aumento (%)</label>
