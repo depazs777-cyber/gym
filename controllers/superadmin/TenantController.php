@@ -4,9 +4,9 @@ class TenantController extends Controller {
     protected $tenantModel;
     protected $planModel;
     public function __construct() {
-        Auth::requireLogin();
+        Auth::requireLogin('superadmin');
         if (Auth::user()->role_id != 1) {
-            Helpers::redirect('');
+            Helpers::redirect('superadmin/auth/login');
         }
         $this->tenantModel = $this->model('TenantModel');
         $this->planModel = $this->model('PlanModel');

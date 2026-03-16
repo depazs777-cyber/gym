@@ -17,7 +17,8 @@ class AuthController extends Controller {
 
     public function index() {
         if (Auth::check() && Auth::user()->tenant_id == $this->tenant->id) {
-            Helpers::redirect('dashboard');
+            $urlParam = isset($_GET['tenant']) ? '?tenant=' . $_GET['tenant'] : '';
+            Helpers::redirect('gym/dashboard' . $urlParam);
         }
         $this->view('auth/gym-login', ['tenant' => $this->tenant]);
     }
@@ -26,7 +27,7 @@ class AuthController extends Controller {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (!Session::verifyCsrfToken($_POST['csrf_token'])) {
                 Helpers::flash('login_error', 'Token de seguridad inválido.', 'alert alert-danger');
-                Helpers::redirect('auth/login');
+                Helpers::redirect('gym/auth/login');
             }
 
             $username = Helpers::sanitize($_POST['username']);
@@ -36,10 +37,13 @@ class AuthController extends Controller {
 
             if ($user && $user->tenant_id == $this->tenant->id) { // Admin Gym / Recepcion
                 Auth::login($user);
-                Helpers::redirect('dashboard');
+                // In local dev, pass tenant along to maintain session scope on subdomains/url params
+                $urlParam = isset($_GET['tenant']) ? '?tenant=' . $_GET['tenant'] : '';
+                Helpers::redirect('gym/dashboard' . $urlParam);
             } else {
-                Helpers::flash('login_error', 'Credenciales incorrectas.', 'alert alert-danger');
-                Helpers::redirect('auth/login');
+                Helpers::flash('login_error', 'Credenciales incorrectas o usuario no pertenece a este gimnasio.', 'alert alert-danger');
+                $urlParam = isset($_GET['tenant']) ? '?tenant=' . $_GET['tenant'] : '';
+                Helpers::redirect('gym/auth/login' . $urlParam);
             }
         } else {
             // Display the login page for GET requests
@@ -49,6 +53,6 @@ class AuthController extends Controller {
 
     public function logout() {
         Auth::logout();
-        Helpers::redirect('auth/login');
+        Helpers::redirect('gym/auth/login');
     }
 }

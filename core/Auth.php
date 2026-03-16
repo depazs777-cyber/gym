@@ -31,7 +31,7 @@ class Auth {
         Session::set('user_id', $user->id);
         Session::set('username', $user->username);
         Session::set('email', $user->email);
-        Session::set('role_id', $user->role_id);
+        Session::set('role_id', isset($user->rol_id) ? $user->rol_id : (isset($user->role_id) ? $user->role_id : null));
         Session::set('tenant_id', $user->tenant_id);
 
         // Regenerate session ID to prevent session fixation
@@ -42,9 +42,13 @@ class Auth {
         Session::destroy();
     }
 
-    public static function requireLogin() {
+    public static function requireLogin($namespace = 'gym') {
         if (!self::check()) {
-            Helpers::redirect('auth/login');
+            if ($namespace === 'superadmin') {
+                Helpers::redirect('superadmin/auth/login');
+            } else {
+                Helpers::redirect('gym/auth/login');
+            }
         }
     }
 }

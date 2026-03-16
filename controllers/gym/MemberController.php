@@ -8,7 +8,7 @@ class MemberController extends Controller {
         Auth::requireLogin();
         $this->tenant = Tenant::current();
         if (!$this->tenant || Auth::user()->tenant_id != $this->tenant->id) {
-            Helpers::redirect('auth/login');
+            Helpers::redirect('gym/auth/login');
         }
         $this->memberModel = $this->model('MemberModel');
         $this->tokenModel = $this->model('AccessTokenModel');

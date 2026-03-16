@@ -8,7 +8,7 @@ class AuthController extends Controller {
 
     public function index() {
         if (Auth::check() && Auth::user()->role_id == 1) {
-            Helpers::redirect('dashboard');
+            Helpers::redirect('superadmin/dashboard');
         }
         $this->view('auth/superadmin-login');
     }
@@ -17,7 +17,7 @@ class AuthController extends Controller {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (!Session::verifyCsrfToken($_POST['csrf_token'])) {
                 Helpers::flash('login_error', 'Token de seguridad inválido.', 'alert alert-danger');
-                Helpers::redirect('');
+                Helpers::redirect('superadmin/auth/login');
             }
 
             $username = Helpers::sanitize($_POST['username']);
@@ -27,10 +27,10 @@ class AuthController extends Controller {
 
             if ($user && $user->rol_id == 1) { // Super Admin
                 Auth::login($user);
-                Helpers::redirect('dashboard');
+                Helpers::redirect('superadmin/dashboard');
             } else {
                 Helpers::flash('login_error', 'Credenciales incorrectas o no tienes permisos.', 'alert alert-danger');
-                Helpers::redirect('');
+                Helpers::redirect('superadmin/auth/login');
             }
         } else {
             // Display the login page for GET requests
@@ -40,6 +40,6 @@ class AuthController extends Controller {
 
     public function logout() {
         Auth::logout();
-        Helpers::redirect('');
+        Helpers::redirect('superadmin/auth/login');
     }
 }
