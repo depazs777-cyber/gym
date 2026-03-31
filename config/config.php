@@ -3,35 +3,34 @@
 // Determine Base URL dynamically
 $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
 $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-$scriptDir = isset($_SERVER['SCRIPT_NAME']) ? dirname($_SERVER['SCRIPT_NAME']) : '';
-// Normalize scriptDir to remove trailing slash unless it's just "/"
-$scriptDir = rtrim(str_replace('\\', '/', $scriptDir), '/');
+$scriptDir = dirname($_SERVER['SCRIPT_NAME']);
 
-if (!defined('APP_NAME')) define('APP_NAME', 'PROMPT MAESTRO');
-if (!defined('BASE_URL')) define('BASE_URL', $protocol . '://' . $host . $scriptDir);
-if (!defined('BASE_PATH')) define('BASE_PATH', $scriptDir); // Relative path e.g. /gym
+// Remove "public" from the scriptDir if we are accessing via a parent folder rewrite
+$scriptDir = str_replace('\\', '/', $scriptDir);
+$scriptDir = preg_replace('/\/public$/', '', $scriptDir);
+$scriptDir = rtrim($scriptDir, '/');
 
-if (!defined('DB_HOST')) define('DB_HOST', getenv('DB_HOST') ?: '127.0.0.1');
-if (!defined('DB_NAME')) define('DB_NAME', getenv('DB_NAME') ?: 'gym_saas');
-if (!defined('DB_USER')) define('DB_USER', getenv('DB_USER') ?: 'root');
-if (!defined('DB_PASS')) define('DB_PASS', getenv('DB_PASS') ?: '');
+// Base URL handling for subdirectories (e.g., localhost/gym)
+define('BASE_URL', $protocol . '://' . $host . $scriptDir);
 
-// Path constants
-if (!defined('ROOT_PATH')) define('ROOT_PATH', dirname(__DIR__));
-if (!defined('VIEW_PATH')) define('VIEW_PATH', ROOT_PATH . '/views');
-if (!defined('CONTROLLER_PATH')) define('CONTROLLER_PATH', ROOT_PATH . '/controllers');
-if (!defined('MODEL_PATH')) define('MODEL_PATH', ROOT_PATH . '/models');
+// Configuración Global
 
-// Security
-if (!defined('CSRF_TOKEN_NAME')) define('CSRF_TOKEN_NAME', 'csrf_token');
+// Base de Datos
+define('DB_HOST', '127.0.0.1');
+define('DB_NAME', 'gym_saas');
+define('DB_USER', 'root');
+define('DB_PASS', '');
 
-// Helper function for URLs
-function url($path = '') {
-    if ($path === '' || $path === '/') {
-        return BASE_PATH . '/';
-    }
-    if ($path[0] !== '/') {
-        $path = '/' . $path;
-    }
-    return BASE_PATH . $path;
-}
+// Rutas
+define('ROOT_PATH', dirname(__DIR__)); // Raíz del proyecto
+define('APP_PATH', ROOT_PATH . '/app');
+define('PUBLIC_PATH', ROOT_PATH . '/public');
+define('VIEW_PATH', APP_PATH . '/Views');
+
+// Seguridad
+define('CSRF_TOKEN_NAME', 'csrf_token');
+define('SESSION_LIFETIME', 3600 * 2); // 2 horas
+
+// Configuración Regional
+date_default_timezone_set('America/Bogota');
+setlocale(LC_MONETARY, 'es_CO.UTF-8');
