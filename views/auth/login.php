@@ -1,71 +1,38 @@
-<?php defined('APP_NAME') or exit('No direct script access allowed'); ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= APP_NAME ?> - Login</title>
-    <link rel="stylesheet" href="<?= url('/assets/css/theme.css') ?>">
-    <style>
-        body {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            background-color: var(--gray-100);
-        }
-        .login-card {
-            width: 100%;
-            max-width: 400px;
-            padding: 2.5rem;
-            border-radius: 1rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            background: white;
-            text-align: center;
-        }
-        .brand-logo {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-            letter-spacing: -1px;
-        }
-        .brand-subtitle {
-            color: var(--gray-500);
-            margin-bottom: 2rem;
-            font-size: 0.95rem;
-        }
-    </style>
+    <title>Login - Super Admin</title>
+    <link href="<?php echo URL_ROOT; ?>/assets/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <div class="login-card">
-        <div class="brand-logo"><?= APP_NAME ?></div>
-        <div class="brand-subtitle">Gym Management SaaS</div>
-        
-        <?php if (isset($_SESSION['error'])): ?>
-            <div class="alert alert-error" style="text-align: left; margin-bottom: 1.5rem;">
-                <?= $_SESSION['error']; unset($_SESSION['error']); ?>
+<body class="bg-dark d-flex align-items-center" style="height: 100vh;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <div class="card shadow">
+                    <div class="card-header text-center bg-primary text-white">
+                        <h4>FitManager SaaS Admin</h4>
+                    </div>
+                    <div class="card-body">
+                        <?php Helpers::flash('login_error'); ?>
+                        <form action="<?php echo URL_ROOT; ?>/auth/login" method="POST">
+                            <input type="hidden" name="csrf_token" value="<?php echo Session::generateCsrfToken(); ?>">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Usuario</label>
+                                <input type="text" name="username" class="form-control" required autofocus>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Contraseña</label>
+                                <input type="password" name="password" class="form-control" required>
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">Ingresar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-        <?php endif; ?>
-
-        <form action="<?= url("/login") ?>" method="POST">
-            <input type="hidden" name="<?= CSRF_TOKEN_NAME ?>" value="<?= $_SESSION[CSRF_TOKEN_NAME] ?>">
-            
-            <div class="mb-3" style="text-align: left;">
-                <label for="email" class="mb-1" style="display:block; font-weight:500; font-size:0.9rem;">Email Address</label>
-                <input type="email" id="email" name="email" class="form-control" required placeholder="you@example.com">
-            </div>
-            
-            <div class="mb-4" style="text-align: left;">
-                <label for="password" class="mb-1" style="display:block; font-weight:500; font-size:0.9rem;">Password</label>
-                <input type="password" id="password" name="password" class="form-control" required placeholder="••••••••">
-            </div>
-            
-            <button type="submit" class="btn btn-primary btn-block" style="width: 100%; padding: 0.75rem; font-size: 1rem;">Sign In</button>
-        </form>
-        
-        <div class="mt-4 text-muted" style="font-size: 0.85rem;">
-            &copy; <?= date('Y') ?> Prompt Maestro
         </div>
     </div>
 </body>
