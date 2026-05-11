@@ -4,7 +4,7 @@ require_once __DIR__ . '/config/database.php';
 
 echo "Starting Call Center V2 Migration...\n";
 
-$pdo = Database::getInstance()->getConnection();
+$pdo = new Database()->getConnection();
 
 function addColumn($pdo, $table, $column, $type) {
     try {

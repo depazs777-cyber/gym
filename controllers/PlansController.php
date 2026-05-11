@@ -8,7 +8,7 @@ class PlansController extends BaseController {
     }
 
     public function index() {
-        $db = Database::getInstance()->getConnection();
+        $db = new Database()->getConnection();
         
         // Fetch Plans with Gym count
         $stmt = $db->query("
@@ -58,7 +58,7 @@ class PlansController extends BaseController {
             $this->redirect('/admin/plans');
         }
 
-        $db = Database::getInstance()->getConnection();
+        $db = new Database()->getConnection();
         
         // Check duplicate code
         $stmt = $db->prepare("SELECT id FROM saas_plans WHERE code = ?");
@@ -91,7 +91,7 @@ class PlansController extends BaseController {
             $this->redirect('/admin/plans');
         }
 
-        $db = Database::getInstance()->getConnection();
+        $db = new Database()->getConnection();
         $stmt = $db->prepare("UPDATE saas_plans SET name = ?, is_active = ? WHERE id = ?");
         $stmt->execute([$name, $isActive, $id]);
 
@@ -113,7 +113,7 @@ class PlansController extends BaseController {
             $this->redirect('/admin/plans');
         }
 
-        $db = Database::getInstance()->getConnection();
+        $db = new Database()->getConnection();
         
         // Get current price
         $stmt = $db->prepare("SELECT current_price FROM saas_plans WHERE id = ?");
@@ -148,7 +148,7 @@ class PlansController extends BaseController {
             $this->redirect('/admin/plans');
         }
 
-        $db = Database::getInstance()->getConnection();
+        $db = new Database()->getConnection();
 
         try {
             $db->beginTransaction();
@@ -206,7 +206,7 @@ class PlansController extends BaseController {
         $this->verifyCsrf();
 
         $id = $_POST['id'] ?? null;
-        $db = Database::getInstance()->getConnection();
+        $db = new Database()->getConnection();
         
         $stmt = $db->prepare("UPDATE saas_plans SET is_active = NOT is_active WHERE id = ?");
         $stmt->execute([$id]);

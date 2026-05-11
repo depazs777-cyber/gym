@@ -4,7 +4,7 @@ require_once __DIR__ . '/config/database.php';
 
 echo "Starting Migration V3 (SQLite Compatible)...\n";
 
-$pdo = Database::getInstance()->getConnection();
+$pdo = new Database()->getConnection();
 
 function addColumn($pdo, $table, $colDef) {
     try {

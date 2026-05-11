@@ -10,7 +10,7 @@ $email = 'admin@promptmaestro.com';
 $password = 'admin';
 $hash = password_hash($password, PASSWORD_DEFAULT);
 
-$pdo = Database::getInstance()->getConnection();
+$pdo = new Database()->getConnection();
 
 // Check if user exists
 $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");

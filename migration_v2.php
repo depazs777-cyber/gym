@@ -4,7 +4,7 @@ require_once __DIR__ . '/config/database.php';
 
 echo "Starting Migration V2...\n";
 
-$pdo = Database::getInstance()->getConnection();
+$pdo = new Database()->getConnection();
 
 try {
     // 1. Update Gyms Table (Config)

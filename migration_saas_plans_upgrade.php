@@ -4,7 +4,7 @@ require_once __DIR__ . '/config/database.php';
 
 echo "Starting SaaS Plans Upgrade Migration (SQLite Compatible)...\n";
 
-$pdo = Database::getInstance()->getConnection();
+$pdo = new Database()->getConnection();
 $driver = getenv('DB_DRIVER') ?: 'mysql';
 
 function addColumn($pdo, $table, $column, $definition) {

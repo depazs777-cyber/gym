@@ -4,7 +4,7 @@ require_once __DIR__ . '/config/database.php';
 
 echo "Starting PK Fix Migration (MySQL Auto-Increment)...\n";
 
-$pdo = Database::getInstance()->getConnection();
+$pdo = new Database()->getConnection();
 $driver = getenv('DB_DRIVER') ?: 'mysql';
 
 // Helper to modify column

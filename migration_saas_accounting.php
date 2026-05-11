@@ -7,7 +7,7 @@ define('ROOT_PATH', __DIR__); // Define ROOT_PATH
 require_once __DIR__ . '/config/config.php'; // Load config constants
 require_once __DIR__ . '/config/database.php';
 
-$db = Database::getInstance()->getConnection();
+$db = new Database()->getConnection();
 $driver = $db->getAttribute(PDO::ATTR_DRIVER_NAME);
 
 echo "Starting SaaS Accounting Migration (Driver: $driver)...\n";

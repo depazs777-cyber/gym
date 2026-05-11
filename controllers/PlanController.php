@@ -11,7 +11,7 @@ class PlanController extends BaseController {
 
     public function index() {
         $gymId = $_SESSION['gym_id'];
-        $db = Database::getInstance()->getConnection();
+        $db = new Database()->getConnection();
         
         $stmt = $db->prepare("SELECT * FROM plans WHERE gym_id = ? ORDER BY name ASC");
         $stmt->execute([$gymId]);
@@ -36,7 +36,7 @@ class PlanController extends BaseController {
         }
 
         $gymId = $_SESSION['gym_id'];
-        $db = Database::getInstance()->getConnection();
+        $db = new Database()->getConnection();
         $stmt = $db->prepare("SELECT * FROM plans WHERE id = ? AND gym_id = ?");
         $stmt->execute([$id, $gymId]);
         $plan = $stmt->fetch();
@@ -66,7 +66,7 @@ class PlanController extends BaseController {
             $this->redirect('/gym/plans/create');
         }
 
-        $db = Database::getInstance()->getConnection();
+        $db = new Database()->getConnection();
 
         try {
             $stmt = $db->prepare("INSERT INTO plans (gym_id, name, type, duration_days, sessions_count, price, status) VALUES (?, ?, ?, ?, ?, ?, 'active')");
@@ -94,7 +94,7 @@ class PlanController extends BaseController {
             $this->redirect('/gym/plans');
         }
 
-        $db = Database::getInstance()->getConnection();
+        $db = new Database()->getConnection();
 
         try {
             // Verify ownership

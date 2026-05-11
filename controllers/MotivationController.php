@@ -7,7 +7,7 @@ class MotivationController extends BaseController {
     }
 
     public function index() {
-        $db = Database::getInstance()->getConnection();
+        $db = new Database()->getConnection();
         $stmt = $db->query("SELECT * FROM motivation_posts ORDER BY show_date DESC");
         $posts = $stmt->fetchAll();
 
@@ -27,7 +27,7 @@ class MotivationController extends BaseController {
         // Image upload logic here (omitted for brevity, assume URL input or file)
         $img = $_POST['image_url'] ?? '';
 
-        $db = Database::getInstance()->getConnection();
+        $db = new Database()->getConnection();
         $stmt = $db->prepare("INSERT INTO motivation_posts (title, quote_text, show_date, image_url) VALUES (?, ?, ?, ?)");
         $stmt->execute([$title, $quote, $date, $img]);
 
