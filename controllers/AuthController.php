@@ -1,88 +1,59 @@
-<?php defined('APP_NAME') or exit('No direct script access allowed');
+<?php
 
-class AuthController extends BaseController {
-    
-    public function login() {
-        if (isset($_SESSION['user_id'])) {
-            $this->redirectBasedOnRole($_SESSION['user_role']);
-        }
-        $this->view('auth/login');
+class AuthController extends Controller {
+    protected $userModel;
+    public function __construct() {
+        $this->userModel = $this->model('UserModel');
     }
 
-    public function authenticate() {
-        $this->verifyCsrf();
-        $email = $_POST['email'] ?? '';
-        $password = $_POST['password'] ?? '';
-
-        if (empty($email) || empty($password)) {
-            $_SESSION['error'] = 'Please fill in all fields.';
-            $this->redirect('/');
+    public function index() {
+        if (Auth::check()) {
+            if (Auth::user()->role_id == 1) {
+                Helpers::redirect('superadmin/dashboard');
+            } else {
+                Helpers::redirect('gym/dashboard');
+            }
         }
+        $this->view('auth/login'); // Vista unificada
+    }
 
-        $userModel = new User();
-        $user = $userModel->findByEmail($email);
-
-        if ($user && password_verify($password, $user['password_hash'])) {
-            if ($user['status'] !== 'active') {
-                $_SESSION['error'] = 'Account is inactive or suspended.';
-                $this->redirect('/');
+    public function login() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if (!Session::verifyCsrfToken($_POST['csrf_token'])) {
+                Helpers::flash('login_error', 'Token de seguridad inválido.', 'alert alert-danger');
+                Helpers::redirect('auth/login');
             }
 
-            // SaaS License Check
-            if ($user['gym_id']) {
-                $gymModel = new Gym();
-                $gym = $gymModel->findById($user['gym_id']);
-                
-                if (!$gym) {
-                     $_SESSION['error'] = 'Gym not found.';
-                     $this->redirect('/');
+            $username = Helpers::sanitize($_POST['username']);
+            $password = $_POST['password'];
+
+            $user = $this->userModel->login($username, $password);
+
+            if ($user) {
+                if ($user->estado !== 'activo') {
+                    Helpers::flash('login_error', 'Tu cuenta está inactiva.', 'alert alert-danger');
+                    Helpers::redirect('auth/login');
                 }
 
-                if ($gym['status'] !== 'active') {
-                    // Log attempt?
-                    $_SESSION['error'] = 'Licencia vencida o suspendida. Contacte a soporte para renovar.';
-                    $this->redirect('/');
+                Auth::login($user);
+
+                if ($user->rol_id == 1) { // Super Admin
+                    Helpers::redirect('superadmin/dashboard');
+                } else { // Gym User
+                    Helpers::redirect('gym/dashboard');
                 }
-                
-                $today = date('Y-m-d');
-                if ($gym['license_end'] < $today) {
-                    $_SESSION['error'] = 'Licencia vencida o suspendida. Contacte a soporte para renovar.';
-                    $this->redirect('/');
-                }
+            } else {
+                Helpers::flash('login_error', 'Credenciales incorrectas.', 'alert alert-danger');
+                Helpers::redirect('auth/login');
             }
-
-            // Set session
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['user_name'] = $user['name'];
-            $_SESSION['user_email'] = $user['email'];
-            $_SESSION['user_role'] = $user['role'];
-            $_SESSION['gym_id'] = $user['gym_id'];
-
-            $this->redirectBasedOnRole($user['role']);
-
         } else {
-            $_SESSION['error'] = 'Invalid credentials.';
-            $this->redirect('/');
+            // Display the login page for GET requests
+            $this->index();
         }
     }
 
     public function logout() {
-        session_destroy();
-        $this->redirect('/');
-    }
-
-    private function redirectBasedOnRole($role) {
-        $saasRoles = ['SUPER_ADMIN', 'VENDEDOR', 'MARKETING', 'CALL_CENTER', 'FINANZAS', 'SOPORTE', 'DEV', 'SEGURIDAD'];
-        $gymRoles = ['ADMIN_GYM', 'RECEPCION', 'ENTRENADOR', 'CONSULTA_REPORTES'];
-
-        if (in_array($role, $saasRoles)) {
-            $this->redirect('/admin/dashboard');
-        } elseif (in_array($role, $gymRoles)) {
-            $this->redirect('/gym/dashboard');
-        } else {
-            // Unexpected role
-            session_destroy();
-            $this->redirect('/');
-        }
+        Auth::logout();
+        Helpers::redirect('auth/login');
     }
 }
