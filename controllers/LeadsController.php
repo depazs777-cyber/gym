@@ -8,7 +8,7 @@ class LeadsController extends BaseController {
     }
 
     public function index() {
-        $db = Database::getInstance()->getConnection();
+        $db = new Database()->getConnection();
         $userId = $_SESSION['user_id'];
         $userRole = $_SESSION['user_role'];
         
@@ -72,7 +72,7 @@ class LeadsController extends BaseController {
     }
 
     public function callLogs() {
-        $db = Database::getInstance()->getConnection();
+        $db = new Database()->getConnection();
         $userId = $_SESSION['user_id'];
         
         $sql = "SELECT cl.*, l.name as lead_name, l.phone, s.title as script_title 
@@ -102,7 +102,7 @@ class LeadsController extends BaseController {
     }
 
     public function agenda() {
-        $db = Database::getInstance()->getConnection();
+        $db = new Database()->getConnection();
         $userId = $_SESSION['user_id'];
 
         $driver = getenv('DB_DRIVER') ?: 'mysql';
@@ -147,7 +147,7 @@ class LeadsController extends BaseController {
             $this->redirect('/admin/leads/create');
         }
 
-        $db = Database::getInstance()->getConnection();
+        $db = new Database()->getConnection();
         $stmt = $db->prepare("INSERT INTO leads (name, phone, customer_type) VALUES (?, ?, ?)");
         $stmt->execute([$name, $phone, $type]);
 
@@ -173,7 +173,7 @@ class LeadsController extends BaseController {
             $this->redirect('/admin/leads');
         }
 
-        $db = Database::getInstance()->getConnection();
+        $db = new Database()->getConnection();
         $stmt = $db->prepare("UPDATE leads SET name = ?, phone = ?, gym_name = ?, owner_name = ?, city = ? WHERE id = ?");
         $stmt->execute([$name, $phone, $gym, $owner, $city, $id]);
 
@@ -193,7 +193,7 @@ class LeadsController extends BaseController {
             $this->redirect('/admin/leads');
         }
 
-        $db = Database::getInstance()->getConnection();
+        $db = new Database()->getConnection();
         $stmt = $db->prepare("UPDATE leads SET assigned_to_user_id = ? WHERE id = ?");
         $stmt->execute([$userId, $leadId]);
         
@@ -204,7 +204,7 @@ class LeadsController extends BaseController {
     public function getCallCenterUsers() {
         $this->checkRole(['SUPER_ADMIN', 'MARKETING', 'VENDEDOR']);
         
-        $db = Database::getInstance()->getConnection();
+        $db = new Database()->getConnection();
         $stmt = $db->query("SELECT id, name FROM users WHERE role = 'CALL_CENTER' AND status = 'active' ORDER BY name ASC");
         $users = $stmt->fetchAll();
         
@@ -218,7 +218,7 @@ class LeadsController extends BaseController {
         $leadId = $_GET['id'] ?? null;
         if (!$leadId) exit(json_encode(['error' => 'No ID']));
 
-        $db = Database::getInstance()->getConnection();
+        $db = new Database()->getConnection();
         
         // Lead
         $sql = "SELECT * FROM leads WHERE id = ?";
@@ -276,7 +276,7 @@ class LeadsController extends BaseController {
         $duration = $_POST['duration'] ?? 0;
         $nextFollowup = $_POST['next_followup'] ?? null;
 
-        $db = Database::getInstance()->getConnection();
+        $db = new Database()->getConnection();
 
         // Permission Check: Call Center agent can only log calls for assigned leads
         if ($_SESSION['user_role'] === 'CALL_CENTER') {

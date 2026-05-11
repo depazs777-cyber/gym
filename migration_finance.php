@@ -4,7 +4,7 @@ require_once __DIR__ . '/config/database.php';
 
 echo "Starting Finance Module Migration...\n";
 
-$pdo = Database::getInstance()->getConnection();
+$pdo = new Database()->getConnection();
 
 function createTable($pdo, $sql) {
     try {

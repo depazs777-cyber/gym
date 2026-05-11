@@ -56,7 +56,7 @@ class BaseController {
     }
 
     private function verifyGymStatus($gymId) {
-        $db = Database::getInstance()->getConnection();
+        $db = new Database()->getConnection();
         // Check both status and license_end
         $stmt = $db->prepare("SELECT status, license_end FROM gyms WHERE id = ?");
         $stmt->execute([$gymId]);

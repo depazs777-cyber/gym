@@ -7,7 +7,7 @@ define('APP_NAME', 'PROMPT_MAESTRO');
 define('ROOT_PATH', __DIR__);
 require_once __DIR__ . '/config/database.php';
 
-$db = Database::getInstance()->getConnection();
+$db = new Database()->getConnection();
 $driver = $db->getAttribute(PDO::ATTR_DRIVER_NAME);
 $isSqlite = ($driver === 'sqlite');
 

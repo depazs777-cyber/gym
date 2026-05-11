@@ -3,7 +3,7 @@ define('APP_NAME', 'PROMPT_MAESTRO');
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/config/database.php';
 
-$db = Database::getInstance()->getConnection();
+$db = new Database()->getConnection();
 
 // Check Driver
 $driver = getenv('DB_DRIVER') ?: 'mysql';

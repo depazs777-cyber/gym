@@ -5,7 +5,7 @@ require_once __DIR__ . '/config/database.php';
 
 echo "Migrating Roles...\n";
 
-$pdo = Database::getInstance()->getConnection();
+$pdo = new Database()->getConnection();
 
 try {
     // Add CALL_CENTER and DEV to the ENUM

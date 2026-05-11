@@ -64,7 +64,7 @@ class AdminAccountingController extends BaseController {
         }
         
         // Get Gyms list for dropdown if no order selected
-        $db = Database::getInstance()->getConnection();
+        $db = new Database()->getConnection();
         $gyms = $db->query("SELECT id, name FROM gyms ORDER BY name")->fetchAll();
 
         $this->view('layouts/main', [
@@ -87,7 +87,7 @@ class AdminAccountingController extends BaseController {
         $orderModel = new SalesOrder();
         
         try {
-            $db = Database::getInstance()->getConnection();
+            $db = new Database()->getConnection();
             $db->beginTransaction();
 
             // 1. Create RC

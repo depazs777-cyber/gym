@@ -8,7 +8,7 @@ class SaaSUsersController extends BaseController {
     }
 
     public function index() {
-        $db = Database::getInstance()->getConnection();
+        $db = new Database()->getConnection();
         // Fetch users where gym_id is NULL
         $stmt = $db->query("SELECT * FROM users WHERE gym_id IS NULL ORDER BY created_at DESC");
         $users = $stmt->fetchAll();
@@ -39,7 +39,7 @@ class SaaSUsersController extends BaseController {
             $this->redirect('/admin/users');
         }
 
-        $db = Database::getInstance()->getConnection();
+        $db = new Database()->getConnection();
 
         // Check if email exists
         $stmt = $db->prepare("SELECT id FROM users WHERE email = ?");
@@ -81,7 +81,7 @@ class SaaSUsersController extends BaseController {
             $this->redirect('/admin/users');
         }
 
-        $db = Database::getInstance()->getConnection();
+        $db = new Database()->getConnection();
 
         try {
             // Ensure we are updating a SaaS user (gym_id IS NULL)
@@ -115,7 +115,7 @@ class SaaSUsersController extends BaseController {
             $this->redirect('/admin/users');
         }
 
-        $db = Database::getInstance()->getConnection();
+        $db = new Database()->getConnection();
         $stmt = $db->prepare("SELECT status FROM users WHERE id = ? AND gym_id IS NULL");
         $stmt->execute([$id]);
         $user = $stmt->fetch();
@@ -142,7 +142,7 @@ class SaaSUsersController extends BaseController {
              $this->redirect('/admin/users');
         }
 
-        $db = Database::getInstance()->getConnection();
+        $db = new Database()->getConnection();
         $hash = password_hash($password, PASSWORD_DEFAULT);
         
         $stmt = $db->prepare("UPDATE users SET password_hash = ? WHERE id = ? AND gym_id IS NULL");

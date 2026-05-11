@@ -14,7 +14,7 @@ class NotificationsController extends BaseController {
         // AJAX Endpoint
         $gymId = $_SESSION['gym_id'];
         $userId = $_SESSION['user_id'];
-        $db = Database::getInstance()->getConnection();
+        $db = new Database()->getConnection();
         
         // Fetch notifications for this gym that user hasn't read
         $sql = "SELECT n.* FROM notifications n
@@ -37,7 +37,7 @@ class NotificationsController extends BaseController {
         $userId = $_SESSION['user_id'];
         $id = $_POST['id'] ?? null; // ID of notification. If 'all', mark all.
         
-        $db = Database::getInstance()->getConnection();
+        $db = new Database()->getConnection();
         $driver = getenv('DB_DRIVER') ?: 'mysql';
         $ignore = ($driver === 'sqlite') ? "OR IGNORE" : "IGNORE";
 
