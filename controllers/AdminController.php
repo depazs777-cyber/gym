@@ -15,7 +15,7 @@ class AdminController extends BaseController {
         // Everyone sees the dashboard, but stats might be filtered?
         // For MVP, everyone sees the stats.
         
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
         $stmt = $db->query("SELECT COUNT(*) as total FROM gyms");
         $totalGyms = $stmt->fetch()['total'];
 
@@ -53,7 +53,7 @@ class AdminController extends BaseController {
     }
 
     private function callCenterDashboard() {
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
         $userId = $_SESSION['user_id'];
         
         // 1. Motivation
@@ -120,7 +120,7 @@ class AdminController extends BaseController {
         // Restricted to SUPER_ADMIN and VENDEDOR
         $this->checkRole(['SUPER_ADMIN', 'VENDEDOR']);
 
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
         $stmt = $db->query("SELECT * FROM gyms ORDER BY created_at DESC");
         $gyms = $stmt->fetchAll();
 
@@ -133,7 +133,7 @@ class AdminController extends BaseController {
     public function createGymForm() {
         $this->checkRole(['SUPER_ADMIN', 'VENDEDOR']);
         
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
         $stmt = $db->query("SELECT * FROM saas_plans WHERE is_active = 1");
         $plans = $stmt->fetchAll();
 
@@ -168,7 +168,7 @@ class AdminController extends BaseController {
             $this->redirect('/admin/gyms/create');
         }
 
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
         
         // Fetch Plan
         $stmt = $db->prepare("SELECT * FROM saas_plans WHERE id = ?");
@@ -249,7 +249,7 @@ class AdminController extends BaseController {
             $this->redirect('/admin/gyms');
         }
 
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
         $stmt = $db->prepare("SELECT * FROM gyms WHERE id = ?");
         $stmt->execute([$id]);
         $gym = $stmt->fetch();
@@ -280,7 +280,7 @@ class AdminController extends BaseController {
             $this->redirect('/admin/gyms/edit?id=' . $id);
         }
 
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
         $stmt = $db->prepare("UPDATE gyms SET name = ?, license_start = ?, license_end = ?, status = ? WHERE id = ?");
         $stmt->execute([$name, $license_start, $license_end, $status, $id]);
 
@@ -291,7 +291,7 @@ class AdminController extends BaseController {
     public function getGlobalData() {
         $this->checkRole(['SUPER_ADMIN', 'CALL_CENTER', 'MARKETING', 'VENDEDOR']);
         
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
         
         // Scripts
         $stmt = $db->query("SELECT id, title, script_body FROM call_scripts WHERE is_active = 1 ORDER BY title ASC");
@@ -322,7 +322,7 @@ class AdminController extends BaseController {
             $this->redirect('/admin/gyms');
         }
 
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
 
         // Verify Gym exists
         $stmt = $db->prepare("SELECT name FROM gyms WHERE id = ?");

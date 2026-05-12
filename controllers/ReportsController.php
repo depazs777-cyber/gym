@@ -11,7 +11,7 @@ class ReportsController extends BaseController {
 
     public function index() {
         $gymId = $_SESSION['gym_id'];
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
         
         $filter = $_GET['filter'] ?? 'month';
         

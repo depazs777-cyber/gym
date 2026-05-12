@@ -4,7 +4,7 @@ require_once __DIR__ . '/config/database.php';
 
 echo "Starting SaaS Pricing Migration...\n";
 
-$pdo = new Database()->getConnection();
+$pdo = (new Database())->getConnection();
 $driver = getenv('DB_DRIVER') ?: 'mysql';
 $pk = ($driver === 'sqlite') ? "INTEGER PRIMARY KEY" : "INT AUTO_INCREMENT PRIMARY KEY";
 

@@ -8,7 +8,7 @@ class AccountingController extends BaseController {
 
     public function index() {
         $gymId = $_SESSION['gym_id'];
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
 
         $type = $_GET['type'] ?? 'ALL'; // RC, CE, FC, ETC.
         $start = $_GET['start_date'] ?? date('Y-m-01');
@@ -43,7 +43,7 @@ class AccountingController extends BaseController {
 
     public function viewDocument($id) {
         $gymId = $_SESSION['gym_id'];
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
 
         $stmt = $db->prepare("
             SELECT d.*, tp.name as third_party_name, tp.doc_number, tp.doc_type as tp_doc_type, tp.address, tp.phone

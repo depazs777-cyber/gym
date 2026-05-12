@@ -11,7 +11,7 @@ class GymSettingsController extends BaseController {
 
     public function settings() {
         $gymId = $_SESSION['gym_id'];
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
         
         $stmt = $db->prepare("SELECT * FROM gyms WHERE id = ?");
         $stmt->execute([$gymId]);
@@ -88,7 +88,7 @@ class GymSettingsController extends BaseController {
             'message' => $message
         ]);
 
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
         
         try {
             $sql = "UPDATE gyms SET 

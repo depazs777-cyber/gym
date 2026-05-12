@@ -12,7 +12,7 @@ class MembershipController extends BaseController {
     public function index() {
         // List Memberships with Tabs (Active, Expiring, Expired)
         $gymId = $_SESSION['gym_id'];
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
         
         $status = $_GET['status'] ?? 'active'; // active, expiring, expired
         
@@ -54,7 +54,7 @@ class MembershipController extends BaseController {
             $this->redirect('/gym/clients');
         }
 
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
 
         // Get Client
         $stmt = $db->prepare("SELECT * FROM clients WHERE id = ? AND gym_id = ?");
@@ -110,7 +110,7 @@ class MembershipController extends BaseController {
             $this->redirect('/gym/clients');
         }
 
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
 
         // Verify Client belongs to Gym
         $stmt = $db->prepare("SELECT id, name, identification, email FROM clients WHERE id = ? AND gym_id = ?");

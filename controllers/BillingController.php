@@ -10,7 +10,7 @@ class BillingController extends BaseController {
     public function index() {
         $this->autoApplyPricing();
 
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
         
         // Fetch All Gyms with License Details
         // Calculate days remaining
@@ -79,7 +79,7 @@ class BillingController extends BaseController {
     }
 
     private function autoApplyPricing() {
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
         $today = date('Y-m-d');
         $now = date('Y-m-d H:i:s');
 
@@ -136,7 +136,7 @@ class BillingController extends BaseController {
         $not->modify('-1 month');
         $notifyDate = $not->format('Y-m-d');
         
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
         
         // Get Annual Plan
         $stmt = $db->prepare("SELECT id, current_price FROM saas_plans WHERE name = 'Anual'");
@@ -156,7 +156,7 @@ class BillingController extends BaseController {
         $this->verifyCsrf();
         $id = $_POST['change_id'];
         
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
         $stmt = $db->prepare("UPDATE saas_plan_price_changes SET status = 'CANCELLED' WHERE id = ?");
         $stmt->execute([$id]);
         
@@ -174,7 +174,7 @@ class BillingController extends BaseController {
         $reference = $_POST['reference'];
         $notes = $_POST['notes'];
 
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
         
         // Get Gym
         $stmt = $db->prepare("SELECT * FROM gyms WHERE id = ?");
@@ -226,7 +226,7 @@ class BillingController extends BaseController {
 
     public function history() {
         $gymId = $_GET['gym_id'];
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
         
         // Payments
         $stmt = $db->prepare("SELECT * FROM saas_payments WHERE gym_id = ? ORDER BY payment_date DESC");

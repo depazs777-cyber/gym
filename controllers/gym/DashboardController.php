@@ -8,6 +8,7 @@ class DashboardController extends Controller {
         $this->tenant = Tenant::current();
         if (!$this->tenant || Auth::user()->tenant_id != $this->tenant->id) {
             Auth::logout();
+            Helpers::flash('login_error', 'No perteneces a ningún gimnasio activo.', 'alert alert-danger');
             Helpers::redirect('auth/login');
         }
         $this->memberModel = $this->model('MemberModel');

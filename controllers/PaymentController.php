@@ -11,7 +11,7 @@ class PaymentController extends BaseController {
 
     public function index() {
         $gymId = $_SESSION['gym_id'];
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
 
         // Filters
         $from = $_GET['from'] ?? date('Y-m-01');
@@ -45,7 +45,7 @@ class PaymentController extends BaseController {
             die("Payment ID required.");
         }
 
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
 
         // Try to fetch from 'receipts' table first (Snapshot)
         $stmt = $db->prepare("SELECT * FROM receipts WHERE payment_id = ? AND gym_id = ?");

@@ -4,7 +4,7 @@ require_once __DIR__ . '/config/database.php';
 
 echo "Starting Gym Registration Migration...\n";
 
-$pdo = new Database()->getConnection();
+$pdo = (new Database())->getConnection();
 $driver = getenv('DB_DRIVER') ?: 'mysql';
 
 function addColumn($pdo, $table, $column, $definition) {

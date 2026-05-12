@@ -3,7 +3,7 @@
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/config/database.php';
 
-$db = new Database()->getConnection();
+$db = (new Database())->getConnection();
 $driver = getenv('DB_DRIVER') ?: 'mysql';
 $pk = ($driver === 'sqlite') ? "INTEGER PRIMARY KEY AUTOINCREMENT" : "INT AUTO_INCREMENT PRIMARY KEY";
 

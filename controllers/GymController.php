@@ -13,7 +13,7 @@ class GymController extends BaseController {
 
     public function dashboard() {
         $gymId = $_SESSION['gym_id'];
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
 
         // Stats
         $stmt = $db->prepare("SELECT COUNT(*) as total FROM clients WHERE gym_id = ?");
@@ -35,7 +35,7 @@ class GymController extends BaseController {
 
     public function listClients() {
         $gymId = $_SESSION['gym_id'];
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
         
         // Get Gym Warning Threshold
         $stmt = $db->prepare("SELECT config_warning_days FROM gyms WHERE id = ?");
@@ -126,7 +126,7 @@ class GymController extends BaseController {
             $this->redirect('/gym/clients/create');
         }
 
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
 
         try {
             $stmt = $db->prepare("INSERT INTO clients (gym_id, name, identification, email, phone, status) VALUES (?, ?, ?, ?, ?, 'active')");
@@ -155,7 +155,7 @@ class GymController extends BaseController {
             exit;
         }
 
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
 
         // 1. Get Client Data
         $stmt = $db->prepare("SELECT * FROM clients WHERE id = ? AND gym_id = ?");
