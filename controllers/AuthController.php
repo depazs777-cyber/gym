@@ -10,8 +10,9 @@ class AuthController extends Controller {
         if (Auth::check()) {
             if (Auth::user()->role_id == 1) {
                 Helpers::redirect('superadmin/dashboard');
-            } elseif (Auth::user()->role_id != 1) {
-                if (!Tenant::current()) {
+            } else {
+                $tenant = Tenant::current();
+                if (!$tenant || Auth::user()->tenant_id != $tenant->id) {
                     Auth::logout();
                     Helpers::flash('login_error', 'Gimnasio inactivo o sin membresía.', 'alert alert-danger');
                     Helpers::redirect('auth/login');
@@ -43,7 +44,8 @@ class AuthController extends Controller {
                 Auth::login($user);
 
                 if (Auth::user()->role_id != 1) {
-                    if (!Tenant::current()) {
+                    $tenant = Tenant::current();
+                    if (!$tenant || Auth::user()->tenant_id != $tenant->id) {
                         Auth::logout();
                         Helpers::flash('login_error', 'Gimnasio inactivo o sin membresía.', 'alert alert-danger');
                         Helpers::redirect('auth/login');
