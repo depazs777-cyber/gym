@@ -11,7 +11,7 @@ class GymStaffController extends BaseController {
 
     public function index() {
         $gymId = $_SESSION['gym_id'];
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
         
         $stmt = $db->prepare("SELECT * FROM users WHERE gym_id = ? ORDER BY name ASC");
         $stmt->execute([$gymId]);
@@ -42,7 +42,7 @@ class GymStaffController extends BaseController {
             $this->redirect('/gym/staff');
         }
 
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
         
         // Unique Email Check
         $stmt = $db->prepare("SELECT id FROM users WHERE email = ?");
@@ -69,7 +69,7 @@ class GymStaffController extends BaseController {
         $gymId = $_SESSION['gym_id'];
         $id = $_POST['id'] ?? null;
 
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
         $stmt = $db->prepare("SELECT status FROM users WHERE id = ? AND gym_id = ?");
         $stmt->execute([$id, $gymId]);
         $user = $stmt->fetch();

@@ -4,7 +4,7 @@ require_once __DIR__ . '/config/database.php';
 
 echo "Starting Call Center Migration (SQLite Compatible)...\n";
 
-$pdo = new Database()->getConnection();
+$pdo = (new Database())->getConnection();
 
 function createTable($pdo, $sql) {
     try {

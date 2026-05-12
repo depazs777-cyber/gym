@@ -7,7 +7,7 @@ class FinanceReportsController extends BaseController {
     }
 
     public function index() {
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
         
         // Filters
         $startDate = $_GET['start_date'] ?? date('Y-m-01');
@@ -98,7 +98,7 @@ class FinanceReportsController extends BaseController {
     }
 
     public function export() {
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
         $startDate = $_GET['start_date'] ?? date('Y-m-01');
         $endDate = $_GET['end_date'] ?? date('Y-m-t');
         

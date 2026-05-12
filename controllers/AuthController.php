@@ -10,7 +10,12 @@ class AuthController extends Controller {
         if (Auth::check()) {
             if (Auth::user()->role_id == 1) {
                 Helpers::redirect('superadmin/dashboard');
-            } else {
+            } elseif (Auth::user()->role_id != 1) {
+                if (!Tenant::current()) {
+                    Auth::logout();
+                    Helpers::flash('login_error', 'Gimnasio inactivo o sin membresía.', 'alert alert-danger');
+                    Helpers::redirect('auth/login');
+                }
                 Helpers::redirect('gym/dashboard');
             }
         }
@@ -37,7 +42,14 @@ class AuthController extends Controller {
 
                 Auth::login($user);
 
-                if ($user->rol_id == 1) { // Super Admin
+                if (Auth::user()->role_id != 1) {
+                    if (!Tenant::current()) {
+                        Auth::logout();
+                        Helpers::flash('login_error', 'Gimnasio inactivo o sin membresía.', 'alert alert-danger');
+                        Helpers::redirect('auth/login');
+                    }
+                }
+                if (Auth::user()->role_id == 1) { // Super Admin
                     Helpers::redirect('superadmin/dashboard');
                 } else { // Gym User
                     Helpers::redirect('gym/dashboard');

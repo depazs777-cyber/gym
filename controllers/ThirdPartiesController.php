@@ -9,7 +9,7 @@ class ThirdPartiesController extends BaseController {
 
     public function index() {
         $gymId = $_SESSION['gym_id'];
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
 
         $search = $_GET['search'] ?? '';
         $filter = $_GET['filter'] ?? 'ALL'; // ALL, CLIENT, PROVIDER
@@ -64,7 +64,7 @@ class ThirdPartiesController extends BaseController {
             $this->redirect('/gym/third_parties/create');
         }
 
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
 
         // Check duplicate
         $stmt = $db->prepare("SELECT id FROM third_parties WHERE gym_id = ? AND doc_number = ?");
@@ -113,7 +113,7 @@ class ThirdPartiesController extends BaseController {
         }
 
         $gymId = $_SESSION['gym_id'];
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
 
         $stmt = $db->prepare("SELECT * FROM third_parties WHERE id = ? AND gym_id = ?");
         $stmt->execute([$id, $gymId]);
@@ -143,7 +143,7 @@ class ThirdPartiesController extends BaseController {
             $this->redirect('/gym/third_parties');
         }
 
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
 
         // Check duplicate (exclude self)
         $stmt = $db->prepare("SELECT id FROM third_parties WHERE gym_id = ? AND doc_number = ? AND id != ?");

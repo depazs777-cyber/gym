@@ -3,7 +3,7 @@ define('APP_NAME', 'PROMPT_MAESTRO');
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/config/database.php';
 
-$db = new Database()->getConnection();
+$db = (new Database())->getConnection();
 
 echo "Checking if we can delete the row with id=0 in memberships...\n";
 // Sometimes SQLite stores a row with rowid=0 or user inserted 0.

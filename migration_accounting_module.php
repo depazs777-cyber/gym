@@ -6,7 +6,7 @@ define('APP_NAME', 'PROMPT_MAESTRO');
 define('ROOT_PATH', __DIR__);
 require_once __DIR__ . '/config/database.php';
 
-$db = new Database()->getConnection();
+$db = (new Database())->getConnection();
 $driver = $db->getAttribute(PDO::ATTR_DRIVER_NAME);
 
 echo "Starting Accounting Module Migration (Driver: $driver)...\n";

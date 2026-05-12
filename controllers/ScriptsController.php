@@ -8,7 +8,7 @@ class ScriptsController extends BaseController {
     }
 
     public function index() {
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
         $stmt = $db->query("SELECT * FROM call_scripts ORDER BY title ASC");
         $scripts = $stmt->fetchAll();
 
@@ -26,7 +26,7 @@ class ScriptsController extends BaseController {
         $obj = $_POST['objective'];
         $body = $_POST['script_body'];
 
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
         $stmt = $db->prepare("INSERT INTO call_scripts (title, customer_type, objective, script_body, created_by_user_id) VALUES (?, ?, ?, ?, ?)");
         $stmt->execute([$title, $type, $obj, $body, $_SESSION['user_id']]);
 

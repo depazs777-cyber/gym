@@ -6,7 +6,7 @@ class BaseModel {
     protected $table;
 
     public function __construct() {
-        $this->pdo = new Database()->getConnection();
+        $this->pdo = (new Database())->getConnection();
     }
 
     public function getAll() {

@@ -8,7 +8,7 @@ if (!defined('APP_NAME')) {
 }
 require_once __DIR__ . '/config/database.php';
 
-$db = new Database()->getConnection();
+$db = (new Database())->getConnection();
 
 echo "Starting MySQL Fixes...\n";
 

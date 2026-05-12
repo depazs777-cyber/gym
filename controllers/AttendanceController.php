@@ -10,7 +10,7 @@ class AttendanceController extends BaseController {
 
     public function index() {
         $gymId = $_SESSION['gym_id'];
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
         
         $stmt = $db->prepare("
             SELECT a.*, c.name as client_name, c.identification
@@ -45,7 +45,7 @@ class AttendanceController extends BaseController {
             $this->redirect('/gym/attendance/checkin');
         }
 
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
 
         // 1. Find Client
         // Check if identification is "CLIENT:{ID}" format (QR) or plain identification
@@ -125,7 +125,7 @@ class AttendanceController extends BaseController {
 
     private function logAccess($clientId, $granted, $reason) {
         $gymId = $_SESSION['gym_id'];
-        $db = new Database()->getConnection();
+        $db = (new Database())->getConnection();
         $stmt = $db->prepare("INSERT INTO attendance (gym_id, client_id, method, access_granted, rejection_reason) VALUES (?, ?, 'MANUAL', ?, ?)");
         $stmt->execute([$gymId, $clientId, $granted, $reason]);
     }
