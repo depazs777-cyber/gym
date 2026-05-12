@@ -12,12 +12,6 @@ class Router {
     public function __construct() {
         $url = $this->getUrl();
 
-        // Handle trailing segments that match auth (e.g. gym/auth/login)
-        if (isset($url[0]) && ($url[0] === 'gym' || $url[0] === 'superadmin') && isset($url[1]) && $url[1] === 'auth') {
-            Helpers::redirect('auth/login');
-            exit();
-        }
-
         // Unified login - Check if it's the auth controller explicitly
         if (empty($url) || (isset($url[0]) && $url[0] === 'auth')) {
             $this->namespace = '';
